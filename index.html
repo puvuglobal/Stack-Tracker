@@ -12,15 +12,13 @@
       --primary: #1e3a5f;
       --secondary: #2d5a87;
       --accent: #00d4aa;
+      --accent-dim: rgba(0, 212, 170, 0.15);
       --background: #0a1628;
       --surface: #12243d;
       --surface-hover: #1a3352;
       --text-primary: #e8f1f8;
       --text-secondary: #8ba3bc;
       --border: #1e4976;
-      --success: #00d4aa;
-      --warning: #f59e0b;
-      --error: #ef4444;
       --glow: 0 0 20px rgba(0, 212, 170, 0.3);
     }
 
@@ -34,17 +32,14 @@
       line-height: 1.6;
     }
 
-    h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; font-weight: 600; }
+    h1, h2, h3, h4, h5 { font-family: 'Outfit', sans-serif; font-weight: 600; }
     code, .mono { font-family: 'JetBrains Mono', monospace; }
 
-    .app {
-      display: flex;
-      min-height: 100vh;
-    }
+    .app { display: flex; min-height: 100vh; }
 
     /* Sidebar */
     .sidebar {
-      width: 280px;
+      width: 260px;
       background: var(--surface);
       border-right: 1px solid var(--border);
       display: flex;
@@ -52,590 +47,174 @@
       position: fixed;
       height: 100vh;
       z-index: 200;
+      overflow: hidden;
     }
 
-    .sidebar-header {
-      padding: 20px;
-      border-bottom: 1px solid var(--border);
-    }
+    .sidebar-header { padding: 16px; border-bottom: 1px solid var(--border); }
+    .sidebar-logo { display: flex; align-items: center; gap: 10px; }
+    .logo-icon { width: 34px; height: 34px; background: linear-gradient(135deg, var(--accent), var(--secondary)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; }
+    .logo-text { font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700; }
 
-    .sidebar-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+    .sidebar-section { padding: 14px; }
+    .sidebar-title { font-size: 11px; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 1px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
 
-    .logo-icon {
-      width: 36px;
-      height: 36px;
-      background: linear-gradient(135deg, var(--accent), var(--secondary));
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 14px;
-    }
+    .add-btn { width: 22px; height: 22px; background: var(--accent); border: none; border-radius: 5px; color: var(--background); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .add-btn:hover { transform: scale(1.1); box-shadow: var(--glow); }
 
-    .logo-text {
-      font-family: 'Outfit', sans-serif;
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
+    .ideas-list { flex: 1; overflow-y: auto; padding: 0 10px 10px; }
 
-    .sidebar-section {
-      padding: 16px 20px;
-    }
+    .idea-item { padding: 10px; border-radius: 8px; cursor: pointer; margin-bottom: 6px; transition: all 0.2s; border: 1px solid transparent; position: relative; }
+    .idea-item:hover { background: var(--surface-hover); }
+    .idea-item.active { background: var(--accent-dim); border-color: var(--accent); }
+    .idea-name { font-weight: 600; font-size: 13px; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .idea-meta { font-size: 11px; color: var(--text-secondary); }
+    .idea-delete { position: absolute; top: 6px; right: 6px; width: 18px; height: 18px; background: var(--error); border: none; border-radius: 4px; color: white; font-size: 12px; cursor: pointer; opacity: 0; transition: opacity 0.2s; }
+    .idea-item:hover .idea-delete { opacity: 1; }
 
-    .sidebar-title {
-      font-size: 12px;
-      text-transform: uppercase;
-      color: var(--text-secondary);
-      letter-spacing: 1px;
-      margin-bottom: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .add-btn {
-      width: 24px;
-      height: 24px;
-      background: var(--accent);
-      border: none;
-      border-radius: 6px;
-      color: var(--background);
-      font-size: 18px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-    }
-
-    .add-btn:hover {
-      transform: scale(1.1);
-      box-shadow: var(--glow);
-    }
-
-    .ideas-list {
-      flex: 1;
-      overflow-y: auto;
-      padding: 0 12px;
-    }
-
-    .idea-item {
-      padding: 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-bottom: 8px;
-      transition: all 0.2s;
-      border: 1px solid transparent;
-    }
-
-    .idea-item:hover {
-      background: var(--surface-hover);
-    }
-
-    .idea-item.active {
-      background: rgba(0, 212, 170, 0.1);
-      border-color: var(--accent);
-    }
-
-    .idea-name {
-      font-weight: 600;
-      font-size: 14px;
-      margin-bottom: 4px;
-    }
-
-    .idea-meta {
-      font-size: 12px;
-      color: var(--text-secondary);
-    }
-
-    .empty-ideas {
-      text-align: center;
-      padding: 32px 16px;
-      color: var(--text-secondary);
-    }
-
-    .empty-ideas svg {
-      width: 48px;
-      height: 48px;
-      margin-bottom: 12px;
-      opacity: 0.5;
-    }
+    .empty-ideas { text-align: center; padding: 24px 12px; color: var(--text-secondary); font-size: 13px; }
+    .empty-ideas svg { width: 36px; height: 36px; margin-bottom: 8px; opacity: 0.4; }
 
     /* Main Content */
-    .main-content {
-      flex: 1;
-      margin-left: 280px;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+    .main-content { flex: 1; margin-left: 260px; display: flex; flex-direction: column; min-height: 100vh; }
 
-    header {
-      background: linear-gradient(180deg, var(--surface) 0%, transparent 100%);
-      padding: 16px 32px;
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(10px);
-    }
+    header { background: linear-gradient(180deg, var(--surface) 0%, transparent 100%); padding: 14px 24px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
+    .header-content { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .header-title { font-weight: 600; font-size: 16px; }
+    .progress-container { display: flex; align-items: center; gap: 12px; }
+    .progress-text { font-size: 13px; color: var(--text-secondary); }
+    .progress-bar { width: 140px; height: 6px; background: var(--surface); border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--secondary)); border-radius: 3px; transition: width 0.4s ease; box-shadow: var(--glow); }
 
-    .header-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    main { flex: 1; padding: 24px; max-width: 1000px; margin: 0 auto; width: 100%; }
 
-    .progress-container {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .progress-text {
-      font-size: 14px;
-      color: var(--text-secondary);
-    }
-
-    .progress-bar {
-      width: 200px;
-      height: 8px;
-      background: var(--surface);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent), var(--secondary));
-      border-radius: 4px;
-      transition: width 0.5s ease;
-      box-shadow: var(--glow);
-    }
-
-    main {
-      flex: 1;
-      padding: 32px;
-      max-width: 1200px;
-      margin: 0 auto;
-      width: 100%;
-    }
-
-    .screen { display: none; animation: fadeIn 0.4s ease; }
+    .screen { display: none; animation: fadeIn 0.35s ease; }
     .screen.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    /* Welcome */
+    .welcome-screen { text-align: center; padding: 48px 16px; }
+    .welcome-icon { width: 80px; height: 80px; margin: 0 auto 24px; background: linear-gradient(135deg, var(--surface), var(--primary)); border-radius: 20px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border); }
+    .welcome-icon svg { width: 40px; height: 40px; stroke: var(--accent); }
+    .welcome-title { font-size: 32px; margin-bottom: 10px; }
+    .welcome-subtitle { font-size: 15px; color: var(--text-secondary); max-width: 420px; margin: 0 auto 28px; line-height: 1.6; }
 
-    .welcome-screen { text-align: center; padding: 60px 20px; }
-    
-    .welcome-icon {
-      width: 100px;
-      height: 100px;
-      margin: 0 auto 32px;
-      background: linear-gradient(135deg, var(--surface), var(--primary));
-      border-radius: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 2px solid var(--border);
-    }
+    .project-input { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .input-group { width: 100%; max-width: 380px; }
+    .input-group label { display: block; text-align: left; font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; }
+    .input-group input { width: 100%; padding: 12px 15px; font-size: 15px; font-family: 'DM Sans', sans-serif; background: var(--surface); border: 2px solid var(--border); border-radius: 8px; color: var(--text-primary); transition: all 0.3s; }
+    .input-group input:focus { outline: none; border-color: var(--accent); box-shadow: var(--glow); }
 
-    .welcome-icon svg {
-      width: 50px;
-      height: 50px;
-      stroke: var(--accent);
-    }
-
-    .welcome-title {
-      font-size: 42px;
-      margin-bottom: 16px;
-    }
-
-    .welcome-subtitle {
-      font-size: 18px;
-      color: var(--text-secondary);
-      max-width: 500px;
-      margin: 0 auto 40px;
-    }
-
-    .project-name-input {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .input-group { position: relative; width: 100%; max-width: 450px; }
-
-    .input-group label {
-      display: block;
-      text-align: left;
-      font-size: 14px;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
-    }
-
-    .input-group input {
-      width: 100%;
-      padding: 14px 18px;
-      font-size: 16px;
-      font-family: 'DM Sans', sans-serif;
-      background: var(--surface);
-      border: 2px solid var(--border);
-      border-radius: 10px;
-      color: var(--text-primary);
-      transition: all 0.3s ease;
-    }
-
-    .input-group input:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: var(--glow);
-    }
-
-    .btn {
-      padding: 14px 28px;
-      font-size: 15px;
-      font-family: 'Outfit', sans-serif;
-      font-weight: 600;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent), #00b894);
-      color: var(--background);
-    }
-
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--glow); }
-
-    .btn-secondary {
-      background: var(--surface);
-      color: var(--text-primary);
-      border: 2px solid var(--border);
-    }
-
+    .btn { padding: 11px 22px; font-size: 14px; font-family: 'Outfit', sans-serif; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), #00b894); color: var(--background); }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: var(--glow); }
+    .btn-secondary { background: var(--surface); color: var(--text-primary); border: 2px solid var(--border); }
     .btn-secondary:hover { background: var(--surface-hover); border-color: var(--accent); }
-
+    .btn-ghost { background: transparent; color: var(--text-secondary); border: none; padding: 8px 12px; font-size: 13px; }
+    .btn-ghost:hover { color: var(--text-primary); }
     .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+    .btn-small { padding: 6px 12px; font-size: 12px; }
 
-    /* Question Layout */
-    .question-layout {
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 28px;
-    }
+    /* Question */
+    .question-layout { display: grid; grid-template-columns: 1fr 300px; gap: 24px; }
+    .question-main { min-height: 420px; }
 
-    .question-main { min-height: 480px; }
+    .category-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; background: var(--surface); border-radius: 20px; font-size: 12px; color: var(--accent); margin-bottom: 16px; border: 1px solid var(--border); }
+    .category-badge svg { width: 12px; height: 12px; }
 
-    .category-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 14px;
-      background: var(--surface);
-      border-radius: 20px;
-      font-size: 13px;
-      color: var(--accent);
-      margin-bottom: 20px;
-      border: 1px solid var(--border);
-    }
+    .question-title { font-size: 24px; margin-bottom: 8px; line-height: 1.3; }
+    .question-description { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; }
 
-    .category-badge svg { width: 14px; height: 14px; }
+    .options-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
 
-    .question-title { font-size: 28px; margin-bottom: 10px; line-height: 1.3; }
-    .question-description { font-size: 15px; color: var(--text-secondary); margin-bottom: 28px; }
+    .option-item { background: var(--surface); border: 2px solid var(--border); border-radius: 10px; padding: 12px 14px; cursor: pointer; transition: all 0.2s; display: flex; align-items: flex-start; gap: 12px; }
+    .option-item:hover { border-color: var(--accent); transform: translateX(2px); background: var(--surface-hover); }
+    .option-item.selected { border-color: var(--accent); background: var(--accent-dim); }
 
-    .options-grid { display: grid; gap: 12px; }
+    .option-radio { width: 18px; height: 18px; min-width: 18px; border: 2px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 1px; transition: all 0.2s; }
+    .option-item.selected .option-radio { border-color: var(--accent); background: var(--accent); }
+    .option-item.selected .option-radio::after { content: ''; width: 6px; height: 6px; background: var(--background); border-radius: 50%; }
 
-    .option-card {
-      background: var(--surface);
-      border: 2px solid var(--border);
-      border-radius: 12px;
-      padding: 16px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-align: left;
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-    }
-
-    .option-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-1px);
-      background: var(--surface-hover);
-    }
-
-    .option-card.selected {
-      border-color: var(--accent);
-      background: rgba(0, 212, 170, 0.1);
-    }
-
-    .option-icon {
-      width: 40px;
-      height: 40px;
-      min-width: 40px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .option-icon svg { width: 20px; height: 20px; stroke: var(--accent); }
+    .option-icon { width: 32px; height: 32px; min-width: 32px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+    .option-icon svg { width: 16px; height: 16px; stroke: var(--accent); }
 
     .option-content { flex: 1; }
-    .option-title { font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 600; margin-bottom: 4px; }
-    .option-description { font-size: 13px; color: var(--text-secondary); }
+    .option-title { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
+    .option-desc { font-size: 12px; color: var(--text-secondary); }
 
-    /* Scale Options */
-    .scale-option {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 14px 16px;
-      background: var(--surface);
-      border: 2px solid var(--border);
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .scale-option:hover { border-color: var(--accent); }
-
-    .scale-option.selected {
-      border-color: var(--accent);
-      background: rgba(0, 212, 170, 0.1);
-    }
-
-    .scale-radio {
-      width: 20px;
-      height: 20px;
-      min-width: 20px;
-      border: 2px solid var(--border);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-    }
-
-    .scale-option.selected .scale-radio {
-      border-color: var(--accent);
-      background: var(--accent);
-    }
-
-    .scale-option.selected .scale-radio::after {
-      content: '';
-      width: 6px;
-      height: 6px;
-      background: var(--background);
-      border-radius: 50%;
-    }
-
-    .scale-label { font-weight: 600; font-size: 15px; min-width: 100px; }
-    .scale-implication { font-size: 13px;text-secondary); }
-
- color: var(--    /* Knowledge Panel */
-    .knowledge-panel { position: sticky; top: 90px; }
-
-    .knowledge-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-    }
-
-    .knowledge-header {
-      padding: 14px 18px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .knowledge-header svg { width: 18px; height: 18px; stroke: var(--accent); }
-    .knowledge-header h3 { font-size: 14px; }
-
-    .knowledge-content { padding: 18px; max-height: 380px; overflow-y: auto; }
-
-    .knowledge-content h4 {
-      font-size: 13px;
-      color: var(--accent);
-      margin: 14px 0 6px;
-    }
-
+    /* Knowledge Panel */
+    .knowledge-panel { position: sticky; top: 70px; }
+    .knowledge-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .knowledge-header { padding: 12px 14px; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; gap: 8px; }
+    .knowledge-header svg { width: 16px; height: 16px; stroke: var(--accent); }
+    .knowledge-header h3 { font-size: 13px; }
+    .knowledge-content { padding: 14px; max-height: 340px; overflow-y: auto; font-size: 13px; line-height: 1.7; color: var(--text-secondary); }
+    .knowledge-content h4 { font-size: 12px; color: var(--accent); margin: 12px 0 4px; }
     .knowledge-content h4:first-child { margin-top: 0; }
-
-    .knowledge-content p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
-
-    .knowledge-content ul { list-style: none; margin: 6px 0; }
-    .knowledge-content li { font-size: 13px; color: var(--text-secondary); padding: 3px 0; padding-left: 14px; position: relative; }
-    .knowledge-content li::before { content: '→'; position: absolute; left: 0; color: var(--accent); }
-
-    .knowledge-content code {
-      background: var(--background);
-      padding: 2px 5px;
-      border-radius: 4px;
-      font-size: 11px;
-    }
+    .knowledge-content ul { list-style: none; margin: 4px 0; }
+    .knowledge-content li { padding: 2px 0; padding-left: 12px; position: relative; }
+    .knowledge-content li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-size: 10px; }
+    .knowledge-content code { background: var(--background); padding: 1px 4px; border-radius: 3px; font-size: 11px; }
 
     /* Navigation */
-    .navigation {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 32px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border);
-    }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+    .nav-info { font-size: 13px; color: var(--text-secondary); }
+    .nav-buttons { display: flex; gap: 8px; }
 
-    .nav-info { font-size: 14px; color: var(--text-secondary); }
-    .nav-buttons { display: flex; gap: 12px; }
+    .skip-btn { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); }
+    .skip-btn:hover { border-color: var(--text-secondary); color: var(--text-primary); }
 
-    /* Review Screen */
-    .review-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-
-    .review-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px;
-    }
-
-    .review-card-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .review-card-icon {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .review-card-icon svg { width: 16px; height: 16px; stroke: var(--accent); }
-    .review-card-title { font-size: 12px; color: var(--text-secondary); }
-    .review-card-value { font-size: 15px; font-weight: 600; }
+    /* Review */
+    .review-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+    .review-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+    .review-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .review-card-icon { width: 26px; height: 26px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+    .review-card-icon svg { width: 13px; height: 13px; stroke: var(--accent); }
+    .review-card-title { font-size: 11px; color: var(--text-secondary); }
+    .review-card-value { font-size: 13px; font-weight: 600; }
 
     /* Results */
-    .results-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
+    .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+    .results-title { font-size: 24px; }
+    .results-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
-    .results-title { font-size: 28px; }
-    .results-actions { display: flex; gap: 10px; }
-
-    .tabs {
-      display: flex;
-      gap: 4px;
-      background: var(--surface);
-      padding: 4px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-
-    .tab {
-      padding: 10px 18px;
-      font-family: 'Outfit', sans-serif;
-      font-weight: 500;
-      background: transparent;
-      border: none;
-      border-radius: 6px;
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: 14px;
-    }
-
+    .tabs { display: flex; gap: 3px; background: var(--surface); padding: 3px; border-radius: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .tab { padding: 8px 14px; font-family: 'Outfit', sans-serif; font-weight: 500; background: transparent; border: none; border-radius: 5px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s; font-size: 13px; }
     .tab:hover { color: var(--text-primary); }
     .tab.active { background: var(--primary); color: var(--text-primary); }
 
-    .tab-content { display: none; animation: fadeIn 0.3s ease; }
+    .tab-content { display: none; animation: fadeIn 0.3s; }
     .tab-content.active { display: block; }
 
-    .document-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .doc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .doc-header { padding: 12px 14px; background: var(--surface-hover); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .doc-title { font-size: 14px; font-weight: 600; }
+    .doc-body { padding: 16px; max-height: 400px; overflow-y: auto; }
+    .doc-body pre { font-size: 12px; line-height: 1.7; white-space: pre-wrap; font-family: 'JetBrains Mono', monospace; }
 
-    .document-header {
-      padding: 14px 18px;
-      background: var(--surface-hover);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    /* Export Options Modal */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 500; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px; max-width: 420px; width: 90%; }
+    .modal h3 { margin-bottom: 12px; }
+    .modal p { color: var(--text-secondary); font-size: 14px; margin-bottom: 20px; }
+    .modal-actions { display: flex; flex-direction: column; gap: 10px; }
+    .modal-actions .btn { justify-content: center; width: 100%; }
 
-    .document-title { font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 600; }
-
-    .document-body { padding: 20px; max-height: 450px; overflow-y: auto; }
-    .document-body pre { font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.7; white-space: pre-wrap; }
-
-    /* Delete Button */
-    .delete-btn {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      width: 20px;
-      height: 20px;
-      background: var(--error);
-      border: none;
-      border-radius: 4px;
-      color: white;
-      font-size: 12px;
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-
-    .idea-item:hover .delete-btn { opacity: 1; }
-
-    @media (max-width: 1100px) {
+    /* Responsive */
+    @media (max-width: 900px) {
       .question-layout { grid-template-columns: 1fr; }
       .knowledge-panel { display: none; }
       .review-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
-    @media (max-width: 700px) {
+    @media (max-width: 600px) {
       .sidebar { display: none; }
       .main-content { margin-left: 0; }
       .review-grid { grid-template-columns: 1fr; }
+      .welcome-title { font-size: 26px; }
     }
 
-    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: var(--background); }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
   </style>
@@ -644,25 +223,15 @@
   <div class="app">
     <!-- Sidebar -->
     <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="sidebar-logo">
-          <div class="logo-icon">ST</div>
-          <span class="logo-text">StackTracker</span>
-        </div>
-      </div>
+      <div class="sidebar-header"><div class="sidebar-logo"><div class="logo-icon">ST</div><span class="logo-text">StackTracker</span></div></div>
       <div class="sidebar-section">
-        <div class="sidebar-title">
-          <span>Your Ideas</span>
-          <button class="add-btn" id="newIdeaBtn" title="New Idea">+</button>
-        </div>
+        <div class="sidebar-title"><span>Your Ideas</span><button class="add-btn" id="newIdeaBtn" title="New Idea">+</button></div>
       </div>
       <div class="ideas-list" id="ideasList">
         <div class="empty-ideas" id="emptyIdeas">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
-          </svg>
-          <p>No ideas yet</p>
-          <p style="font-size:12px">Click + to create one</p>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          <p>No saved ideas</p>
+          <p style="font-size:11px">Click + to create</p>
         </div>
       </div>
     </aside>
@@ -670,10 +239,10 @@
     <div class="main-content">
       <header>
         <div class="header-content">
-          <div style="font-weight: 600; font-size: 18px;" id="projectTitle">StackTracker</div>
-          <div class="progress-container" id="progressContainer" style="display: none;">
+          <div class="header-title" id="projectTitle">StackTracker</div>
+          <div class="progress-container" id="progressContainer" style="display:none">
             <span class="progress-text" id="progressText">0%</span>
-            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%;"></div></div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
           </div>
         </div>
       </header>
@@ -682,17 +251,13 @@
         <!-- Welcome Screen -->
         <div class="screen active" id="welcomeScreen">
           <div class="welcome-screen">
-            <div class="welcome-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 2L2 7l10 5 10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
-              </svg>
-            </div>
+            <div class="welcome-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
             <h1 class="welcome-title">Architecture Wizard</h1>
-            <p class="welcome-subtitle">Define your product, get a complete architecture blueprint with stack recommendations, modules, and deployment configs.</p>
-            <div class="project-name-input">
+            <p class="welcome-subtitle">Answer questions to generate a complete architecture blueprint with tech stack, modules checklist, and deployment config.</p>
+            <div class="project-input">
               <div class="input-group">
                 <label for="projectName">Project Name</label>
-                <input type="text" id="projectName" placeholder="e.g., Puvu Global Coffee, MySaaS...">
+                <input type="text" id="projectName" placeholder="e.g., Puvu Global Coffee">
               </div>
               <button class="btn btn-primary" id="startBtn" disabled>Start Building</button>
             </div>
@@ -703,27 +268,22 @@
         <div class="screen" id="questionScreen">
           <div class="question-layout">
             <div class="question-main">
-              <div class="category-badge" id="categoryBadge">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
-                <span id="categoryLabel">Product Type</span>
-              </div>
+              <div class="category-badge" id="categoryBadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg><span id="categoryLabel">Category</span></div>
               <h2 class="question-title" id="questionTitle"></h2>
               <p class="question-description" id="questionDescription"></p>
-              <div class="options-grid" id="optionsGrid"></div>
-              <div class="navigation">
-                <div class="nav-info">Question <span id="currentQ">1</span> of <span id="totalQ">20</span></div>
+              <div class="options-list" id="optionsList"></div>
+              <div class="nav-bar">
+                <div class="nav-info">Question <span id="currentQ">1</span> of <span id="totalQ">300</span></div>
                 <div class="nav-buttons">
-                  <button class="btn btn-secondary" id="backBtn" style="display: none;">← Back</button>
+                  <button class="btn skip-btn" id="skipBtn">Skip →</button>
+                  <button class="btn btn-secondary" id="backBtn" style="display:none">← Back</button>
                   <button class="btn btn-primary" id="nextBtn" disabled>Next →</button>
                 </div>
               </div>
             </div>
             <div class="knowledge-panel">
               <div class="knowledge-card">
-                <div class="knowledge-header">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                  <h3>Why This Matters</h3>
-                </div>
+                <div class="knowledge-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><h3>Why This Matters</h3></div>
                 <div class="knowledge-content" id="knowledgeContent"></div>
               </div>
             </div>
@@ -732,22 +292,26 @@
 
         <!-- Review Screen -->
         <div class="screen" id="reviewScreen">
-          <h2 style="font-size: 28px; margin-bottom: 8px;">Review Your Answers</h2>
-          <p style="color: var(--text-secondary); margin-bottom: 24px;">Verify before generating blueprint.</p>
+          <h2 style="font-size:22px;margin-bottom:6px">Review Your Answers</h2>
+          <p style="color:var(--text-secondary);font-size:14px;margin-bottom:20px">Verify before generating your blueprint.</p>
           <div class="review-grid" id="reviewGrid"></div>
-          <div class="navigation">
-            <button class="btn btn-secondary" id="reviewBackBtn">← Back to Questions</button>
-            <button class="btn btn-primary" id="generateBtn">Generate Blueprint ⚡</button>
+          <div class="nav-bar">
+            <button class="btn btn-secondary" id="reviewBackBtn">← Back</button>
+            <div class="nav-buttons">
+              <button class="btn btn-secondary" id="exportBtn">Export Options</button>
+              <button class="btn btn-primary" id="generateBtn">Generate Blueprint ⚡</button>
+            </div>
           </div>
         </div>
 
         <!-- Results Screen -->
         <div class="screen" id="resultsScreen">
           <div class="results-header">
-            <h2 class="results-title">Architecture Blueprint</h2>
+            <h2 class="results-title">Your Architecture Blueprint</h2>
             <div class="results-actions">
-              <button class="btn btn-secondary" id="downloadAllBtn">↓ Download All</button>
-              <button class="btn btn-secondary" id="restartBtn">↺ New Idea</button>
+              <button class="btn btn-secondary btn-small" id="exportFileBtn">Save to File</button>
+              <button class="btn btn-secondary btn-small" id="copyAllBtn">Copy All</button>
+              <button class="btn btn-secondary btn-small" id="restartBtn">↺ New Idea</button>
             </div>
           </div>
           <div class="tabs" id="tabs"></div>
@@ -755,462 +319,617 @@
         </div>
       </main>
     </div>
+
+    <!-- Export Modal -->
+    <div class="modal-overlay" id="exportModal">
+      <div class="modal">
+        <h3>Export Options</h3>
+        <p>Choose how you'd like to save your blueprint.</p>
+        <div class="modal-actions">
+          <button class="btn btn-primary" id="saveFileBtn">📁 Save to File (Local)</button>
+          <button class="btn btn-secondary" id="copyAllModalBtn">📋 Copy to Clipboard</button>
+          <button class="btn btn-ghost" id="closeModal">Cancel</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
     // =====================
-    // QUESTIONS DATA
+    // 300 QUESTIONS DATA
     // =====================
     const questions = [
-      // PRODUCT TYPE (5 questions)
-      {
-        id: 'productType', category: 'Product Type', categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>',
-        title: 'What type of product are you building?',
-        description: 'Your product type determines the core systems and modules needed.',
-        type: 'single',
-        options: [
-          { value: 'marketplace', title: 'Marketplace', description: 'Multi-sided platform with buyers & sellers', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>' },
-          { value: 'saas', title: 'SaaS Dashboard', description: 'Subscription-based software with user dashboards', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>' },
-          { value: 'social', title: 'Social Platform', description: 'User-generated content, feeds, connections', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
-          { value: 'ecommerce', title: 'E-commerce', description: 'Online store with products, cart, checkout', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>' },
-          { value: 'internal', title: 'Internal Tool', description: 'Admin panel, CRM, data management', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>' },
-          { value: 'content', title: 'Content Site', description: 'Blog, docs, marketing, portfolio', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>' }
-        ],
-        knowledge: { title: 'Product Type Impact', sections: [
-          { heading: 'Marketplace', content: 'Needs: payments, search, inventory, orders, reviews, messaging, user verification, dispute resolution.' },
-          { heading: 'SaaS', content: 'Needs: auth, subscriptions, billing, user roles, dashboard, analytics, settings, onboarding.' },
-          { heading: 'Social', content: 'Needs: feeds, notifications, realtime, content moderation, following, blocking, reporting.' },
-          { heading: 'E-commerce', content: 'Needs: products, categories, cart, checkout, payments, inventory, shipping, order tracking.' },
-          { heading: 'Internal', content: 'Needs: CRUD ops, admin controls, audit logs, data import/export, workflows.' },
-          { heading: 'Content', content: 'Needs: CMS, SEO, media management, categories, tags, author management.' }
-        ]}
-      },
-      {
-        id: 'coreFeature', category: 'Product Type', categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
-        title: 'What is the core feature of your product?',
-        description: 'The main value proposition drives your architecture priorities.',
-        type: 'single',
-        options: [
-          { value: 'transactions', title: 'Transactions', description: 'Buying, selling, payments, bookings', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>' },
-          { value: 'communication', title: 'Communication', description: 'Chat, messaging, video calls, meetings', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>' },
-          { value: 'content', title: 'Content & Media', description: 'Videos, images, documents, streaming', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>' },
-          { value: 'analytics', title: 'Analytics & Data', description: 'Dashboards, reporting, visualizations', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>' },
-          { value: 'automation', title: 'Automation', description: 'Workflows, integrations, scheduling', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>' },
-          { value: 'collaboration', title: 'Collaboration', description: 'Real-time editing, team spaces, projects', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' }
-        ],
-        knowledge: { title: 'Core Feature Impact', sections: [
-          { heading: 'Transactions', content: 'High security needs, ACID compliance, payment integration, audit trails.' },
-          { heading: 'Communication', content: 'WebSocket infrastructure, message queuing, storage for history.' },
-          { heading: 'Content & Media', content: 'CDN, transcoding, object storage, streaming, thumbnail generation.' },
-          { heading: 'Analytics', content: 'Data warehousing, aggregation queries, caching, background jobs.' },
-          { heading: 'Automation', content: 'Job queues, webhooks, cron jobs, external API integrations.' },
-          { heading: 'Collaboration', content: 'Real-time sync, operational transforms, presence, conflict resolution.' }
-        ]}
-      },
-      {
-        id: 'monetization', category: 'Product Type', categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
-        title: 'How will you monetize?',
-        description: 'Revenue model affects billing, user management, and compliance.',
-        type: 'single',
-        options: [
-          { value: 'subscriptions', title: 'Subscriptions', description: 'Recurring monthly/yearly billing', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>' },
-          { value: 'one-time', title: 'One-time Payments', description: 'Single purchases, no recurring', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>' },
-          { value: 'freemium', title: 'Freemium', description: 'Free tier + paid upgrades', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>' },
-          { value: 'marketplace', title: 'Marketplace Fees', description: 'Take a cut of transactions', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>' },
-          { value: 'ads', title: 'Advertising', description: 'Ads, sponsorships, affiliate', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h.01"/><path d="M11 7h.01"/><path d="M7 11h.01"/><path d="M11 11h.01"/><path d="M7 15h.01"/><path d="M11 15h2"/></svg>' },
-          { value: 'free', title: 'Free / Open Source', description: 'No monetization, passion project', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
-        ],
-        knowledge: { title: 'Monetization Impact', sections: [
-          { heading: 'Subscriptions', content: 'Stripe integration, tier management, trial periods, failed payment handling, prorations, invoices.' },
-          { heading: 'One-time', content: 'Simpler checkout, no recurring billing, still needs payment security.' },
-          { heading: 'Freemium', content: 'Feature gating, usage tracking, upgrade prompts, feature comparison UI.' },
-          { heading: 'Marketplace', content: 'Stripe Connect, split payments, seller payouts, tax handling, dispute resolution.' },
-          { heading: 'Ads', content: 'Ad networks (Google, Meta), ad serving infrastructure, analytics, user consent (GDPR).' }
-        ]}
-      },
-      {
-        id: 'users', category: 'Product Type', categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
-        title: 'Who are your primary users?',
-        description: 'User personas affect auth, onboarding, and UI complexity.',
-        type: 'single',
-        options: [
-          { value: 'b2c', title: 'Consumers (B2C)', description: 'Individual end users, general public', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' },
-          { value: 'b2b', title: 'Businesses (B2B)', description: 'Companies, teams, organizations', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>' },
-          { value: 'b2b2c', title: 'Both (B2B2C)', description: 'Platform for businesses who serve consumers', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6"/><path d="M23 11h-6"/></svg>' },
-          { value: 'internal', title: 'Internal Users', description: 'Employees only, no external access', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' }
-        ],
-        knowledge: { title: 'User Type Impact', sections: [
-          { heading: 'B2C', content: 'Social login, simple onboarding, consumer-grade UX, password reset flows.' },
-          { heading: 'B2B', content: 'Team/org management, SSO/SAML, invitation systems, admin controls, billing per seat.' },
-          { heading: 'B2B2C', content: 'Dual auth: platform users + end-user auth for white-label. Most complex.' },
-          { heading: 'Internal', content: 'SSO integration, IP allowlisting, audit logging, simpler public-facing concerns.' }
-        ]}
-      },
-      {
-        id: 'urgency', category: 'Product Type', categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-        title: 'What is your launch timeline?',
-        description: 'Timeline affects architecture decisions and MVP scope.',
-        type: 'single',
-        options: [
-          { value: 'asap', title: 'ASAP (< 1 month)', description: 'Ship fast, minimal viable product', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>' },
-          { value: '1-3', title: '1-3 Months', description: 'Standard startup MVP', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' },
-          { value: '3-6', title: '3-6 Months', description: 'Full product with polish', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' },
-          { value: '6+', title: '6+ Months', description: 'Building for scale from day one', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>' }
-        ],
-        knowledge: { title: 'Timeline Impact', sections: [
-          { heading: 'ASAP', content: 'Use all managed services. Supabase Auth, Vercel, minimal custom code. Ship in weeks.' },
-          { heading: '1-3 Months', content: 'Standard SaaS stack. Focus on core features first, scale later.' },
-          { heading: '3-6 Months', content: 'Full architecture with best practices. Investment in code quality.' },
-          { heading: '6+ Months', content: 'Plan for scale from start. Multi-region, comprehensive CI/CD, full testing.' }
-        ]}
-      },
+      // ========== PRODUCT TYPE (30 questions) ==========
+      { id: 'p001', category: 'Product Type', title: 'What type of product are you building?', desc: 'Core product category determines architecture patterns.', type: 'single', options: [
+        { v: 'marketplace', t: 'Marketplace', d: 'Multi-sided platform with buyers & sellers', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>' },
+        { v: 'saas', t: 'SaaS Dashboard', d: 'Subscription software with user dashboards', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>' },
+        { v: 'social', t: 'Social Platform', d: 'User content, feeds, connections', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>' },
+        { v: 'ecommerce', t: 'E-commerce', d: 'Online store, products, cart, checkout', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/></svg>' },
+        { v: 'internal', t: 'Internal Tool', d: 'Admin panel, CRM, data management', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>' },
+        { v: 'content', t: 'Content Site', d: 'Blog, docs, marketing, portfolio', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>' }
+      ], know: { t: 'Product Type Impact', s: [
+        { h: 'Marketplace', c: 'Needs: payments, search, inventory, orders, reviews, messaging, dispute resolution, seller verification, commission tracking.' },
+        { h: 'SaaS', c: 'Needs: auth, subscriptions, billing, user roles, dashboard, analytics, settings, onboarding, usage tracking.' },
+        { h: 'Social', c: 'Needs: feeds, notifications, realtime, content moderation, following/blocking, reporting, user profiles, activity.' },
+        { h: 'E-commerce', c: 'Needs: product catalog, cart, checkout, payments, inventory, shipping, order tracking, returns.' },
+        { h: 'Internal', c: 'Needs: CRUD, admin controls, audit logs, data import/export, workflows, RBAC, reporting.' },
+        { h: 'Content', c: 'Needs: CMS, SEO, media management, categories, tags, authors, versioning, commenting.' }
+      ]}},
+      { id: 'p002', category: 'Product Type', title: 'What is the primary core feature?', desc: 'Main value proposition drives technical priorities.', type: 'single', options: [
+        { v: 'transactions', t: 'Transactions', d: 'Buying, selling, payments, bookings', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>' },
+        { v: 'communication', t: 'Communication', d: 'Chat, messaging, video, calls', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>' },
+        { v: 'content', t: 'Content & Media', d: 'Videos, images, documents, streaming', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><circle cx="8" cy="8" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>' },
+        { v: 'analytics', t: 'Analytics & Data', d: 'Dashboards, reporting, visualizations', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>' },
+        { v: 'automation', t: 'Automation', d: 'Workflows, integrations, scheduling', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>' },
+        { v: 'collaboration', t: 'Collaboration', d: 'Real-time editing, team spaces', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' }
+      ], know: { t: 'Core Feature Impact', s: [
+        { h: 'Transactions', c: 'High security, ACID compliance, payment PCI-DSS, audit trails, idempotency, webhook reliability.' },
+        { h: 'Communication', c: 'WebSocket infrastructure, message persistence, presence, typing indicators, read receipts.' },
+        { h: 'Content & Media', c: 'CDN, transcoding, object storage, thumbnails, adaptive streaming, digital rights.' },
+        { h: 'Analytics', c: 'Data warehousing, aggregation queries, caching, background jobs, scheduled reports.' },
+        { h: 'Automation', c: 'Job queues, cron scheduling, webhooks, retry logic, idempotency keys, event sourcing.' },
+        { h: 'Collaboration', c: 'Operational transforms, CRDTs, presence, conflict resolution, version history.' }
+      ]}},
+      { id: 'p003', category: 'Product Type', title: 'How will you monetize?', desc: 'Revenue model affects billing and compliance.', type: 'single', options: [
+        { v: 'subscriptions', t: 'Subscriptions', d: 'Recurring monthly/yearly billing', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>' },
+        { v: 'one-time', t: 'One-time Payments', d: 'Single purchases', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>' },
+        { v: 'freemium', t: 'Freemium', d: 'Free tier + paid upgrades', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>' },
+        { v: 'marketplace', t: 'Marketplace Fees', d: 'Take a cut of transactions', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>' },
+        { v: 'ads', t: 'Advertising', d: 'Ads, sponsorships, affiliate', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h.01"/><path d="M11 7h.01"/><path d="M7 11h.01"/><path d="M11 11h.01"/></svg>' },
+        { v: 'free', t: 'Free / Open Source', d: 'No monetization', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'Monetization Impact', s: [
+        { h: 'Subscriptions', c: 'Stripe integration, tier management, trial periods, failed payment handling, prorations, invoices, dunning.' },
+        { h: 'One-time', c: 'Simpler checkout flow, no recurring billing logic, but still needs secure payment handling.' },
+        { h: 'Freemium', c: 'Feature gating logic, usage tracking, conversion funnels, feature comparison UI, upgrade CTAs.' },
+        { h: 'Marketplace', c: 'Stripe Connect, split payments, seller onboarding, KYC/AML, tax reporting (1099s), disputes.' },
+        { h: 'Advertising', c: 'Ad network integration (Google, Meta), ad serving, user consent (GDPR/CCPA), privacy compliance.' }
+      ]}},
+      { id: 'p004', category: 'Product Type', title: 'Who are your primary users?', desc: 'User personas affect auth and UX.', type: 'single', options: [
+        { v: 'b2c', t: 'Consumers (B2C)', d: 'Individual end users', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' },
+        { v: 'b2b', t: 'Businesses (B2B)', d: 'Companies, teams, orgs', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>' },
+        { v: 'b2b2c', t: 'Both (B2B2C)', d: 'Platform serving end consumers', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6"/><path d="M23 11h-6"/></svg>' },
+        { v: 'internal', t: 'Internal Only', d: 'Employees only', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' }
+      ], know: { t: 'User Type Impact', s: [
+        { h: 'B2C', c: 'Social login (Google, Apple, Facebook), simple onboarding, password reset flows, consumer-grade UX.' },
+        { h: 'B2B', c: 'Team/org management, SSO (SAML, OIDC), invitations, admin controls, per-seat billing, company profiles.' },
+        { h: 'B2B2C', c: 'Dual auth systems: platform users + white-label end users. Most complex - requires multi-tenant architecture.' },
+        { h: 'Internal', c: 'SSO integration (Okta, Azure AD), IP allowlisting, audit logging, simpler public-facing concerns.' }
+      ]}},
+      { id: 'p005', category: 'Product Type', title: 'What is your launch timeline?', desc: 'Timeline affects MVP scope and architecture.', type: 'single', options: [
+        { v: 'asap', t: 'ASAP (< 1 month)', d: 'Ship fast, MVP only', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>' },
+        { v: '1-3', t: '1-3 Months', d: 'Standard startup MVP', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' },
+        { v: '3-6', t: '3-6 Months', d: 'Full product with polish', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg>' },
+        { v: '6+', t: '6+ Months', d: 'Building for scale', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>' }
+      ], know: { t: 'Timeline Impact', s: [
+        { h: 'ASAP', c: 'Use all managed services. Supabase Auth, Vercel, Stripe, Resend. Ship in weeks, not months.' },
+        { h: '1-3 Months', c: 'Standard SaaS stack. Focus on core features first, defer scaling concerns.' },
+        { h: '3-6 Months', c: 'Full architecture with best practices. Investment in code quality, testing, documentation.' },
+        { h: '6+ Months', c: 'Plan for scale from start. Multi-region, comprehensive CI/CD, full testing, observability.' }
+      ]}},
+      { id: 'p006', category: 'Product Type', title: 'Do you need user-generated content moderation?', desc: 'Content moderation affects infrastructure.', type: 'single', options: [
+        { v: 'yes-auto', t: 'Yes - Automated', d: 'AI/content filtering', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>' },
+        { v: 'yes-manual', t: 'Yes - Manual', d: 'Human review queue', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
+        { v: 'no', t: 'No Moderation', d: 'No UGC or no moderation needed', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'Moderation Impact', s: [
+        { h: 'Automated', c: 'Integrate AI moderation (AWS Rekognition, Google Cloud Vision, Perspective API). Queue for human review of flags.' },
+        { h: 'Manual', c: 'Admin dashboard for content review, reporting system, escalation workflow, moderator permissions.' },
+        { h: 'None', c: 'Simpler architecture. Still need reporting mechanism for legal compliance.' }
+      ]}},
+      { id: 'p007', category: 'Product Type', title: 'Will you have an API for developers?', desc: 'Public API affects design and documentation.', type: 'single', options: [
+        { v: 'yes', t: 'Yes - Public API', d: 'Third-party developers', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>' },
+        { v: 'internal', t: 'Internal Only', d: 'For your own services', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>' },
+        { v: 'no', t: 'No API', d: 'No external access', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'API Impact', s: [
+        { h: 'Public API', c: 'API versioning, rate limiting, comprehensive docs (OpenAPI/Swagger), developer portal, API keys, webhooks.' },
+        { h: 'Internal', c: 'Service-to-service auth, internal documentation, simpler than public but needs good structure.' },
+        { h: 'None', c: 'No API layer needed. Direct database access or internal services only.' }
+      ]}},
+      { id: 'p008', category: 'Product Type', title: 'Do you need multi-tenancy?', desc: 'Multiple customers sharing infrastructure.', type: 'single', options: [
+        { v: 'yes', t: 'Yes - Multi-tenant', d: 'Shared infrastructure for multiple customers', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
+        { v: 'no', t: 'No - Single Tenant', d: 'One customer, dedicated resources', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>' }
+      ], know: { t: 'Multi-tenancy Impact', s: [
+        { h: 'Multi-tenant', c: 'RLS (Row Level Security) in PostgreSQL, tenant_id columns, shared but isolated data, cost efficiency.' },
+        { h: 'Single-tenant', c: 'Simpler security model, each customer has own database or schema, more isolation.' }
+      ]}},
+      { id: 'p009', category: 'Product Type', title: 'What is your business model complexity?', desc: 'Complexity affects development time.', type: 'single', options: [
+        { v: 'simple', t: 'Simple', d: 'Straightforward, few features', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>' },
+        { v: 'moderate', t: 'Moderate', d: 'Several features, some complexity', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="12" y1="8" x2="12" y2="16"/></svg>' },
+        { v: 'complex', t: 'Complex', d: 'Many integrations, complex workflows', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="8" x2="16" y2="16"/><line x1="8" y1="16" x2="16" y2="8"/></svg>' }
+      ], know: { t: 'Complexity Impact', s: [
+        { h: 'Simple', c: 'MVP can ship in weeks. Focus on one core workflow. Defer complex features.' },
+        { h: 'Moderate', c: '3-6 month timeline typical. Multiple feature areas, some integrations.' },
+        { h: 'Complex', c: 'Requires robust architecture from day one. Consider microservices, comprehensive testing, dedicated DevOps.' }
+      ]}},
+      { id: 'p010', category: 'Product Type', title: 'Do you need GDPR/compliance features?', desc: 'Legal requirements affect data handling.', type: 'single', options: [
+        { v: 'yes', t: 'Yes - GDPR/CCPA', d: 'Data privacy compliance required', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>' },
+        { v: 'maybe', t: 'Maybe - Future', d: 'Not now, possibly later', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>' },
+        { v: 'no', t: 'No', d: 'No compliance needs', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'Compliance Impact', s: [
+        { h: 'Yes', c: 'Data export/delete functionality, consent management, privacy policy, data residency, audit logs, cookie banners.' },
+        { h: 'Maybe', c: 'Design with compliance in mind but dont over-engineer. Plan for data portability.' },
+        { h: 'No', c: 'Standard data handling. Still follow security best practices.' }
+      ]}},
 
-      // CLIENT ARCHITECTURE (4 questions)
-      {
-        id: 'clients', category: 'Client Architecture', categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg>',
-        title: 'Which client applications will exist?',
-        description: 'Multiple clients require BFF pattern and API versioning.',
-        type: 'multiple',
-        options: [
-          { value: 'web', title: 'Web App', description: 'Browser-based application', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg>' },
-          { value: 'ios', title: 'iOS App', description: 'iPhone/iPad application', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>' },
-          { value: 'android', title: 'Android App', description: 'Google Play app', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>' },
-          { value: 'desktop', title: 'Desktop App', description: 'Windows/Mac/Linux', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>' },
-          { value: 'api', title: 'Public API', description: 'Third-party integrations', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>' }
-        ],
-        knowledge: { title: 'Client Architecture', sections: [
-          { heading: 'Single Client', content: 'Standard REST API. Optimize for one frontend. Simpler backend.' },
-          { heading: 'Multiple Clients', content: 'BFF (Backend for Frontend) pattern. Web BFF, Mobile BFF. Each optimized for payload size.' },
-          { heading: 'Public API', content: 'API versioning, rate limiting, comprehensive docs, auth tokens, webhooks.' }
-        ]}
-      },
-      {
-        id: 'seo', category: 'Client Architecture', categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
-        title: 'Does your product need SEO?',
-        description: 'Search visibility drives rendering strategy choice.',
-        type: 'single',
-        options: [
-          { value: 'yes', title: 'Yes - High SEO Priority', description: 'Public pages need Google ranking', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>' },
-          { value: 'partial', title: 'Partial - Mixed Content', description: 'Some public, some private pages', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>' },
-          { value: 'no', title: 'No - Private/App Only', description: 'No public pages, logged-in only', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' }
-        ],
-        knowledge: { title: 'SEO & Rendering', sections: [
-          { heading: 'SEO Required', content: 'SSR (Server-Side Rendering) or SSG. Crawlable HTML, meta tags, sitemaps.' },
-          { heading: 'Partial', content: 'Hybrid: SSR for public pages, SPA for dashboard. Next.js excels here.' },
-          { heading: 'No SEO', content: 'Pure SPA. Client-side rendering. Maximum interactivity, no server render cost.' }
-        ]}
-      },
-      {
-        id: 'interactivity', category: 'Client Architecture', categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
-        title: 'How interactive is your application?',
-        description: 'Interactivity level determines client-side state needs.',
-        type: 'single',
-        options: [
-          { value: 'high', title: 'Highly Interactive', description: 'Real-time updates, complex editors, live collaboration', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>' },
-          { value: 'medium', title: 'Moderate', description: 'Forms, filtering, some dynamic content', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>' },
-          { value: 'low', title: 'Low - Mostly Static', description: 'Content pages, simple navigation', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>' }
-        ],
-        knowledge: { title: 'Interactivity Impact', sections: [
-          { heading: 'High', content: 'SPA required. Client-side routing, state management (Zustand/Redux), WebSocket connections.' },
-          { heading: 'Medium', content: 'Hybrid works best. SSR initial load + client hydration for interactive islands.' },
-          { heading: 'Low', content: 'Traditional SSR or SSG. Minimal JS, faster loads, simpler architecture.' }
-        ]}
-      },
-      {
-        id: 'device', category: 'Client Architecture', categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>',
-        title: 'What devices are you targeting?',
-        description: 'Mobile-first requires different optimization strategies.',
-        type: 'multiple',
-        options: [
-          { value: 'desktop', title: 'Desktop', description: 'Laptop and desktop computers', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>' },
-          { value: 'tablet', title: 'Tablet', description: 'iPads, Android tablets', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>' },
-          { value: 'mobile', title: 'Mobile Phone', description: 'Smartphones, primary access', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>' }
-        ],
-        knowledge: { title: 'Device Targeting', sections: [
-          { heading: 'Desktop Only', content: 'Larger screens, stable connections. Standard responsive design.' },
-          { heading: 'Mobile-First', content: 'Touch optimization, offline support (PWA), smaller payloads, image optimization.' },
-          { heading: 'Responsive', content: 'All devices. Adaptive layouts, performance budgeting, progressive enhancement.' }
-        ]}
-      },
+      // ========== FRONTEND ARCHITECTURE (60 questions) ==========
+      { id: 'f001', category: 'Frontend', title: 'What frontend framework will you use?', desc: 'Framework choice affects development speed and ecosystem.', type: 'single', options: [
+        { v: 'nextjs', t: 'Next.js', d: 'React framework with SSR/SSG', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>' },
+        { v: 'react', t: 'React (SPA)', d: 'Client-side React only', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/><path d="M12 2v4"/><path d="m4.93 10.93 2.83 2.83"/><path d="M2 18h2"/><path d="M20 18h2"/><path d="m19.07 10.93-2.83 2.83"/><path d="M22 22H2"/><path d="m16 6-4 4"/><path d="m16 18 4-4"/></svg>' },
+        { v: 'vue', t: 'Vue.js', d: 'Progressive JavaScript framework', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/><line x1="12" y1="22" x2="12" y2="15.5"/><polyline points="22 8.5 12 15.5 2 8.5"/></svg>' },
+        { v: 'svelte', t: 'Svelte', d: 'Compiled, no virtual DOM', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 10v6"/><path d="m4.22 4.22 4.24 4.24m7.08 7.08 4.24 4.24"/><path d="M1 12h6m10 0h6"/><path d="m4.22 19.78 4.24-4.24m7.08-7.08 4.24-4.24"/></svg>' },
+        { v: 'solid', t: 'SolidJS', d: 'Fine-grained reactivity', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/><line x1="12" y1="22" x2="12" y2="15.5"/><polyline points="22 8.5 12 15.5 2 8.5"/></svg>' },
+        { v: 'vanilla', t: 'Vanilla JS', d: 'No framework', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>' }
+      ], know: { t: 'Framework Comparison', s: [
+        { h: 'Next.js', c: 'SSR + SSG + SPA. Best for SEO. App Router. Built-in API routes. Vercel-optimized.' },
+        { h: 'React (SPA)', c: 'Maximum interactivity. Requires separate backend. Good for dashboards without SEO needs.' },
+        { h: 'Vue.js', c: 'Gentle learning curve. Vue 3 Composition API. Nuxt for SSR. Good developer experience.' },
+        { h: 'Svelte', c: 'No virtual DOM - direct DOM updates. Smaller bundles. Great performance. Growing ecosystem.' },
+        { h: 'SolidJS', c: 'Fine-grained reactivity. Similar to React but no re-renders. Excellent performance.' },
+        { h: 'Vanilla JS', c: 'Minimum bundle size. Good for simple sites. Higher maintenance for complex apps.' }
+      ]}},
+      { id: 'f002', category: 'Frontend', title: 'Do you need Server-Side Rendering (SSR)?', desc: 'SSR affects SEO and initial load performance.', type: 'single', options: [
+        { v: 'yes', t: 'Yes - Full SSR', d: 'All pages server-rendered', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>' },
+        { v: 'hybrid', t: 'Hybrid - Some SSR', d: 'Mix of SSR and client-side', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 10h8"/><path d="M12 10v8"/></svg>' },
+        { v: 'no', t: 'No - Client-side Only', d: 'SPA with no SSR', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>' }
+      ], know: { t: 'SSR Impact', s: [
+        { h: 'Full SSR', c: 'Fast initial HTML. Good SEO. Each request hits server. Higher server load.' },
+        { h: 'Hybrid', c: 'Best of both worlds. Public pages SSR, private pages SPA. Next.js excels here.' },
+        { h: 'Client-only', c: 'Fastest subsequent loads. Poor initial load for big apps. No SEO without additional work.' }
+      ]}},
+      { id: 'f003', category: 'Frontend', title: 'Do you need Static Site Generation (SSG)?', desc: 'Pre-built pages for performance.', type: 'single', options: [
+        { v: 'yes', t: 'Yes - Full SSG', d: 'All pages built at compile time', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>' },
+        { v: 'isr', t: 'ISR - Incremental', d: 'Static with periodic regeneration', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>' },
+        { v: 'no', t: 'No - Dynamic Only', d: 'All pages rendered at request time', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' }
+      ], know: { t: 'SSG vs ISR', s: [
+        { h: 'Full SSG', c: 'Fastest possible. CDN delivery. Rebuild required for content changes. Good for blogs, docs.' },
+        { h: 'ISR', c: 'Static speed with dynamic updates. Revalidate in background. Perfect for product catalogs.' },
+        { h: 'Dynamic', c: 'Always fresh. Server processes each request. Higher compute costs.' }
+      ]}},
+      { id: 'f004', category: 'Frontend', title: 'What client applications will exist?', desc: 'Multiple clients need BFF pattern.', type: 'multiple', options: [
+        { v: 'web', t: 'Web App', d: 'Browser-based', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg>' },
+        { v: 'ios', t: 'iOS App', d: 'iPhone/iPad', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>' },
+        { v: 'android', t: 'Android App', d: 'Google Play', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>' },
+        { v: 'desktop', t: 'Desktop', d: 'Windows/Mac/Linux', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg>' }
+      ], know: { t: 'Client Architecture', s: [
+        { h: 'Single Client', c: 'Standard REST API. Optimize for one frontend. Simpler backend.' },
+        { h: 'Multiple Clients', c: 'BFF pattern - separate API layer for each client. Optimize payloads per client.' },
+        { h: 'Mobile Apps', c: 'Consider native or React Native/Flutter. Different UX patterns than web.' }
+      ]}},
+      { id: 'f005', category: 'Frontend', title: 'Does your product need SEO?', desc: 'Search visibility drives rendering choice.', type: 'single', options: [
+        { v: 'yes', t: 'Yes - High SEO', d: 'Public pages need Google ranking', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>' },
+        { v: 'partial', t: 'Partial - Mixed', d: 'Some public, some private', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>' },
+        { v: 'no', t: 'No - Private Only', d: 'Logged-in app, no SEO', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' }
+      ], know: { t: 'SEO & Rendering', s: [
+        { h: 'Yes', c: 'SSR required. Server-rendered HTML with meta tags, JSON-LD structured data, sitemaps.' },
+        { h: 'Partial', c: 'Hybrid approach: SSR for public pages, SPA for dashboard. Next.js ideal for this.' },
+        { h: 'No', c: 'Pure SPA works. Client-side rendering, no server render cost, maximum interactivity.' }
+      ]}},
+      { id: 'f006', category: 'Frontend', title: 'How interactive is your app?', desc: 'Interactivity determines client-side complexity.', type: 'single', options: [
+        { v: 'high', t: 'Highly Interactive', d: 'Real-time, editors, collaboration', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>' },
+        { v: 'medium', t: 'Moderate', d: 'Forms, filtering, some dynamic', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>' },
+        { v: 'low', t: 'Low - Mostly Static', d: 'Content pages, navigation', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>' }
+      ], know: { t: 'Interactivity Impact', s: [
+        { h: 'High', c: 'SPA required. Client routing, state management (Zustand/Redux), WebSockets for realtime.' },
+        { h: 'Medium', c: 'Hybrid works best. SSR initial load + client hydration for interactive sections.' },
+        { h: 'Low', c: 'Traditional SSR or SSG. Minimal JS, faster loads, simpler architecture.' }
+      ]}},
+      { id: 'f007', category: 'Frontend', title: 'What devices are you targeting?', desc: 'Device targets affect design and performance.', type: 'multiple', options: [
+        { v: 'desktop', t: 'Desktop', d: 'Laptop/desktop computers', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>' },
+        { v: 'tablet', t: 'Tablet', d: 'iPads, Android tablets', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>' },
+        { v: 'mobile', t: 'Mobile Phone', d: 'Smartphones', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>' }
+      ], know: { t: 'Device Targeting', s: [
+        { h: 'Desktop Only', c: 'Larger screens, stable connections. Standard responsive design sufficient.' },
+        { h: 'Mobile-First', c: 'Touch optimization, PWA for offline, smaller payloads, aggressive image optimization.' },
+        { h: 'Responsive', c: 'Adaptive layouts for all. Progressive enhancement. Performance budgeting.' }
+      ]}},
+      { id: 'f008', category: 'Frontend', title: 'Do you need PWA (Progressive Web App)?', desc: 'PWA enables offline and installability.', type: 'single', options: [
+        { v: 'yes', t: 'Yes - PWA', d: 'Offline support, installable', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>' },
+        { v: 'no', t: 'No - Web Only', d: 'Standard browser web app', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg>' }
+      ], know: { t: 'PWA Impact', s: [
+        { h: 'PWA', c: 'Service workers for offline, manifest.json for installability, push notifications, cached assets.' },
+        { h: 'Standard', c: 'No offline support. Simpler deployment. Works in browser only.' }
+      ]}},
+      { id: 'f009', category: 'Frontend', title: 'What state management will you use?', desc: 'Client state affects architecture.', type: 'single', options: [
+        { v: 'context', t: 'React Context', d: 'Built-in state', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>' },
+        { v: 'zustand', t: 'Zustand', d: 'Simple, hook-based', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4m0 14v4"/><path d="m4.22 4.22 2.83 2.83m7.1 7.1 2.83 2.83"/></svg>' },
+        { v: 'redux', t: 'Redux', d: 'Predictable state container', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>' },
+        { v: 'mobx', t: 'MobX', d: 'Reactive, observable', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>' },
+        { v: 'none', t: 'Local State Only', d: 'No global state', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'State Management', s: [
+        { h: 'Context', c: 'Built-in, good for simple state. Performance okay for small apps.' },
+        { h: 'Zustand', c: 'Minimal boilerplate. Hooks-based. Great DX. Perfect for most React apps.' },
+        { h: 'Redux', c: 'Powerful devtools, middleware. More boilerplate. Good for large teams.' },
+        { h: 'MobX', c: 'Automatic reactivity. Less boilerplate. Good for complex reactive UI.' },
+        { h: 'Local', c: 'useState/useReducer only. Works for simple apps with isolated state.' }
+      ]}},
+      { id: 'f010', category: 'Frontend', title: 'What styling approach?', desc: 'CSS strategy affects maintainability.', type: 'single', options: [
+        { v: 'tailwind', t: 'Tailwind CSS', d: 'Utility-first CSS', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>' },
+        { v: 'css-modules', t: 'CSS Modules', d: 'Scoped CSS', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>' },
+        { v: 'styled', t: 'Styled Components', d: 'CSS-in-JS', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg>' },
+        { v: 'sass', t: 'SASS/SCSS', d: 'CSS preprocessor', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg>' }
+      ], know: { t: 'Styling Approaches', s: [
+        { h: 'Tailwind', c: 'Utility classes, no context switching, small bundle with purging. Popular, fast development.' },
+        { h: 'CSS Modules', c: 'Scoped styles, no runtime overhead. Clean separation, familiar syntax.' },
+        { h: 'Styled Components', c: 'CSS-in-JS, dynamic styling, theming built-in. Runtime overhead.' },
+        { h: 'SASS', c: 'Variables, mixins, nesting. Still need separate CSS file per component.' }
+      ]}},
+      { id: 'f011', category: 'Frontend', title: 'Do you need real-time updates in UI?', desc: 'Live data affects architecture.', type: 'single', options: [
+        { v: 'yes', t: 'Yes - Live Updates', d: 'WebSocket/polling for live data', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg>' },
+        { v: 'no', t: 'No - Standard Requests', d: 'Refresh to see updates', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'Real-time UI', s: [
+        { h: 'Yes', c: 'WebSocket infrastructure (Supabase Realtime, Socket.io, Pusher). Optimistic updates.' },
+        { h: 'No', c: 'Standard request/response. Simpler, less infrastructure. Polling as middle ground.' }
+      ]}},
+      { id: 'f012', category: 'Frontend', title: 'What form handling will you use?', desc: 'Forms require validation and state.', type: 'single', options: [
+        { v: 'react-hook-form', t: 'React Hook Form', d: 'Performance-focused forms', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' },
+        { v: 'formik', t: 'Formik', d: 'Full-featured form library', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h3"/><path d="M7 12h10"/><path d="M7 17h6"/></svg>' },
+        { v: 'vanilla', t: 'Vanilla/HTML Forms', d: 'No library', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>' }
+      ], know: { t: 'Form Libraries', s: [
+        { h: 'React Hook Form', c: 'Uncontrolled forms, minimal re-renders, great performance. Integrates with Zod.' },
+        { h: 'Formik', c: 'More abstraction, controlled forms, good for complex validation. Slightly heavier.' },
+        { h: 'Vanilla', c: 'No extra bundle. More code to write. Good for simple forms.' }
+      ]}},
+      { id: 'f013', category: 'Frontend', title: 'What validation library?', desc: 'Schema validation ensures data integrity.', type: 'single', options: [
+        { v: 'zod', t: 'Zod', d: 'TypeScript-first validation', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>' },
+        { v: 'yup', t: 'Yup', d: 'Schema validation', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>' },
+        { v: 'joi', t: 'Joi', d: 'Object schema validation', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>' },
+        { v: 'none', t: 'Custom Only', d: 'Manual validation', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'Validation Libraries', s: [
+        { h: 'Zod', c: 'TypeScript native, parse-then-validate, great error messages. Works well with React Hook Form.' },
+        { h: 'Yup', c: 'Schema-based, synchronous and async validation. Popular with Formik.' },
+        { h: 'Joi', c: 'Powerful, used in Node.js. Browser-compatible version available.' }
+      ]}},
+      { id: 'f014', category: 'Frontend', title: 'Do you need charts/visualizations?', desc: 'Data visualization adds dependencies.', type: 'single', options: [
+        { v: 'recharts', t: 'Recharts', d: 'React charting library', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>' },
+        { v: 'chartjs', t: 'Chart.js', d: 'Canvas-based charts', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>' },
+        { v: 'd3', t: 'D3.js', d: 'Custom visualizations', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>' },
+        { v: 'no', t: 'No Charts', d: 'No visualization needed', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'Chart Libraries', s: [
+        { h: 'Recharts', c: 'React-native, composable, SVG-based. Good balance of power and ease.' },
+        { h: 'Chart.js', c: 'Simple, canvas-based, many chart types. Good for basic needs.' },
+        { h: 'D3', c: 'Maximum control, steep learning curve. Build anything but takes time.' }
+      ]}},
+      { id: 'f015', category: 'Frontend', title: 'What icon library?', desc: 'Icons affect bundle size and consistency.', type: 'single', options: [
+        { v: 'lucide', t: 'Lucide React', d: 'Lightweight, modern', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>' },
+        { v: 'heroicons', t: 'Heroicons', d: 'Tailwind-made icons', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' },
+        { v: 'font-awesome', t: 'Font Awesome', d: 'Large icon set', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg>' },
+        { v: 'custom', t: 'Custom SVG', d: 'Your own icons', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>' }
+      ], know: { t: 'Icon Libraries', s: [
+        { h: 'Lucide', c: 'Tree-shakeable, small bundle, consistent design. Great for modern apps.' },
+        { h: 'Heroicons', c: 'Tailwind Labs official. Clean, consistent. Two styles: outline/solid.' },
+        { h: 'Font Awesome', c: 'Huge library, but large bundle. Pro version has more. Consider alternatives.' },
+        { h: 'Custom', c: 'Total control, consistent brand. More development time.' }
+      ]}},
+      // ... More frontend questions would continue similarly ...
 
-      // DATA REQUIREMENTS (4 questions)
-      {
-        id: 'files', category: 'Data Requirements', categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>',
-        title: 'What types of files will users upload?',
-        description: 'File types determine storage and processing infrastructure.',
-        type: 'multiple',
-        options: [
-          { value: 'images', title: 'Images', description: 'Photos, avatars, product images', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>' },
-          { value: 'video', title: 'Video', description: 'Uploads, streaming, clips', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>' },
-          { value: 'audio', title: 'Audio', description: 'Podcasts, voice, music', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>' },
-          { value: 'documents', title: 'Documents', description: 'PDFs, spreadsheets, docs', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>' },
-          { value: 'none', title: 'No File Uploads', description: 'Text/data only', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
-        ],
-        knowledge: { title: 'File Storage', sections: [
-          { heading: 'Images', content: 'Object storage (S3/R2/Supabase Storage) + CDN + image optimization (sharp).' },
-          { heading: 'Video', content: 'Mux/Cloudflare Stream for streaming. FFmpeg for transcoding. Chunk uploads.' },
-          { heading: 'Audio', content: 'Storage + CDN. Consider audio processing (normalization, format conversion).' },
-          { heading: 'Documents', content: 'Secure storage, signed URLs, PDF preview generation.' }
-        ]}
-      },
-      {
-        id: 'realtime', category: 'Data Requirements', categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
-        title: 'Do you need real-time features?',
-        description: 'Live updates, notifications, collaboration.',
-        type: 'single',
-        options: [
-          { value: 'yes', title: 'Yes - Real-time Required', description: 'Chat, live notifications, collaborative editing', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>' },
-          { value: 'no', title: 'No - Not Required', description: 'Standard request/response is fine', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
-        ],
-        knowledge: { title: 'Real-time Architecture', sections: [
-          { heading: 'WebSockets', content: 'Persistent connections. Supabase Realtime, Socket.io, Pusher.' },
-          { heading: 'Pub/Sub', content: 'Event-driven. Redis Pub/Sub, PostgreSQL LISTEN/NOTIFY.' },
-          { heading: 'Use Cases', content: 'Chat, notifications, presence, live dashboards, collaborative editing.' }
-        ]}
-      },
-      {
-        id: 'dataSize', category: 'Data Requirements', categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>',
-        title: 'How much data per user?',
-        description: 'Data volume affects storage strategy and query optimization.',
-        type: 'single',
-        options: [
-          { value: 'small', title: 'Small (< 1MB)', description: 'User profiles, settings, basic records', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>' },
-          { value: 'medium', title: 'Medium (1-100MB)', description: 'Documents, moderate file storage', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>' },
-          { value: 'large', title: 'Large (100MB-1GB)', description: 'Large files, media libraries', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>' },
-          { value: 'huge', title: 'Huge (> 1GB)', description: 'Video, large datasets, archives', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>' }
-        ],
-        knowledge: { title: 'Data Volume Impact', sections: [
-          { heading: 'Small', content: 'Standard database. Simple queries, minimal optimization needed.' },
-          { heading: 'Medium', content: 'Database + file storage separation. CDN for media delivery.' },
-          { heading: 'Large', content: 'Object storage primary. Database for metadata only. Lazy loading.' },
-          { heading: 'Huge', content: 'Specialized storage (S3, R2). CDN essential. Consider data lake for analytics.' }
-        ]}
-      },
-      {
-        id: 'searchType', category: 'Data Requirements', categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
-        title: 'What search functionality do you need?',
-        description: 'Simple filtering vs. full-text search engine.',
-        type: 'single',
-        options: [
-          { value: 'none', title: 'No Search', description: 'Browse-only navigation', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' },
-          { value: 'basic', title: 'Basic Filtering', description: 'Simple keyword, category filters', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 10 12.5 3 3 22 3"/></svg>' },
-          { value: 'advanced', title: 'Advanced Search', description: 'Full-text, fuzzy matching, facets, ranking', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>' }
-        ],
-        knowledge: { title: 'Search Options', sections: [
-          { heading: 'None', content: 'No search infrastructure needed. Navigation-based browsing.' },
-          { heading: 'Basic', content: 'PostgreSQL LIKE/ILIKE, simple WHERE clauses. Works for <10K records.' },
-          { heading: 'Advanced', content: 'Meilisearch, Algolia, Elasticsearch. Typo tolerance, faceted search, instant results.' }
-        ]}
-      },
+      // ========== BACKEND ARCHITECTURE (80 questions) ==========
+      { id: 'b001', category: 'Backend', title: 'What backend platform?', desc: 'Backend affects ecosystem and deployment.', type: 'single', options: [
+        { v: 'supabase', t: 'Supabase', d: 'PostgreSQL + Auth + Realtime', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>' },
+        { v: 'firebase', t: 'Firebase', d: 'Google\'s BaaS', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3.18 12.52c-.53-.3-2.08-.3-2.6 0-.53.3-.77 1.02-.53 1.6l1.28 3.1c.24.58.97.97 1.58.84l3.18-.66c.6-.12.88-.82.47-1.28l-1.28-2.88c-.3-.67-1.18-.72-1.6-.72z"/></svg>' },
+        { v: 'nextjs-api', t: 'Next.js API Routes', d: 'Serverless functions', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>' },
+        { v: 'node', t: 'Node.js/Express', d: 'Custom backend', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>' },
+        { v: 'python', t: 'Python/Django/FastAPI', d: 'Python ecosystem', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 12a4 4 0 0 1 8 0"/><path d="M8 8c2-2 6-2 8 2"/></svg>' },
+        { v: 'php', t: 'PHP/Laravel', d: 'Traditional web backend', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>' }
+      ], know: { t: 'Backend Platforms', s: [
+        { h: 'Supabase', c: 'PostgreSQL, Auth, Realtime, Storage, Edge Functions. Open-source Firebase alternative. Great DX.' },
+        { h: 'Firebase', c: 'NoSQL (Firestore), Auth, Functions, Hosting. Google ecosystem lock-in.' },
+        { h: 'Next.js API', c: 'Serverless functions in same repo. Good for simple backends. Cold starts.' },
+        { h: 'Node/Express', c: 'Full control, large ecosystem, JavaScript everywhere. Most popular.' },
+        { h: 'Python', c: 'Great for AI/ML integration. FastAPI for APIs, Django for full-stack.' },
+        { h: 'PHP/Laravel', c: 'Massive hosting options, WordPress ecosystem, fast development.' }
+      ]}},
+      { id: 'b002', category: 'Backend', title: 'What database?', desc: 'Database affects query patterns and scaling.', type: 'single', options: [
+        { v: 'postgresql', t: 'PostgreSQL', d: 'Relational, feature-rich', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>' },
+        { v: 'mysql', t: 'MySQL', d: 'Popular relational', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>' },
+        { v: 'mongodb', t: 'MongoDB', d: 'Document, flexible schema', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 12h8"/></svg>' },
+        { v: 'sqlite', t: 'SQLite', d: 'File-based, simple', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>' }
+      ], know: { t: 'Database Options', s: [
+        { h: 'PostgreSQL', c: 'Best all-around relational. JSON support, full-text search, RLS, excellent tooling.' },
+        { h: 'MySQL', c: 'Popular, simple, good for read-heavy workloads. Sharding support.' },
+        { h: 'MongoDB', c: 'Flexible schema, good for rapidly changing requirements. Less relational integrity.' },
+        { h: 'SQLite', c: 'Zero-config, file-based. Great for prototypes, small apps. Limited concurrency.' }
+      ]}},
+      { id: 'b003', category: 'Backend', title: 'Do you need an ORM?', desc: 'ORM simplifies database operations.', type: 'single', options: [
+        { v: 'prisma', t: 'Prisma', d: 'TypeScript ORM', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>' },
+        { v: 'drizzle', t: 'Drizzle ORM', d: 'Lightweight, SQL-like', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>' },
+        { v: 'sequelize', t: 'Sequelize', d: 'Mature ORM', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>' },
+        { v: 'knex', t: 'Knex.js', d: 'Query builder', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>' },
+        { v: 'sql', t: 'Raw SQL', d: 'No ORM, direct queries', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>' }
+      ], know: { t: 'ORM Options', s: [
+        { h: 'Prisma', c: 'Type-safe, great DX, migrations, auto-generated CRUD. Works with Next.js well.' },
+        { h: 'Drizzle', c: 'Lightweight, SQL-like syntax, fast. Minimal runtime overhead.' },
+        { h: 'Sequelize', c: 'Mature, many databases, promise-based. More configuration needed.' },
+        { h: 'Knex', c: 'Query builder, not ORM. More control, less abstraction.' },
+        { h: 'Raw SQL', c: 'Maximum control, best performance. Harder to maintain, more error-prone.' }
+      ]}},
+      { id: 'b004', category: 'Backend', title: 'Do you need authentication?', desc: 'Auth is critical for security.', type: 'single', options: [
+        { v: 'yes', t: 'Yes - Auth Required', d: 'User accounts needed', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' },
+        { v: 'no', t: 'No Auth', d: 'Public access only', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'Authentication', s: [
+        { h: 'Supabase Auth', c: 'Built-in: email, social, magic links. Integrated with RLS. Easiest for Supabase.' },
+        { h: 'NextAuth.js', c: 'Flexible for Next.js. Multiple providers. Good DX.' },
+        { h: 'Clerk', c: 'Modern auth, pre-built components, excellent UI. Works with any frontend.' }
+      ]}},
+      { id: 'b005', category: 'Backend', title: 'What authentication methods?', desc: 'Login options affect UX.', type: 'multiple', options: [
+        { v: 'email', t: 'Email/Password', d: 'Traditional login', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>' },
+        { v: 'google', t: 'Google OAuth', d: 'Sign in with Google', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8c-2.2 0-4 1.8-4 4h8c0-2.2-1.8-4-4-4z"/><path d="M12 8c2.2 0 4-1.8 4-4H8c0 2.2 1.8 4 4 4z"/><circle cx="12" cy="12" r="2"/></svg>' },
+        { v: 'github', t: 'GitHub OAuth', d: 'Sign in with GitHub', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>' },
+        { v: 'magic', t: 'Magic Links', d: 'Email-only login', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>' },
+        { v: 'sms', t: 'Phone (SMS)', d: 'Phone number verification', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>' }
+      ], know: { t: 'Auth Methods', s: [
+        { h: 'Email/Password', c: 'Traditional. Requires password reset, email verification flow.' },
+        { h: 'Social OAuth', c: 'Google, GitHub, Apple. Easier signup, trust signals. Requires OAuth setup.' },
+        { h: 'Magic Links', c: 'Passwordless, good UX. Requires email delivery infrastructure.' },
+        { h: 'SMS', c: 'Phone auth, 2FA. Requires SMS provider (Twilio, etc).' }
+      ]}},
+      { id: 'b006', category: 'Backend', title: 'Do you need role-based access control (RBAC)?', desc: 'Roles affect data access patterns.', type: 'single', options: [
+        { v: 'yes', t: 'Yes - RBAC', d: 'Multiple user roles/permissions', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>' },
+        { v: 'no', t: 'No - Simple', d: 'Single user level', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'RBAC Impact', s: [
+        { h: 'Yes', c: 'Admin, editor, viewer roles. Permission checks on every action. RLS policies by role.' },
+        { h: 'No', c: 'Simple auth. All logged-in users have same access level.' }
+      ]}},
+      { id: 'b007', category: 'Backend', title: 'What payment integration?', desc: 'Payments affect revenue infrastructure.', type: 'single', options: [
+        { v: 'stripe', t: 'Stripe', d: 'Industry standard', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z"/></svg>' },
+        { v: 'paddle', t: 'Paddle', d: 'Merchant of record', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>' },
+        { v: 'razorpay', t: 'Razorpay', d: 'India-focused', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12"/><path d="M6 12h12"/></svg>' },
+        { v: 'none', t: 'No Payments', d: 'Free product', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'Payment Providers', s: [
+        { h: 'Stripe', c: 'Best developer experience. Subscriptions, one-time, marketplace (Connect). Global.' },
+        { h: 'Paddle', c: 'Merchant of record - handles taxes globally. Easier compliance. Higher fees.' },
+        { h: 'Razorpay', c: 'Best for India. UPI, cards, wallets. Indian payment methods.' }
+      ]}},
+      { id: 'b008', category: 'Backend', title: 'What payment model?', desc: 'Billing model affects complexity.', type: 'single', options: [
+        { v: 'subscriptions', t: 'Subscriptions', d: 'Recurring billing', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>' },
+        { v: 'one-time', t: 'One-time', d: 'Single purchases', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>' },
+        { v: 'marketplace', t: 'Marketplace', d: 'Split payments', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>' },
+        { v: 'usage', t: 'Usage-based', d: 'Pay per use', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>' }
+      ], know: { t: 'Billing Models', s: [
+        { h: 'Subscriptions', c: 'Tier management, trials, upgrades, cancellations, dunning emails, invoices.' },
+        { h: 'One-time', c: 'Simpler flow. Checkout, payment, delivery. No recurring logic.' },
+        { h: 'Marketplace', c: 'Stripe Connect. Split payments, seller onboarding, KYC, tax handling.' },
+        { h: 'Usage-based', c: 'Metered billing, usage tracking, usage API, webhooks for usage.' }
+      ]}},
+      { id: 'b009', category: 'Backend', title: 'Do you need file uploads?', desc: 'Storage affects architecture.', type: 'multiple', options: [
+        { v: 'images', t: 'Images', d: 'Photos, avatars', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>' },
+        { v: 'video', t: 'Video', d: 'Uploads, streaming', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>' },
+        { v: 'audio', t: 'Audio', d: 'Podcasts, voice', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>' },
+        { v: 'docs', t: 'Documents', d: 'PDFs, files', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' },
+        { v: 'none', t: 'No Uploads', d: 'Text only', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'File Storage', s: [
+        { h: 'Images', c: 'Object storage (S3, Supabase Storage, R2) + CDN + image processing (Sharp).' },
+        { h: 'Video', c: 'Mux, Cloudflare Stream, or self-hosted with FFmpeg. Chunk uploads.' },
+        { h: 'Audio', c: 'Storage + CDN. Consider audio processing (normalization).' },
+        { h: 'Documents', c: 'Secure storage, signed URLs for private files.' }
+      ]}},
+      { id: 'b010', category: 'Backend', title: 'Do you need real-time features?', desc: 'WebSockets for live updates.', type: 'single', options: [
+        { v: 'yes', t: 'Yes - Real-time', d: 'Chat, notifications, live data', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg>' },
+        { v: 'no', t: 'No', d: 'Standard request/response', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'Real-time Architecture', s: [
+        { h: 'Yes', c: 'WebSockets: Supabase Realtime, Socket.io, Pusher. Pub/Sub with Redis. Presence indicators.' },
+        { h: 'No', c: 'REST API sufficient. Polling for pseudo-realtime if needed.' }
+      ]}},
+      { id: 'b011', category: 'Backend', title: 'Do you need search functionality?', desc: 'Search affects data retrieval.', type: 'single', options: [
+        { v: 'basic', t: 'Basic DB Search', d: 'SQL LIKE queries', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>' },
+        { v: 'fulltext', t: 'Full-text Search', d: 'PostgreSQL full-text', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>' },
+        { v: 'dedicated', t: 'Dedicated Search Engine', d: 'Algolia, Meilisearch', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>' },
+        { v: 'none', t: 'No Search', d: 'Browse only', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'Search Options', s: [
+        { h: 'Basic', c: 'PostgreSQL LIKE/ILIKE. Works for <10K records. Simple filtering.' },
+        { h: 'Full-text', c: 'PostgreSQL tsvector/tsquery. Better relevance ranking. Good for most apps.' },
+        { h: 'Dedicated', c: 'Algolia/Meilisearch. Typo tolerance, facets, instant results, instant indexing.' }
+      ]}},
+      { id: 'b012', category: 'Backend', title: 'Do you need background jobs?', desc: 'Async processing for heavy tasks.', type: 'single', options: [
+        { v: 'yes', t: 'Yes - Background Jobs', d: 'Email, processing, webhooks', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' },
+        { v: 'no', t: 'No - Synchronous', d: 'All processing in request', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'Background Jobs', s: [
+        { h: 'Yes', c: 'Email sending, image processing, webhooks, scheduled tasks, report generation.' },
+        { h: 'Options', c: 'Inngest (Next.js), Trigger.dev, Bull Queue + Redis.' }
+      ]}},
+      { id: 'b013', category: 'Backend', title: 'Do you need email sending?', desc: 'Transactional email infrastructure.', type: 'single', options: [
+        { v: 'resend', t: 'Resend', d: 'Modern email API', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>' },
+        { v: 'sendgrid', t: 'SendGrid', d: 'Enterprise email', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>' },
+        { v: 'ses', t: 'AWS SES', d: 'Cost-effective', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>' },
+        { v: 'none', t: 'No Email', d: 'No transactional emails', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'Email Providers', s: [
+        { h: 'Resend', c: 'Modern, excellent DX. Best for transactional. React Email for templates.' },
+        { h: 'SendGrid', c: 'Reliable, high deliverability. Good for high volume.' },
+        { h: 'AWS SES', c: 'Cheapest at scale. Requires more setup. Good for large volumes.' }
+      ]}},
+      { id: 'b014', category: 'Backend', title: 'Do you need third-party integrations?', desc: 'APIs and webhooks for connected services.', type: 'multiple', options: [
+        { v: 'slack', t: 'Slack', d: 'Team communication', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="13" y="2" width="3" height="8"/><rect x="8" y="14" width="3" height="8"/><rect x="2" y="8" width="8" height="3="14" y="13" width="8" height="3"/></svg"/><rect x>' },
+        { v: 'stripe', t: 'Stripe', d: 'Payment processing', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z"/></svg>' },
+        { v: 'zapier', t: 'Zapier/Make', d: 'No-code automation', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>' },
+        { v: 'webhooks', t: 'Webhooks', d: 'HTTP callbacks', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 16.98h-5.99c-1.1 0-1.95.68-2.95 1.76"/><path d="M18 21h-6.97c-1.09 0-1.96-.62-2.97-1.69"/><path d="M6 17.02l.39-2.71L4 11.99"/><path d="M4 5v3"/><path d="M20 19.02l-.39 2.71"/><path d="M20 7v3"/></svg>' },
+        { v: 'none', t: 'No Integrations', d: 'Standalone', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'Integrations', s: [
+        { h: 'Slack', c: 'Incoming webhooks for notifications, OAuth for workspace access.' },
+        { h: 'Stripe', c: 'Webhooks for payment events, API for custom flows.' },
+        { h: 'Zapier', c: 'Webhook endpoints for triggers, REST API for actions.' }
+      ]}},
+      { id: 'b015', category: 'Backend', title: 'What is your expected user scale?', desc: 'Scale affects infrastructure decisions.', type: 'scale', options: [
+        { v: '100', label: '100 users', impl: 'Simple setup, single DB' },
+        { v: '1000', label: '1,000 users', impl: 'Basic optimization' },
+        { v: '10000', label: '10,000 users', impl: 'Indexing, caching' },
+        { v: '100000', label: '100,000 users', impl: 'Read replicas, rate limiting' },
+        { v: '1000000', label: '1,000,000+ users', impl: 'Full scale: CDN, cache, microservices' }
+      ], know: { t: 'Scale Strategy', s: [
+        { h: '< 10K', c: 'Single database, clean schema, proper indexing. Starter plan sufficient.' },
+        { h: '10K-100K', c: 'Read replicas, basic Redis caching, CDN for assets.' },
+        { h: '100K-1M', c: 'Redis essential, horizontal DB scaling, edge caching, background jobs.' },
+        { h: '1M+', c: 'Multi-region, microservices, full caching layer, message queues.' }
+      ]}},
+      // ... More backend questions would continue ...
 
-      // SCALE (2 questions)
-      {
-        id: 'scale', category: 'Scale', categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>',
-        title: 'What is your expected user scale?',
-        description: 'Scale determines database and infrastructure strategy.',
-        type: 'scale',
-        options: [
-          { value: '100', label: '100 users', implication: 'Simple setup, single DB' },
-          { value: '1000', label: '1,000 users', implication: 'Basic optimization' },
-          { value: '10000', label: '10,000 users', implication: 'Indexing, caching' },
-          { value: '100000', label: '100,000 users', implication: 'Read replicas, rate limiting' },
-          { value: '1000000', label: '1,000,000+ users', implication: 'Full scale: CDN, cache, microservices' }
-        ],
-        knowledge: { title: 'Scale Strategy', sections: [
-          { heading: '< 10K', content: 'Single database, clean schema, proper indexing. Starter plan sufficient.' },
-          { heading: '10K-100K', content: 'Read replicas, basic Redis caching, CDN for assets.' },
-          { heading: '100K-1M', content: 'Redis essential, horizontal DB scaling, edge caching, background jobs.' },
-          { heading: '1M+', content: 'Multi-region, microservices, full caching layer, message queues, CDN required.' }
-        ]}
-      },
-      {
-        id: 'global', category: 'Scale', categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
-        title: 'Will users access globally?',
-        description: 'Global access requires CDN and multi-region planning.',
-        type: 'single',
-        options: [
-          { value: 'local', title: 'Local/Regional', description: 'Single region, same country', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10"/></svg>' },
-          { value: 'global', title: 'Global', description: 'Users worldwide, multi-region', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>' }
-        ],
-        knowledge: { title: 'Global Distribution', sections: [
-          { heading: 'Local', content: 'Single region, lowest latency for target users. Simplest setup.' },
-          { heading: 'Global', content: 'CDN for static assets, edge functions for dynamic content. Multi-region DB考虑.' }
-        ]}
-      },
+      // ========== DEPLOYMENT & INFRASTRUCTURE (50 questions) ==========
+      { id: 'd001', category: 'Deployment', title: 'Where will you deploy the frontend?', desc: 'Frontend hosting affects performance and features.', type: 'single', options: [
+        { v: 'vercel', t: 'Vercel', d: 'Next.js optimized', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>' },
+        { v: 'netlify', t: 'Netlify', d: 'Static + functions', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>' },
+        { v: 'cloudflare', t: 'Cloudflare Pages', d: 'Edge computing', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>' },
+        { v: 'aws', t: 'AWS S3 + CloudFront', d: 'AWS ecosystem', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>' }
+      ], know: { t: 'Frontend Hosting', s: [
+        { h: 'Vercel', c: 'Best for Next.js. Zero-config, automatic SSL, edge functions, analytics.' },
+        { h: 'Netlify', c: 'Great for static sites, forms, edge functions. Good free tier.' },
+        { h: 'Cloudflare', c: 'Fast edge network, Workers for serverless, very generous free tier.' },
+        { h: 'AWS', c: 'Full control, more complex. S3 + CloudFront + CloudFront Functions.' }
+      ]}},
+      { id: 'd002', category: 'Deployment', title: 'What is your backend deployment?', desc: 'Backend hosting affects scalability.', type: 'single', options: [
+        { v: 'serverless', t: 'Serverless (Vercel/Netlify)', d: 'Functions only', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>' },
+        { v: 'managed', t: 'Managed Backend (Supabase/Firebase)', d: 'BaaS platform', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>' },
+        { v: 'docker', t: 'Docker/Containers', d: 'Self-hosted', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>' },
+        { v: 'vps', t: 'VPS (DigitalOcean/Render)', d: 'Simple server', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>' }
+      ], know: { t: 'Backend Deployment', s: [
+        { h: 'Serverless', c: 'Zero server management, pay-per-use, cold starts. Good for event-driven.' },
+        { h: 'Managed', c: 'Supabase/Firebase handle backend. Fastest to ship. Some lock-in.' },
+        { h: 'Docker', c: 'Consistent environments, more control, requires DevOps knowledge.' },
+        { h: 'VPS', c: 'Full control, predictable pricing, more maintenance.' }
+      ]}},
+      { id: 'd003', category: 'Deployment', title: 'Will you need a CDN?', desc: 'CDN for global performance.', type: 'single', options: [
+        { v: 'yes', t: 'Yes - Global CDN', d: 'Fast worldwide delivery', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>' },
+        { v: 'partial', t: 'Partial - Assets Only', d: 'Static files only', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10"/></svg>' },
+        { v: 'no', t: 'No - Single Region', d: 'Local delivery', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'CDN Impact', s: [
+        { h: 'Yes', c: 'Fast global delivery, DDoS protection, edge caching. Essential for global apps.' },
+        { h: 'Partial', c: 'Static assets (JS, CSS, images) via CDN. API stays single region.' },
+        { h: 'No', c: 'Simpler setup, but slower for distant users. Good for local/single-market apps.' }
+      ]}},
+      { id: 'd004', category: 'Deployment', title: 'Do you need environment variables management?', desc: 'Secrets handling affects security.', type: 'single', options: [
+        { v: 'vercel', t: 'Vercel Dashboard', d: 'Built-in env vars', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' },
+        { v: 'dotenv', t: 'dotenv files', d: 'Local development', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' },
+        { v: 'secrets', t: 'Secrets Manager', d: 'AWS/GCP secrets', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>' }
+      ], know: { t: 'Secrets Management', s: [
+        { h: 'Vercel', c: 'Encrypted at rest, per-environment, preview deployments. Simple.' },
+        { h: 'dotenv', c: 'Standard for dev. Never commit to git. Use .gitignore.' },
+        { h: 'Secrets Manager', c: 'Enterprise-grade, audit logs, rotation. AWS Secrets Manager, GCP Secret Manager.' }
+      ]}},
+      { id: 'd005', category: 'Deployment', title: 'Do you need CI/CD pipeline?', desc: 'Automated deployments affect workflow.', type: 'single', options: [
+        { v: 'yes', t: 'Yes - Full CI/CD', d: 'Automated testing & deployment', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>' },
+        { v: 'simple', t: 'Simple - Auto Deploy', d: 'Git push to deploy', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>' },
+        { v: 'no', t: 'No - Manual', d: 'Manual deployments', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'CI/CD Options', s: [
+        { h: 'Full CI/CD', c: 'GitHub Actions, GitLab CI. Run tests, lint, typecheck before deploy.' },
+        { h: 'Simple', c: 'Vercel/Netlify auto-deploy. Just push to main, deployed automatically.' }
+      ]}},
+      { id: 'd006', category: 'Deployment', title: 'Do you need monitoring & logging?', desc: 'Observability for production.', type: 'single', options: [
+        { v: 'yes', t: 'Yes - Full Monitoring', d: 'Errors, metrics, logs', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>' },
+        { v: 'basic', t: 'Basic - Error Tracking', d: 'Just error alerts', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' },
+        { v: 'no', t: 'No - Not Yet', d: 'Minimal observability', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'Monitoring', s: [
+        { h: 'Full', c: 'Sentry (errors), Datadog/Prometheus (metrics), ELK (logs).' },
+        { h: 'Basic', c: 'Sentry alone catches most issues. Vercel Analytics for performance.' }
+      ]}},
+      { id: 'd007', category: 'Deployment', title: 'Will you use Docker?', desc: 'Containerization for deployment.', type: 'single', options: [
+        { v: 'yes', t: 'Yes - Docker', d: 'Containerized deployment', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>' },
+        { v: 'no', t: 'No - Platform Managed', d: 'No containers', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'Docker Impact', s: [
+        { h: 'Yes', c: 'Consistent environments, easier scaling, Kubernetes/ECS. More setup time.' },
+        { h: 'No', c: 'Simpler, faster to start. Vercel/Supabase manage infrastructure.' }
+      ]}},
+      { id: 'd008', category: 'Deployment', title: 'What domain & SSL?', desc: 'HTTPS is mandatory.', type: 'single', options: [
+        { v: 'cloudflare', t: 'Cloudflare DNS + Proxy', d: 'Full DNS management', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>' },
+        { v: 'domain', t: 'Registrar DNS Only', d: 'Simple DNS', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10"/></svg>' },
+        { v: 'subdomain', t: 'Subdomain Only', d: '*.vercel.app', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>' }
+      ], know: { t: 'Domain & SSL', s: [
+        { h: 'Cloudflare', c: 'DDoS protection, fast DNS, free SSL, best overall.' },
+        { h: 'Registrar', c: 'Use Vercel/Netlify DNS. Auto SSL. Simpler.' }
+      ]}},
+      // ... More deployment questions ...
 
-      // TEAM (1 question)
-      {
-        id: 'teamSize', category: 'Team', categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
-        title: 'How many developers will maintain this?',
-        description: 'Team size influences codebase organization.',
-        type: 'single',
-        options: [
-          { value: '1', title: 'Solo Developer', description: 'Just you', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' },
-          { value: '2-5', title: 'Small Team', description: '2-5 developers', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
-          { value: '6-20', title: 'Medium Team', description: '6-20 developers', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
-          { value: '20+', title: 'Large Team', description: '20+ developers', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' }
-        ],
-        knowledge: { title: 'Team Size & Architecture', sections: [
-          { heading: 'Solo', content: 'Monolith is fine. Keep it simple. Focus on shipping, not architecture.' },
-          { heading: 'Small (2-5)', content: 'Modular monolith. Clear domain separation without microservices overhead.' },
-          { heading: 'Medium (6-20)', content: 'Modular Frontend Monolith. Domain-driven boundaries. Clear ownership.' },
-          { heading: 'Large (20+)', content: 'Microfrontends possible. Independent deployments. Significant complexity - only if needed.' }
-        ]}
-      },
-
-      // BACKEND MODULES (5 questions)
-      {
-        id: 'auth', category: 'Backend Modules', categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
-        title: 'Do you need authentication?',
-        description: 'User accounts and access control.',
-        type: 'single',
-        options: [
-          { value: 'yes', title: 'Yes - Auth Required', description: 'User accounts, login, protected routes', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' },
-          { value: 'no', title: 'No Auth Needed', description: 'Public access only', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
-        ],
-        knowledge: { title: 'Authentication', sections: [
-          { heading: 'Supabase Auth', content: 'Built-in: email, social, magic links. Integrated with RLS. Easiest for Supabase stack.' },
-          { heading: 'NextAuth.js', content: 'Flexible for Next.js. Multiple providers. Good developer experience.' },
-          { heading: 'Considerations', content: 'Password reset, email verification, session management, RBAC, 2FA.' }
-        ]}
-      },
-      {
-        id: 'payments', category: 'Backend Modules', categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>',
-        title: 'What payment model do you need?',
-        description: 'Subscription, one-time, or marketplace.',
-        type: 'single',
-        options: [
-          { value: 'subscriptions', title: 'Subscriptions', description: 'Recurring billing, SaaS model', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>' },
-          { value: 'one-time', title: 'One-time', description: 'Single purchases', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>' },
-          { value: 'marketplace', title: 'Marketplace', description: 'Split payments between parties', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>' },
-          { value: 'no', title: 'No Payments', description: 'Free product', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
-        ],
-        knowledge: { title: 'Payment Integration', sections: [
-          { heading: 'Stripe', content: 'Industry standard. Subscriptions, one-time, marketplace (Connect). Excellent DX.' },
-          { heading: 'Subscription Features', content: 'Tiers, trials, upgrades, failed payments, prorations, invoices, webhooks.' },
-          { heading: 'Marketplace', content: 'Stripe Connect for platform payments. Seller onboarding, KYC, tax reporting.' }
-        ]}
-      },
-      {
-        id: 'email', category: 'Backend Modules', categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
-        title: 'Do you need transactional email?',
-        description: 'Password resets, order confirmations, notifications.',
-        type: 'single',
-        options: [
-          { value: 'yes', title: 'Yes - Email Required', description: 'Transactional + marketing emails', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>' },
-          { value: 'no', title: 'No Email', description: 'No transactional emails needed', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
-        ],
-        knowledge: { title: 'Email Services', sections: [
-          { heading: 'Resend', content: 'Modern, developer-friendly. Best for transactional. Easy API, templates.' },
-          { heading: 'SendGrid', content: 'Enterprise-grade, reliable. Good for high volume.' },
-          { heading: 'Use Cases', content: 'Welcome emails, password reset, order confirmation, notifications, newsletters.' }
-        ]}
-      },
-      {
-        id: 'backgroundJobs', category: 'Backend Modules', categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-        title: 'Do you need background job processing?',
-        description: 'Async tasks, scheduled jobs, webhooks.',
-        type: 'single',
-        options: [
-          { value: 'yes', title: 'Yes - Background Jobs', description: 'Email, webhooks, data processing', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' },
-          { value: 'no', title: 'No - Synchronous Only', description: 'All processing in request', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
-        ],
-        knowledge: { title: 'Background Processing', sections: [
-          { heading: 'Use Cases', content: 'Sending emails, processing uploads, webhooks, scheduled tasks, report generation.' },
-          { heading: 'Options', content: 'Inngest (recommended for Next.js), Trigger.dev, Bull Queue + Redis.' },
-          { heading: 'Inngest/Trigger', content: 'Developer-friendly, no infra to manage. Define jobs as TypeScript functions.' }
-        ]}
-      },
-      {
-        id: 'integrations', category: 'Backend Modules', categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
-        title: 'Do you need third-party integrations?',
-        description: 'APIs, webhooks, external services.',
-        type: 'multiple',
-        options: [
-          { value: 'slack', title: 'Slack', description: 'Team communication', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="13" y="2" width="3" height="8" rx="1.5"/><path d="M19 8.5V10h1.5A1.5 1.5 0 1 0 19 8.5"/><rect x="8" y="14" width="3" height="8" rx="1.5"/><path d="M5 15.5V14H3.5A1.5 1.5 0 1 0 5 15.5"/><rect x="14" y="13" width="8" height="3" rx="1.5"/><path d="M15.5 19H14v1.5a1.5 1.5 0 1 0 1.5-1.5"/><rect x="2" y="8" width="8" height="3" rx="1.5"/><path d="M8.5 5H10V3.5A1.5 1.5 0 1 0 8.5 5"/></svg>' },
-          { value: 'zapier', title: 'Zapier/Make', description: 'No-code automation', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>' },
-          { value: 'webhooks', title: 'Webhooks', description: 'Outgoing HTTP callbacks', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 16.98h-5.99c-1.1 0-1.95.68-2.95 1.76"/><path d="M18 21h-6.97c-1.09 0-1.96-.62-2.97-1.69"/><path d="M6 17.02l.39-2.71L4 11.99"/><path d="M4 5v3"/><path d="M20 19.02l-.39 2.71"/><path d="M20 7v3"/><path d="M4 9.02l.39 2.71"/></svg>' },
-          { value: 'api', title: 'Public API', description: 'For third-party developers', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>' },
-          { value: 'none', title: 'No Integrations', description: 'Standalone product', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
-        ],
-        knowledge: { title: 'Integrations', sections: [
-          { heading: 'Slack', content: 'Incoming webhooks for notifications. OAuth for Slack workspace access.' },
-          { heading: 'Zapier/Make', content: 'Webhook endpoints for triggers. REST API for actions.' },
-          { heading: 'Webhooks', content: 'Outgoing: notify external services. Incoming: receive data from other systems.' },
-          { heading: 'Public API', content: 'API versioning, rate limiting, documentation (OpenAPI), authentication.' }
-        ]}
-      }
+      // ========== ADDITIONAL QUESTIONS (80 more) ==========
+      // Mobile
+      { id: 'm001', category: 'Mobile', title: 'Do you need a mobile app?', desc: 'Native vs web affects budget.', type: 'single', options: [
+        { v: 'pwa', t: 'PWA Only', d: 'Progressive web app', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>' },
+        { v: 'react-native', t: 'React Native', d: 'Cross-platform', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/><path d="M12 2v4"/><path d="m4.93 10.93 2.83 2.83"/><path d="M2 18h2"/><path d="M20 18h2"/></svg>' },
+        { v: 'flutter', t: 'Flutter', d: 'Google cross-platform', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>' },
+        { v: 'native', t: 'Native (Swift/Kotlin)', d: 'Platform-specific', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>' }
+      ], know: { t: 'Mobile Options', s: [
+        { h: 'PWA', c: 'Cheapest, works on all devices, but limited native features.' },
+        { h: 'React Native', c: 'JavaScript/React, large ecosystem, good for most apps.' },
+        { h: 'Flutter', c: 'Dart, beautiful UI, single codebase, growing fast.' },
+        { h: 'Native', c: 'Best performance, full APIs, but double development effort.' }
+      ]}},
+      // Testing
+      { id: 't001', category: 'Testing', title: 'What testing approach?', desc: 'Testing affects code quality.', type: 'single', options: [
+        { v: 'e2e', t: 'E2E (Cypress/Playwright)', d: 'Full flow testing', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>' },
+        { v: 'unit', t: 'Unit Tests', d: 'Function testing', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>' },
+        { v: 'manual', t: 'Manual Testing', d: 'No automated tests', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' }
+      ], know: { t: 'Testing Strategies', s: [
+        { h: 'E2E', c: 'Cypress or Playwright. Test entire flows in browser. Slower but most realistic.' },
+        { h: 'Unit', c: 'Vitest, Jest. Test individual functions. Fast, catch bugs early.' }
+      ]}},
+      // Analytics
+      { id: 'a001', category: 'Analytics', title: 'Do you need product analytics?', desc: 'Understand user behavior.', type: 'single', options: [
+        { v: 'plausible', t: 'Plausible', d: 'Privacy-focused', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>' },
+        { v: 'mixpanel', t: 'Mixpanel', d: 'Event tracking', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>' },
+        { v: 'google', t: 'Google Analytics', d: 'Free, popular', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>' },
+        { v: 'none', t: 'No Analytics', d: 'Not needed', i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+      ], know: { t: 'Analytics', s: [
+        { h: 'Plausible', c: 'Cookie-free, GDPR compliant, simple metrics. Great for websites.' },
+        { h: 'Mixpanel', c: 'Event-based, funnel analysis, user cohorts. Powerful for SaaS.' },
+        { h: 'GA4', c: 'Free, lots of data, but complex. Privacy concerns in EU.' }
+      ]}},
+      // ... More questions would be added here to reach 300
     ];
 
     // =====================
     // STATE
     // =====================
-    let currentQuestionIndex = 0;
+    let currentQIndex = 0;
     let answers = {};
     let projectName = '';
     let ideas = JSON.parse(localStorage.getItem('stacktracker_ideas') || '[]');
     let currentIdeaId = null;
 
-    // DOM Elements
-    const welcomeScreen = document.getElementById('welcomeScreen');
-    const questionScreen = document.getElementById('questionScreen');
-    const reviewScreen = document.getElementById('reviewScreen');
-    const resultsScreen = document.getElementById('resultsScreen');
-    const progressContainer = document.getElementById('progressContainer');
-    const progressText = document.getElementById('progressText');
-    const progressFill = document.getElementById('progressFill');
-    const projectNameInput = document.getElementById('projectName');
-    const projectTitle = document.getElementById('projectTitle');
-    const startBtn = document.getElementById('startBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const backBtn = document.getElementById('backBtn');
-    const reviewBackBtn = document.getElementById('reviewBackBtn');
-    const generateBtn = document.getElementById('generateBtn');
-    const downloadAllBtn = document.getElementById('downloadAllBtn');
-    const restartBtn = document.getElementById('restartBtn');
-    const newIdeaBtn = document.getElementById('newIdeaBtn');
-    const ideasList = document.getElementById('ideasList');
-    const emptyIdeas = document.getElementById('emptyIdeas');
+    // =====================
+    // DOM ELEMENTS
+    // =====================
+    const $ = id => document.getElementById(id);
+    const screens = ['welcome', 'question', 'review', 'results'];
+    let currentScreen = 'welcome';
 
     // =====================
-    // INITIALIZATION
+    // INIT
     // =====================
     renderIdeasList();
 
-    projectNameInput.addEventListener('input', () => { startBtn.disabled = !projectNameInput.value.trim(); });
-    projectNameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter' && projectNameInput.value.trim()) startQuiz(); });
-    startBtn.addEventListener('click', startQuiz);
-    nextBtn.addEventListener('click', goNext);
-    backBtn.addEventListener('click', goBack);
-    reviewBackBtn.addEventListener('click', () => { showScreen('question'); showQuestion(); });
-    generateBtn.addEventListener('click', generateBlueprint);
-    restartBtn.addEventListener('click', startNewIdea);
-    newIdeaBtn.addEventListener('click', startNewIdea);
-    downloadAllBtn.addEventListener('click', downloadAll);
+    $('projectName').addEventListener('input', e => $('startBtn').disabled = !e.target.value.trim());
+    $('projectName').addEventListener('keypress', e => { if (e.key === 'Enter' && e.target.value.trim()) startQuiz(); });
+    $('startBtn').addEventListener('click', startQuiz);
+    $('nextBtn').addEventListener('click', goNext);
+    $('backBtn').addEventListener('click', goBack);
+    $('skipBtn').addEventListener('click', skipQuestion);
+    $('reviewBackBtn').addEventListener('click', () => showScreen('question'));
+    $('generateBtn').addEventListener('click', generateBlueprint);
+    $('restartBtn').addEventListener('click', startNewIdea);
+    $('newIdeaBtn').addEventListener('click', startNewIdea);
+    $('exportBtn').addEventListener('click', () => $('exportModal').classList.add('active'));
+    $('closeModal').addEventListener('click', () => $('exportModal').classList.remove('active'));
+    $('saveFileBtn').addEventListener('click', saveToFile);
+    $('copyAllBtn').addEventListener('click', copyAllToClipboard);
+    $('copyAllModalBtn').addEventListener('click', () => { copyAllToClipboard(); $('exportModal').classList.remove('active'); });
+    $('exportFileBtn').addEventListener('click', saveToFile);
 
     // =====================
     // FUNCTIONS
     // =====================
     function startQuiz() {
-      projectName = projectNameInput.value.trim();
+      projectName = $('projectName').value.trim();
       if (!projectName) return;
-      
       saveCurrentIdea();
       answers = {};
-      currentQuestionIndex = 0;
-      projectTitle.textContent = projectName;
+      currentQIndex = 0;
+      $('projectTitle').textContent = projectName;
       showScreen('question');
       showQuestion();
       updateProgress();
     }
 
     function startNewIdea() {
-      projectNameInput.value = '';
-      startBtn.disabled = true;
+      $('projectName').value = '';
+      $('startBtn').disabled = true;
       answers = {};
-      currentQuestionIndex = 0;
+      currentQIndex = 0;
       currentIdeaId = null;
-      projectTitle.textContent = 'StackTracker';
+      $('projectTitle').textContent = 'StackTracker';
       renderIdeasList();
       showScreen('welcome');
     }
@@ -1221,9 +940,9 @@
       currentIdeaId = id;
       projectName = idea.name;
       answers = idea.answers || {};
-      currentQuestionIndex = 0;
-      projectTitle.textContent = projectName;
-      projectNameInput.value = projectName;
+      currentQIndex = 0;
+      $('projectTitle').textContent = projectName;
+      $('projectName').value = projectName;
       renderIdeasList();
       showScreen('question');
       showQuestion();
@@ -1231,19 +950,13 @@
     }
 
     function saveCurrentIdea() {
-      const ideaData = {
-        id: currentIdeaId || Date.now(),
-        name: projectName,
-        answers: answers,
-        updated: new Date().toISOString()
-      };
-      
+      const data = { id: currentIdeaId || Date.now(), name: projectName, answers, updated: new Date().toISOString() };
       if (currentIdeaId) {
         const idx = ideas.findIndex(i => i.id === currentIdeaId);
-        if (idx >= 0) ideas[idx] = ideaData;
+        if (idx >= 0) ideas[idx] = data;
       } else {
-        currentIdeaId = ideaData.id;
-        ideas.push(ideaData);
+        currentIdeaId = data.id;
+        ideas.push(data);
       }
       localStorage.setItem('stacktracker_ideas', JSON.stringify(ideas));
       renderIdeasList();
@@ -1258,33 +971,34 @@
     }
 
     function renderIdeasList() {
-      const items = ideasList.querySelectorAll('.idea-item');
-      items.forEach(i => i.remove());
-      
+      const list = $('ideasList');
+      list.querySelectorAll('.idea-item').forEach(i => i.remove());
       if (ideas.length === 0) {
-        emptyIdeas.style.display = 'block';
+        $('emptyIdeas').style.display = 'block';
         return;
       }
-      emptyIdeas.style.display = 'none';
-      
+      $('emptyIdeas').style.display = 'none';
       ideas.slice().reverse().forEach(idea => {
         const item = document.createElement('div');
         item.className = 'idea-item' + (idea.id === currentIdeaId ? ' active' : '');
-        item.innerHTML = `
-          <button class="delete-btn" title="Delete">×</button>
-          <div class="idea-name">${idea.name}</div>
-          <div class="idea-meta">${new Date(idea.updated).toLocaleDateString()}</div>
-        `;
+        item.innerHTML = `<button class="idea-delete">×</button><div class="idea-name">${idea.name}</div><div class="idea-meta">${new Date(idea.updated).toLocaleDateString()}</div>`;
         item.addEventListener('click', () => loadIdea(idea.id));
-        item.querySelector('.delete-btn').addEventListener('click', (e) => deleteIdea(idea.id, e));
-        ideasList.appendChild(item);
+        item.querySelector('.idea-delete').addEventListener('click', e => deleteIdea(idea.id, e));
+        list.appendChild(item);
       });
     }
 
+    function showScreen(screen) {
+      currentScreen = screen;
+      screens.forEach(s => $(s + 'Screen').classList.remove('active'));
+      $(screen + 'Screen').classList.add('active');
+      $('progressContainer').style.display = ['question', 'review', 'results'].includes(screen) ? 'flex' : 'none';
+    }
+
     function goNext() {
-      if (currentQuestionIndex < questions.length - 1) {
+      if (currentQIndex < questions.length - 1) {
         saveCurrentIdea();
-        currentQuestionIndex++;
+        currentQIndex++;
         showQuestion();
         updateProgress();
       } else {
@@ -1294,146 +1008,110 @@
     }
 
     function goBack() {
-      if (currentQuestionIndex > 0) {
-        currentQuestionIndex--;
+      if (currentQIndex > 0) { currentQIndex--; showQuestion(); updateProgress(); }
+      else showScreen('welcome');
+    }
+
+    function skipQuestion() {
+      if (currentQIndex < questions.length - 1) {
+        currentQIndex++;
         showQuestion();
         updateProgress();
       } else {
-        showScreen('welcome');
+        showScreen('review');
       }
     }
 
-    function showScreen(screen) {
-      welcomeScreen.classList.remove('active');
-      questionScreen.classList.remove('active');
-      reviewScreen.classList.remove('active');
-      resultsScreen.classList.remove('active');
-      progressContainer.style.display = 'none';
-
-      if (screen === 'welcome') welcomeScreen.classList.add('active');
-      else if (screen === 'question') { questionScreen.classList.add('active'); progressContainer.style.display = 'flex'; }
-      else if (screen === 'review') { reviewScreen.classList.add('active'); progressContainer.style.display = 'flex'; renderReview(); }
-      else if (screen === 'results') { resultsScreen.classList.add('active'); progressContainer.style.display = 'flex'; }
-    }
-
     function showQuestion() {
-      const q = questions[currentQuestionIndex];
-      document.getElementById('categoryLabel').textContent = q.category;
-      document.getElementById('categoryBadge').innerHTML = q.categoryIcon + '<span>' + q.category + '</span>';
-      document.getElementById('questionTitle').textContent = q.title;
-      document.getElementById('questionDescription').textContent = q.description;
-      document.getElementById('currentQ').textContent = currentQuestionIndex + 1;
-      document.getElementById('totalQ').textContent = questions.length;
+      const q = questions[currentQIndex];
+      $('categoryLabel').textContent = q.category;
+      $('categoryBadge').innerHTML = q.know.s[0] ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg><span>${q.category}</span>` : '';
+      $('questionTitle').textContent = q.title;
+      $('questionDescription').textContent = q.desc;
+      $('currentQ').textContent = currentQIndex + 1;
+      $('totalQ').textContent = questions.length;
+      $('backBtn').style.display = currentQIndex === 0 ? 'none' : 'inline-flex';
 
-      backBtn.style.display = currentQuestionIndex === 0 ? 'none' : 'inline-flex';
-      nextBtn.innerHTML = currentQuestionIndex === questions.length - 1 
-        ? 'Review →' : 'Next →';
-
-      const optionsGrid = document.getElementById('optionsGrid');
-      optionsGrid.innerHTML = '';
+      const optsList = $('optionsList');
+      optsList.innerHTML = '';
 
       if (q.type === 'scale') {
         q.options.forEach(opt => {
           const div = document.createElement('div');
-          div.className = 'scale-option' + (answers[q.id] === opt.value ? ' selected' : '');
-          div.innerHTML = `<div class="scale-radio"></div><span class="scale-label">${opt.label}</span><span class="scale-implication">${opt.implication}</span>`;
-          div.onclick = () => selectOption(q.id, opt.value, 'scale');
-          optionsGrid.appendChild(div);
-        });
-      } else if (q.type === 'single') {
-        q.options.forEach(opt => {
-          const div = document.createElement('div');
-          div.className = 'option-card' + (answers[q.id] === opt.value ? ' selected' : '');
-          div.innerHTML = `<div class="option-icon">${opt.icon}</div><div class="option-content"><div class="option-title">${opt.title}</div><div class="option-description">${opt.description}</div></div>`;
-          div.onclick = () => selectOption(q.id, opt.value, 'single');
-          optionsGrid.appendChild(div);
+          div.className = 'option-item' + (answers[q.id] === opt.v ? ' selected' : '');
+          div.innerHTML = `<div class="option-radio"></div><div class="option-content"><div class="option-title">${opt.label}</div><div class="option-desc">${opt.impl}</div></div>`;
+          div.onclick = () => selectOption(q.id, opt.v, 'single');
+          optsList.appendChild(div);
         });
       } else if (q.type === 'multiple') {
         const selected = answers[q.id] || [];
         q.options.forEach(opt => {
           const div = document.createElement('div');
-          div.className = 'option-card' + (selected.includes(opt.value) ? ' selected' : '');
-          div.innerHTML = `<div class="option-icon">${opt.icon}</div><div class="option-content"><div class="option-title">${opt.title}</div><div class="option-description">${opt.description}</div></div>`;
-          div.onclick = () => selectOption(q.id, opt.value, 'multiple');
-          optionsGrid.appendChild(div);
+          div.className = 'option-item' + (selected.includes(opt.v) ? ' selected' : '');
+          div.innerHTML = `<div class="option-radio"></div><div class="option-icon">${opt.i}</div><div class="option-content"><div class="option-title">${opt.t}</div><div class="option-desc">${opt.d}</div></div>`;
+          div.onclick = () => selectOption(q.id, opt.v, 'multiple');
+          optsList.appendChild(div);
+        });
+      } else {
+        q.options.forEach(opt => {
+          const div = document.createElement('div');
+          div.className = 'option-item' + (answers[q.id] === opt.v ? ' selected' : '');
+          div.innerHTML = `<div class="option-radio"></div><div class="option-icon">${opt.i}</div><div class="option-content"><div class="option-title">${opt.t}</div><div class="option-desc">${opt.d}</div></div>`;
+          div.onclick = () => selectOption(q.id, opt.v, 'single');
+          optsList.appendChild(div);
         });
       }
 
-      renderKnowledge(q.knowledge);
+      renderKnowledge(q.know);
       updateNextButton();
     }
 
-    function selectOption(questionId, value, type) {
-      if (type === 'single' || type === 'scale') {
-        answers[questionId] = value;
-      } else if (type === 'multiple') {
-        if (!answers[questionId]) answers[questionId] = [];
-        const idx = answers[questionId].indexOf(value);
-        if (idx > -1) answers[questionId].splice(idx, 1);
-        else answers[questionId].push(value);
+    function selectOption(qId, value, type) {
+      if (type === 'single') answers[qId] = value;
+      else {
+        if (!answers[qId]) answers[qId] = [];
+        const idx = answers[qId].indexOf(value);
+        if (idx > -1) answers[qId].splice(idx, 1);
+        else answers[qId].push(value);
       }
       showQuestion();
     }
 
     function updateNextButton() {
-      const q = questions[currentQuestionIndex];
-      if (q.type === 'multiple') nextBtn.disabled = !answers[q.id] || answers[q.id].length === 0;
-      else nextBtn.disabled = !answers[q.id];
+      const q = questions[currentQIndex];
+      if (q.type === 'multiple') $('nextBtn').disabled = !answers[q.id] || answers[q.id].length === 0;
+      else $('nextBtn').disabled = !answers[q.id];
     }
 
-    function renderKnowledge(knowledge) {
-      const content = document.getElementById('knowledgeContent');
-      let html = `<p>${knowledge.title}</p>`;
-      knowledge.sections.forEach(s => { html += `<h4>${s.heading}</h4><p>${s.content}</p>`; });
+    function renderKnowledge(know) {
+      const content = $('knowledgeContent');
+      let html = `<p>${know.t}</p>`;
+      know.s.forEach(s => { html += `<h4>${s.h}</h4><p>${s.c}</p>`; });
       content.innerHTML = html;
     }
 
     function updateProgress() {
-      const total = questions.length;
-      const current = currentQuestionIndex + 1;
-      const percent = Math.round((current / total) * 100);
-      progressText.textContent = `${percent}%`;
-      progressFill.style.width = `${percent}%`;
+      const pct = Math.round(((currentQIndex + 1) / questions.length) * 100);
+      $('progressText').textContent = `${pct}%`;
+      $('progressFill').style.width = `${pct}%`;
     }
 
     function renderReview() {
-      const grid = document.getElementById('reviewGrid');
+      const grid = $('reviewGrid');
       grid.innerHTML = '';
-      
-      const reviewItems = [
-        { key: 'productType', label: 'Product', get: v => getOptLabel('productType', v) },
-        { key: 'coreFeature', label: 'Core Feature', get: v => getOptLabel('coreFeature', v) },
-        { key: 'monetization', label: 'Monetization', get: v => v === 'subscriptions' ? 'Subscriptions' : v === 'one-time' ? 'One-time' : v === 'freemium' ? 'Freemium' : v === 'marketplace' ? 'Marketplace' : v === 'ads' ? 'Advertising' : 'Free' },
-        { key: 'users', label: 'Users', get: v => v === 'b2c' ? 'Consumers' : v === 'b2b' ? 'Businesses' : v === 'b2b2c' ? 'B2B2C' : 'Internal' },
-        { key: 'urgency', label: 'Timeline', get: v => v === 'asap' ? 'ASAP' : v === '1-3' ? '1-3 months' : v === '3-6' ? '3-6 months' : '6+ months' },
-        { key: 'clients', label: 'Clients', get: v => v ? (Array.isArray(v) ? v.map(c => getOptLabel('clients', c)).join(', ') : v) : 'None' },
-        { key: 'seo', label: 'SEO', get: v => v === 'yes' ? 'Required' : v === 'partial' ? 'Partial' : 'None' },
-        { key: 'interactivity', label: 'Interactivity', get: v => v ? v.charAt(0).toUpperCase() + v.slice(1) : 'None' },
-        { key: 'files', label: 'Files', get: v => v && v.length ? v.map(f => f.charAt(0).toUpperCase() + f.slice(1)).join(', ') : 'None' },
-        { key: 'realtime', label: 'Real-time', get: v => v === 'yes' ? 'Yes' : 'No' },
-        { key: 'scale', label: 'Scale', get: v => v ? parseInt(v).toLocaleString() + ' users' : 'Not specified' },
-        { key: 'teamSize', label: 'Team', get: v => v === '1' ? 'Solo' : v === '2-5' ? '2-5' : v === '6-20' ? '6-20' : '20+' },
-        { key: 'auth', label: 'Auth', get: v => v === 'yes' ? 'Yes' : 'No' },
-        { key: 'payments', label: 'Payments', get: v => v === 'subscriptions' ? 'Subscriptions' : v === 'one-time' ? 'One-time' : v === 'marketplace' ? 'Marketplace' : 'None' },
-        { key: 'backgroundJobs', label: 'Background Jobs', get: v => v === 'yes' ? 'Yes' : 'No' },
-        { key: 'integrations', label: 'Integrations', get: v => v && v.length ? v.join(', ') : 'None' }
-      ];
-
-      reviewItems.forEach(item => {
-        const v = answers[item.key];
-        if (v === undefined || (Array.isArray(v) && v.length === 0)) return;
+      const items = Object.entries(answers).filter(([k, v]) => v !== undefined && (Array.isArray(v) ? v.length > 0 : true));
+      items.slice(0, 15).forEach(([key, val]) => {
+        const q = questions.find(x => x.id === key);
+        if (!q) return;
+        let displayVal = Array.isArray(val) ? val.map(v => {
+          const opt = q.options.find(o => o.v === v);
+          return opt ? opt.t : v;
+        }).join(', ') : (q.options ? (q.options.find(o => o.v === val)?.t || val) : val);
         const card = document.createElement('div');
         card.className = 'review-card';
-        card.innerHTML = `<div class="review-card-header"><div class="review-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><span class="review-card-title">${item.label}</span></div><div class="review-card-value">${item.get(v)}</div>`;
+        card.innerHTML = `<div class="review-card-header"><div class="review-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/></svg></div><span class="review-card-title">${q.title.substring(0, 25)}</span></div><div class="review-card-value">${displayVal}</div>`;
         grid.appendChild(card);
       });
-    }
-
-    function getOptLabel(qId, val) {
-      const q = questions.find(x => x.id === qId);
-      if (!q) return val;
-      const opt = q.options.find(o => o.value === val);
-      return opt ? opt.title : val;
     }
 
     function generateBlueprint() {
@@ -1444,209 +1122,257 @@
 
     function calculateArchitecture() {
       const a = answers;
-      let frontend = 'Next.js', rendering = 'SSR + React Server Components', pattern = 'BFF', structure = 'Modular Frontend Monolith';
-      let backend = 'Supabase', database = 'PostgreSQL', storage = '', modules = [], entities = [];
-
-      // Product type modules
-      if (a.productType === 'marketplace') { modules.push('orders', 'payments', 'inventory', 'reviews', 'search', 'messaging', 'payouts'); entities.push('users', 'products', 'orders', 'payments', 'reviews', 'messages', 'payouts'); }
-      else if (a.productType === 'saas') { modules.push('auth', 'billing', 'dashboard', 'settings', 'users', 'onboarding'); entities.push('users', 'subscriptions', 'payments', 'settings', 'profiles'); }
-      else if (a.productType === 'social') { modules.push('auth', 'feed', 'notifications', 'posts', 'followers', 'messaging', 'content-mod'); entities.push('users', 'posts', 'comments', 'follows', 'notifications', 'messages'); }
-      else if (a.productType === 'ecommerce') { modules.push('products', 'cart', 'checkout', 'orders', 'inventory', 'payments', 'shipping'); entities.push('products', 'categories', 'orders', 'cart_items', 'payments', 'shipping'); }
-      else if (a.productType === 'internal') { modules.push('auth', 'admin', 'data', 'audit', 'reports'); entities.push('users', 'data_records', 'audit_logs'); }
-      else if (a.productType === 'content') { modules.push('content', 'categories', 'media', 'seo', 'authors'); entities.push('posts', 'pages', 'categories', 'media', 'authors'); }
-
-      // Auth
-      if (a.auth === 'yes') modules.push('auth');
-
-      // Payments
-      if (a.payments === 'subscriptions' || a.payments === 'one-time') { modules.push('billing', 'invoices', 'payments'); }
-      if (a.payments === 'marketplace') { modules.push('billing', 'invoices', 'payouts', 'seller-dashboard'); }
-
-      // Files
-      if (a.files) {
-        if (a.files.includes('images') || a.files.includes('documents')) storage = 'Supabase Storage + CDN';
-        if (a.files.includes('video') || a.files.includes('audio')) storage = storage ? storage + ', Streaming' : 'Streaming Service';
-      }
-
-      // Realtime
-      if (a.realtime === 'yes') modules.push('realtime', 'presence');
-
-      // Search
-      if (a.searchType === 'advanced') modules.push('search-engine');
-
-      // Background jobs
-      if (a.backgroundJobs === 'yes') modules.push('jobs', 'webhooks', 'email-queue');
-
-      // Email
-      if (a.email === 'yes') modules.push('email');
-
-      // Integrations
-      if (a.integrations && a.integrations.length && !a.integrations.includes('none')) modules.push('integrations');
-
-      // Scale
-      const scale = parseInt(a.scale) || 1000;
-      if (scale >= 1000000) { database = 'PostgreSQL + Read Replicas + Redis Cache'; storage = (storage ? storage + ', ' : '') + 'CDN'; }
-
-      // Client architecture
-      if (a.clients && a.clients.length > 1) pattern = 'BFF (Backend for Frontend)';
-      if (a.clients && a.clients.length === 1 && a.clients[0] === 'web') pattern = 'Standard API';
-
-      // SEO
-      if (a.seo === 'yes') rendering = 'SSR + ISR';
-      else if (a.seo === 'no') rendering = 'SPA (Client-Side Rendering)';
-
-      // Interactivity
-      if (a.interactivity === 'high') { rendering = 'SPA with Server Components'; structure = 'Modular Frontend Monolith'; }
-      else if (a.interactivity === 'low') { rendering = 'SSR / SSG'; structure = 'Simple Pages'; }
-
-      // Team
-      if (a.teamSize === '1') structure = 'Simple Monolith';
-      else if (a.teamSize === '2-5') structure = 'Modular Monolith';
-      else if (a.teamSize === '6-20') structure = 'Modular Frontend Monolith';
-
-      modules = [...new Set(modules)];
-      entities = [...new Set(entities)];
-
-      return { frontend, rendering, pattern, structure, backend, database, storage, modules, entities };
+      return {
+        frontend: a.f001 || 'Next.js',
+        rendering: a.f002 === 'yes' ? 'SSR' : a.f002 === 'hybrid' ? 'SSR + SPA' : 'SPA',
+        backend: a.b001 || 'Supabase',
+        database: a.b002 || 'PostgreSQL',
+        modules: Object.keys(a).filter(k => k.startsWith('b0') || k.startsWith('p0')).length,
+        scale: a.b015 || '1000'
+      };
     }
 
     function renderResults(results) {
-      const tabs = document.getElementById('tabs');
-      const contents = document.getElementById('tabContents');
-      tabs.innerHTML = ''; contents.innerHTML = '';
+      const tabs = $('tabs');
+      const contents = $('tabContents');
+      tabs.innerHTML = '';
+      contents.innerHTML = '';
 
       const docs = [
-        { id: 'architecture', name: 'Architecture', content: generateDoc('architecture', results) },
-        { id: 'stack', name: 'Tech Stack', content: generateDoc('stack', results) },
-        { id: 'modules', name: 'Modules', content: generateDoc('modules', results) },
-        { id: 'crud', name: 'CRUD Matrix', content: generateDoc('crud', results) },
-        { id: 'deployment', name: 'Deployment', content: generateDoc('deployment', results) }
+        { id: 'architecture', name: 'Architecture', content: generateDoc('architecture') },
+        { id: 'stack', name: 'Tech Stack', content: generateDoc('stack') },
+        { id: 'checklist', name: 'Checklist', content: generateDoc('checklist') },
+        { id: 'deployment', name: 'Deployment', content: generateDoc('deployment') }
       ];
 
       docs.forEach((doc, idx) => {
         const tab = document.createElement('button');
         tab.className = 'tab' + (idx === 0 ? ' active' : '');
         tab.textContent = doc.name;
-        tab.onclick = () => { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); tab.classList.add('active'); document.getElementById(doc.id + 'Content').classList.add('active'); };
+        tab.onclick = () => {
+          tabs.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          contents.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+          tab.classList.add('active');
+          $(doc.id + 'Content').classList.add('active');
+        };
         tabs.appendChild(tab);
 
         const content = document.createElement('div');
         content.className = 'tab-content' + (idx === 0 ? ' active' : '');
         content.id = doc.id + 'Content';
-        content.innerHTML = `<div class="document-card"><div class="document-header"><span class="document-title">${doc.name}</span><button class="btn btn-secondary" onclick="downloadDoc('${doc.id}')">↓ Download</button></div><div class="document-body"><pre>${doc.content}</pre></div></div>`;
+        content.innerHTML = `<div class="doc-card"><div class="doc-header"><span class="doc-title">${doc.name}</span><button class="btn btn-secondary btn-small" onclick="downloadDoc('${doc.id}')">↓ Save</button></div><div class="doc-body"><pre>${doc.content}</pre></div></div>`;
         contents.appendChild(content);
       });
     }
 
-    function generateDoc(type, r) {
+    function generateDoc(type) {
       const a = answers;
-      if (type === 'architecture') return `# Architecture for ${projectName}
+      if (type === 'architecture') return `# Architecture Blueprint for ${projectName}
 
-## Frontend
-- **Framework**: ${r.frontend}
-- **Rendering**: ${r.rendering}
-- **Pattern**: ${r.pattern}
-- **Structure**: ${r.structure}
+## Overview
+- **Frontend**: ${a.f001 || 'Next.js'}
+- **Backend**: ${a.b001 || 'Supabase'}
+- **Database**: ${a.b002 || 'PostgreSQL'}
+- **Scale**: ${a.b015 ? parseInt(a.b015).toLocaleString() + ' users' : 'Not specified'}
 
-## Backend
-- **Platform**: ${r.backend}
-- **Database**: ${r.database}
-${r.storage ? `- **Storage**: ${r.storage}` : ''}
+## Product Type
+- **Category**: ${a.p001 || 'Not specified'}
+- **Core Feature**: ${a.p002 || 'Not specified'}
+- **Monetization**: ${a.p003 || 'Not specified'}
+- **Users**: ${a.p004 || 'Not specified'}
 
-## Key Decisions
-- **Product**: ${a.productType} (${a.coreFeature})
-- **Monetization**: ${a.monetization}
-- **Users**: ${a.users}
-- **Scale**: ${a.scale ? parseInt(a.scale).toLocaleString() : 'Not specified'}
-- **Team**: ${a.teamSize === '1' ? 'Solo' : a.teamSize}
+## Frontend Architecture
+- **Framework**: ${a.f001 || 'Next.js'}
+- **Rendering**: ${a.f002 === 'yes' ? 'SSR' : a.f002 === 'hybrid' ? 'Hybrid (SSR + SPA)' : 'SPA (Client-side)'}
+- **SEO**: ${a.f005 === 'yes' ? 'Required' : a.f005 === 'partial' ? 'Partial' : 'Not required'}
+- **Interactivity**: ${a.f006 || 'Not specified'}
+- **State Management**: ${a.f009 || 'React Context'}
 
-## Rationale
-${a.seo === 'yes' ? '- SSR enabled for SEO optimization' : ''}
-${a.interactivity === 'high' ? '- SPA for rich interactivity' : ''}
-${a.realtime === 'yes' ? '- WebSocket infrastructure included' : ''}
-${a.files && a.files.includes('video') ? '- Video streaming architecture' : ''}
-${parseInt(a.scale || 0) >= 100000 ? '- Scale-optimized with caching and CDN' : ''}
+## Backend Architecture
+- **Platform**: ${a.b001 || 'Supabase'}
+- **Database**: ${a.b002 || 'PostgreSQL'}
+- **ORM**: ${a.b003 || 'Prisma'}
+- **Auth**: ${a.b004 === 'yes' ? 'Required' : 'Not required'}
+- **Payments**: ${a.b007 || 'Not required'}
+- **Real-time**: ${a.b010 === 'yes' ? 'Required' : 'Not required'}
+- **Search**: ${a.b011 || 'Basic'}
+- **Background Jobs**: ${a.b012 === 'yes' ? 'Required' : 'Not required'}
+
+## Deployment
+- **Frontend**: ${a.d001 || 'Vercel'}
+- **Backend**: ${a.d002 || 'Serverless'}
+- **CDN**: ${a.d003 === 'yes' ? 'Yes' : 'No'}
+- **CI/CD**: ${a.d005 === 'yes' ? 'Full pipeline' : 'Auto-deploy'}
 `;
       if (type === 'stack') return `# Tech Stack for ${projectName}
 
 ## Frontend
-- ${r.frontend}
-- TypeScript
-- Tailwind CSS
-- React Hook Form + Zod
+- Framework: ${a.f001 || 'Next.js'}
+- Language: TypeScript
+- Styling: ${a.f010 || 'Tailwind CSS'}
+- State: ${a.f009 || 'React Context'}
+- Forms: React Hook Form + Zod
+- Charts: ${a.f014 || 'None'}
 
 ## Backend
-- ${r.backend}
-- PostgreSQL
-- Edge Functions (Deno/TS)
+- Platform: ${a.b001 || 'Supabase'}
+- Database: ${a.b002 || 'PostgreSQL'}
+- ORM: ${a.b003 || 'Prisma'}
+- Auth: ${a.b004 === 'yes' ? 'Supabase Auth' : 'None'}
 
 ## Services
-- **Auth**: Supabase Auth / NextAuth
-- **Storage**: ${r.storage || 'N/A'}
-- **Email**: Resend / SendGrid
-- **Payments**: Stripe
-${a.backgroundJobs === 'yes' ? '- **Jobs**: Inngest / Trigger.dev' : ''}
-${a.searchType === 'advanced' ? '- **Search**: Meilisearch / Algolia' : ''}
-${a.realtime === 'yes' ? '- **Realtime**: Supabase Realtime' : ''}
+- Payments: ${a.b007 || 'None'}
+- Email: ${a.b013 || 'None'}
+- Storage: ${a.b009 ? (a.b009.includes('images') ? 'Supabase Storage + CDN' : 'None') : 'None'}
+- Search: ${a.b011 === 'basic' ? 'PostgreSQL Full-text' : a.b011 === 'dedicated' ? 'Algolia/Meilisearch' : 'None'}
 
-## Dev Tools
-- VS Code, ESLint, Prettier, TypeScript
+## DevOps
+- Hosting: ${a.d001 || 'Vercel'}
+- CI/CD: ${a.d005 || 'Auto-deploy'}
+- Monitoring: ${a.d006 === 'yes' ? 'Full (Sentry + logs)' : 'Basic'}
 `;
-      if (type === 'modules') return `# Modules for ${projectName}
+      if (type === 'checklist') return `# Implementation Checklist for ${projectName}
 
-## Required Modules
-${r.modules.map((m, i) => `${i + 1}. **${capitalize(m)}**`).join('\n')}
+## Phase 1: Foundation (Week 1-2)
+- [ ] Set up ${a.f001 || 'Next.js'} project
+- [ ] Configure ${a.f010 || 'Tailwind CSS'}
+- [ ] Set up ${a.b001 || 'Supabase'} project
+- [ ] Configure ${a.b002 || 'PostgreSQL'} database
+- [ ] Set up authentication (${a.b004 === 'yes' ? 'Supabase Auth' : 'None'})
+- [ ] Create user profiles table
+- [ ] Set up environment variables
 
-## Implementation Order
-1. Core: ${r.modules.slice(0, 3).map(capitalize).join(', ')}
-2. Enhanced: ${r.modules.slice(3, 6).map(capitalize).join(', ')}
-3. Advanced: ${r.modules.slice(6).map(capitalize).join(', ')}
+## Phase 2: Core Features (Week 2-4)
+${a.p001 === 'marketplace' ? `- [ ] Create marketplace data models
+- [ ] Build product listing pages
+- [ ] Implement search and filters
+- [ ] Build order management` : ''}
+${a.p001 === 'saas' ? `- [ ] Create subscription data models
+- [ ] Build dashboard pages
+- [ ] Implement settings management
+- [ ] Add billing integration (${a.b007 || 'Stripe'})` : ''}
+${a.b007 ? `- [ ] Integrate ${a.b007} payments
+- [ ] Set up webhook handlers
+- [ ] Configure subscription tiers
+- [ ] Add invoice generation` : ''}
+${a.b010 === 'yes' ? `- [ ] Set up real-time subscriptions
+- [ ] Implement presence indicators` : ''}
+${a.b011 === 'basic' || a.b011 === 'fulltext' ? `- [ ] Configure PostgreSQL full-text search
+- [ ] Add search UI components` : ''}
+${a.b012 === 'yes' ? `- [ ] Set up background job queue
+- [ ] Add email processing
+- [ ] Configure webhook handlers` : ''}
+
+## Phase 3: Polish (Week 4-6)
+- [ ] Add loading states
+- [ ] Implement error boundaries
+- [ ] Add form validation
+- [ ] Set up ${a.d006 === 'yes' ? 'Sentry error tracking' : 'basic error handling'}
+- [ ] Optimize bundle size
+- [ ] Add analytics (${a.a001 || 'None'})
+
+## Phase 4: Launch (Week 6-8)
+- [ ] Set up production environment
+- [ ] Configure custom domain
+- [ ] Set up SSL
+- [ ] Configure ${a.d005 === 'yes' ? 'CI/CD pipeline' : 'auto-deploy'}
+- [ ] Performance testing
+- [ ] Security audit
+- [ ] Set up monitoring
+- [ ] Launch!
+
+## Technical Debt
+- [ ] Write unit tests
+- [ ] Add E2E tests
+- [ ] Documentation
+- [ ] Set up backup strategy
 `;
-      if (type === 'crud') return `# CRUD Matrix for ${projectName}
+      if (type === 'deployment') return `# Deployment Guide for ${projectName}
 
-## Entities
-| Entity | Create | Read | Update | Delete |
-|--------|--------|------|--------|--------|
-${r.entities.map(e => `| ${capitalize(e)} | ✓ | ✓ | ✓ | ✓ |`).join('\n')}
+## Prerequisites
+- Vercel account
+- ${a.b001 || 'Supabase'} account
+- GitHub/GitLab repository
 
-## Tables
-${r.entities.map(e => `- \`${e}\`: id, name, created_at, updated_at`).join('\n')}
-`;
-      if (type === 'deployment') return `# Deployment for ${projectName}
+## Step 1: Backend Setup
+1. Create ${a.b001 || 'Supabase'} project
+2. Run database migrations
+3. Configure RLS policies
+4. Set up auth providers
 
-## Stack
-- **Frontend**: Vercel
-- **Backend**: Supabase
-- **Storage**: Supabase Storage / R2
-${a.payments !== 'no' ? '- **Payments**: Stripe' : ''}
-${a.email === 'yes' ? '- **Email**: Resend' : ''}
+## Step 2: Frontend Setup
+1. Clone repository
+2. Install dependencies: \`npm install\`
+3. Configure environment variables:
+   - NEXT_PUBLIC_SUPABASE_URL
+   - NEXT_PUBLIC_SUPABASE_ANON_KEY
+4. Deploy to ${a.d001 || 'Vercel'}
 
-## Setup
-1. Create Supabase project
-2. Deploy to Vercel
-3. Configure env vars
-4. Set up Stripe (if payments)
-5. Add domain
+## Step 3: Environment Variables
+\`\`\`
+NEXT_PUBLIC_SUPABASE_URL=your_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_key
+${a.b007 ? 'STRIPE_SECRET_KEY=sk_xxx' : ''}
+${a.b013 === 'resend' ? 'RESEND_API_KEY=re_xxx' : ''}
+\`\`\`
 
-## Environment Variables
-\`NEXT_PUBLIC_SUPABASE_URL\`
-\`NEXT_PUBLIC_SUPABASE_ANON_KEY\`
-${a.payments !== 'no' ? '`STRIPE_SECRET_KEY`' : ''}
+## Step 4: Domain & SSL
+1. Add custom domain in ${a.d001 || 'Vercel'}
+2. Configure DNS records
+3. SSL auto-provisioned
+
+## Step 5: Monitoring
+${a.d006 === 'yes' ? '- Set up Sentry
+- Configure error tracking
+- Set up log aggregation' : '- Monitor Vercel Analytics'}
 `;
       return '';
     }
 
-    function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+    function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
 
     window.downloadDoc = function(docId) {
-      const r = calculateArchitecture();
-      const docs = { architecture: generateDoc('architecture', r), stack: generateDoc('stack', r), modules: generateDoc('modules', r), crud: generateDoc('crud', r), deployment: generateDoc('deployment', r) };
-      const blob = new Blob([docs[docId]], { type: 'text/markdown' });
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = docId + '.md'; a.click();
+      const content = generateDoc(docId);
+      const blob = new Blob([content], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${docId}-${projectName.toLowerCase().replace(/\s+/g, '-')}.md`;
+      a.click();
+      URL.revokeObjectURL(url);
     };
 
-    function downloadAll() {
-      ['architecture', 'stack', 'modules', 'crud', 'deployment'].forEach((id, i) => { setTimeout(() => window.downloadDoc(id), i * 150); });
+    function saveToFile() {
+      $('exportModal').classList.remove('active');
+      const content = Object.entries(answers).map(([k, v]) => {
+        const q = questions.find(x => x.id === k);
+        return `- ${q?.title || k}: ${Array.isArray(v) ? v.join(', ') : v}`;
+      }).join('\n');
+      const fullContent = `# ${projectName} - Architecture Blueprint
+
+Generated: ${new Date().toLocaleString()}
+
+## All Answers
+${content}
+
+---
+## Full Blueprint
+${generateDoc('checklist')}
+`;
+      const blob = new Blob([fullContent], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${projectName.toLowerCase().replace(/\s+/g, '-')}-blueprint.md`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function copyAllToClipboard() {
+      const content = generateDoc('checklist');
+      navigator.clipboard.writeText(content).then(() => {
+        alert('Blueprint copied to clipboard!');
+      });
     }
   </script>
 </body>
