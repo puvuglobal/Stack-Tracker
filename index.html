@@ -1,0 +1,1926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StackTracker - SaaS Architecture Decision Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1e3a5f;
+      --secondary: #2d5a87;
+      --accent: #00d4aa;
+      --background: #0a1628;
+      --surface: #12243d;
+      --surface-hover: #1a3352;
+      --text-primary: #e8f1f8;
+      --text-secondary: #8ba3bc;
+      --border: #1e4976;
+      --success: #00d4aa;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --glow: 0 0 20px rgba(0, 212, 170, 0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--background);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+    }
+
+    code, .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(180deg, var(--surface) 0%, transparent 100%);
+      padding: 16px 32px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent), var(--secondary));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .logo-text {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--text-primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .progress-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .progress-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .progress-bar {
+      width: 200px;
+      height: 8px;
+      background: var(--surface);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--secondary));
+      border-radius: 4px;
+      transition: width 0.5s ease;
+      box-shadow: var(--glow);
+    }
+
+    main {
+      flex: 1;
+      padding: 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .screen {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .welcome-screen {
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .welcome-icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 32px;
+      background: linear-gradient(135deg, var(--surface), var(--primary));
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--border);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0, 212, 170, 0.4); }
+      50% { box-shadow: 0 0 30px 10px rgba(0, 212, 170, 0.2); }
+    }
+
+    .welcome-icon svg {
+      width: 60px;
+      height: 60px;
+      stroke: var(--accent);
+    }
+
+    .welcome-title {
+      font-size: 48px;
+      margin-bottom: 16px;
+      background: linear-gradient(90deg, var(--text-primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .welcome-subtitle {
+      font-size: 20px;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 48px;
+    }
+
+    .project-name-input {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .input-group {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .input-group label {
+      display: block;
+      text-align: left;
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 16px 20px;
+      font-size: 18px;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      color: var(--text-primary);
+      transition: all 0.3s ease;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: var(--glow);
+    }
+
+    .btn {
+      padding: 16px 32px;
+      font-size: 16px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #00b894);
+      color: var(--background);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--glow);
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text-primary);
+      border: 2px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-hover);
+      border-color: var(--accent);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .question-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 32px;
+    }
+
+    .question-main {
+      min-height: 500px;
+    }
+
+    .category-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--surface);
+      border-radius: 20px;
+      font-size: 14px;
+      color: var(--accent);
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+    }
+
+    .category-badge svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .question-title {
+      font-size: 32px;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .question-description {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    .options-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .options-grid.columns-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .options-grid.columns-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .option-card {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: left;
+    }
+
+    .option-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      background: var(--surface-hover);
+    }
+
+    .option-card.selected {
+      border-color: var(--accent);
+      background: rgba(0, 212, 170, 0.1);
+      box-shadow: var(--glow);
+    }
+
+    .option-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .option-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--accent);
+    }
+
+    .option-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .option-description {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .scale-selector {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .scale-option {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .scale-option:hover {
+      border-color: var(--accent);
+    }
+
+    .scale-option.selected {
+      border-color: var(--accent);
+      background: rgba(0, 212, 170, 0.1);
+    }
+
+    .scale-radio {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .scale-option.selected .scale-radio {
+      border-color: var(--accent);
+      background: var(--accent);
+    }
+
+    .scale-option.selected .scale-radio::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--background);
+      border-radius: 50%;
+    }
+
+    .scale-label {
+      font-weight: 600;
+      font-size: 16px;
+      min-width: 120px;
+    }
+
+    .scale-implication {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .knowledge-panel {
+      position: sticky;
+      top: 100px;
+    }
+
+    .knowledge-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .knowledge-header {
+      padding: 16px 20px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .knowledge-header svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--accent);
+    }
+
+    .knowledge-header h3 {
+      font-size: 16px;
+      color: var(--text-primary);
+    }
+
+    .knowledge-content {
+      padding: 20px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .knowledge-content h4 {
+      font-size: 14px;
+      color: var(--accent);
+      margin: 16px 0 8px;
+    }
+
+    .knowledge-content h4:first-child {
+      margin-top: 0;
+    }
+
+    .knowledge-content p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .knowledge-content ul {
+      list-style: none;
+      margin: 8px 0;
+    }
+
+    .knowledge-content li {
+      font-size: 14px;
+      color: var(--text-secondary);
+      padding: 4px 0;
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .knowledge-content li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    .knowledge-content code {
+      background: var(--background);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .navigation {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .nav-info {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 16px;
+    }
+
+    .review-screen {
+      padding: 20px 0;
+    }
+
+    .review-title {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .review-subtitle {
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    .review-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .review-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .review-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .review-card-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .review-card-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--accent);
+    }
+
+    .review-card-title {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .review-card-value {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .results-screen {
+      padding: 20px 0;
+    }
+
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    .results-title {
+      font-size: 32px;
+    }
+
+    .results-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--surface);
+      padding: 4px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+    }
+
+    .tab {
+      padding: 12px 24px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 500;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tab:hover {
+      color: var(--text-primary);
+    }
+
+    .tab.active {
+      background: var(--primary);
+      color: var(--text-primary);
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .document-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .document-header {
+      padding: 16px 20px;
+      background: var(--surface-hover);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .document-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .document-body {
+      padding: 24px;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .document-body pre {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    @media (max-width: 1200px) {
+      .question-layout {
+        grid-template-columns: 1fr;
+      }
+      .knowledge-panel {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .options-grid.columns-2,
+      .options-grid.columns-3 {
+        grid-template-columns: 1fr;
+      }
+      .review-grid {
+        grid-template-columns: 1fr;
+      }
+      header {
+        padding: 12px 16px;
+      }
+      main {
+        padding: 16px;
+      }
+      .welcome-title {
+        font-size: 32px;
+      }
+      .progress-bar {
+        display: none;
+      }
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--background);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--secondary);
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="header-content">
+        <div class="logo">
+          <div class="logo-icon">ST</div>
+          <span class="logo-text">StackTracker</span>
+        </div>
+        <div class="progress-container" id="progressContainer" style="display: none;">
+          <span class="progress-text" id="progressText">0% Complete</span>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="screen active" id="welcomeScreen">
+        <div class="welcome-screen">
+          <div class="welcome-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h1 class="welcome-title">SaaS Architecture Wizard</h1>
+          <p class="welcome-subtitle">Answer a few questions about your product vision, and we'll generate a complete architecture blueprint with technology stack recommendations, module checklists, and deployment configs.</p>
+          <div class="project-name-input">
+            <div class="input-group">
+              <label for="projectName">What's your project called?</label>
+              <input type="text" id="projectName" placeholder="e.g., Puvu Global Coffee, MySaaS App...">
+            </div>
+            <button class="btn btn-primary" id="startBtn">
+              <span>Start Building</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="questionScreen">
+        <div class="question-layout">
+          <div class="question-main">
+            <div class="category-badge" id="categoryBadge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                <path d="M12 17h.01"/>
+              </svg>
+              <span id="categoryLabel">Product Type</span>
+            </div>
+            <h2 class="question-title" id="questionTitle">What type of product are you building?</h2>
+            <p class="question-description" id="questionDescription">This determines interaction patterns and system requirements.</p>
+            <div class="options-grid" id="optionsGrid"></div>
+            <div class="navigation">
+              <div class="nav-info">
+                Question <span id="currentQ">1</span> of <span id="totalQ">12</span>
+              </div>
+              <div class="nav-buttons">
+                <button class="btn btn-secondary" id="backBtn" style="display: none;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                  </svg>
+                  Back
+                </button>
+                <button class="btn btn-primary" id="nextBtn" disabled>
+                  Next
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="knowledge-panel">
+            <div class="knowledge-card">
+              <div class="knowledge-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                </svg>
+                <h3>Why This Matters</h3>
+              </div>
+              <div class="knowledge-content" id="knowledgeContent"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="reviewScreen">
+        <div class="review-screen">
+          <h2 class="review-title">Review Your Answers</h2>
+          <p class="review-subtitle">Verify your selections before generating your architecture blueprint.</p>
+          <div class="review-grid" id="reviewGrid"></div>
+          <div class="navigation">
+            <button class="btn btn-secondary" id="reviewBackBtn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+              Back to Questions
+            </button>
+            <button class="btn btn-primary" id="generateBtn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+              </svg>
+              Generate Blueprint
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="resultsScreen">
+        <div class="results-screen">
+          <div class="results-header">
+            <h2 class="results-title">Your Architecture Blueprint</h2>
+            <div class="results-actions">
+              <button class="btn btn-secondary" id="downloadAllBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Download All
+              </button>
+              <button class="btn btn-secondary" id="restartBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                  <path d="M3 3v5h5"/>
+                </svg>
+                Start Over
+              </button>
+            </div>
+          </div>
+          <div class="tabs" id="tabs"></div>
+          <div class="tab-contents" id="tabContents"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        id: 'productType',
+        category: 'Product Type',
+        categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>',
+        title: 'What type of product are you building?',
+        description: 'This determines interaction patterns and system requirements.',
+        type: 'single',
+        options: [
+          { value: 'marketplace', title: 'Marketplace', description: 'Buying/selling, listings, orders, payments', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>' },
+          { value: 'saas', title: 'SaaS Dashboard', description: 'User accounts, analytics, settings, subscriptions', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>' },
+          { value: 'social', title: 'Social Platform', description: 'Feeds, notifications, realtime updates, content moderation', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
+          { value: 'ecommerce', title: 'E-commerce', description: 'Product catalogs, shopping cart, checkout, inventory', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>' },
+          { value: 'internal', title: 'Internal Tool', description: 'Admin panels, CRMs, workflows, data management', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>' },
+          { value: 'content', title: 'Content Site', description: 'Blogs, documentation, marketing pages, SEO focus', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>' }
+        ],
+        knowledge: {
+          title: 'Product Type Impact',
+          sections: [
+            { heading: 'Marketplace', content: 'Requires: payments, search, inventory, orders, user reviews, analytics. Complex multi-sided transactions.' },
+            { heading: 'SaaS Dashboard', content: 'Requires: authentication, subscription billing, user roles, data visualization, settings management.' },
+            { heading: 'Social Platform', content: 'Requires: feeds, notifications, realtime updates, content moderation, following/relationships.' },
+            { heading: 'E-commerce', content: 'Requires: product catalogs, cart, checkout, payment processing, inventory management, order tracking.' },
+            { heading: 'Internal Tool', content: 'Requires: CRUD operations, admin controls, data management, workflow automation. Less SEO focus.' },
+            { heading: 'Content Site', content: 'Requires: CMS integration, SEO optimization, static generation, caching, CDN delivery.' }
+          ]
+        }
+      },
+      {
+        id: 'clients',
+        category: 'Client Architecture',
+        categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',
+        title: 'Which client applications will exist?',
+        description: 'This determines frontend architecture and API patterns.',
+        type: 'multiple',
+        options: [
+          { value: 'web', title: 'Web Browser', description: 'Primary web application', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>' },
+          { value: 'ios', title: 'iOS App', description: 'Apple iPhone/iPad', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>' },
+          { value: 'android', title: 'Android App', description: 'Google Play apps', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>' },
+          { value: 'desktop', title: 'Desktop App', description: 'Windows/Mac/Linux', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>' },
+          { value: 'api', title: 'Public API', description: 'Third-party integrations', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>' }
+        ],
+        knowledge: {
+          title: 'Client Architecture Decision',
+          sections: [
+            { heading: 'Single Client (Web Only)', content: 'Standard REST/GraphQL API. Focus on web optimization.' },
+            { heading: 'Multiple Clients', content: 'Requires BFF (Backend for Frontend) pattern. Each client gets optimized API layer.' },
+            { heading: 'Public API', content: 'Requires API versioning, rate limiting, comprehensive documentation, authentication flows.' },
+            { heading: 'BFF Pattern', content: 'Web BFF → aggregates endpoints for web. Mobile BFF → optimized payloads for mobile. Reduces over-fetching and improves performance.' }
+          ]
+        }
+      },
+      {
+        id: 'seo',
+        category: 'Client Architecture',
+        categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+        title: 'Does your product need SEO?',
+        description: 'Search engine optimization affects rendering strategy.',
+        type: 'single',
+        options: [
+          { value: 'yes', title: 'Yes - SEO Required', description: 'Landing pages, blogs, product catalogs need search visibility', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>' },
+          { value: 'no', title: 'No - Internal/App', description: 'Private dashboards, logged-in areas, no public pages', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' },
+          { value: 'partial', title: 'Partial - Mixed Content', description: 'Some public pages, some private dashboards', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>' }
+        ],
+        knowledge: {
+          title: 'SEO & Rendering Strategy',
+          sections: [
+            { heading: 'SEO Required', content: 'Use SSR (Server-Side Rendering) or SSG (Static Site Generation). Fast initial load, crawlable content.' },
+            { heading: 'No SEO Needed', content: 'Pure SPA works. Client-side rendering, better interactivity, no server overhead for pages.' },
+            { heading: 'Hybrid Approach', content: 'SSR for public pages + SPA for dashboard sections. Next.js excels at this pattern.' }
+          ]
+        }
+      },
+      {
+        id: 'interactivity',
+        category: 'Client Architecture',
+        categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
+        title: 'How interactive is your application?',
+        description: 'High interactivity requires client-side state management.',
+        type: 'single',
+        options: [
+          { value: 'high', title: 'Highly Interactive', description: 'Real-time updates, complex forms, editors, dashboards', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>' },
+          { value: 'medium', title: 'Moderate Interactivity', description: 'Forms, filtering, some dynamic content', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>' },
+          { value: 'low', title: 'Low Interactivity', description: 'Mostly static content, simple navigation', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>' }
+        ],
+        knowledge: {
+          title: 'Interactivity & Architecture',
+          sections: [
+            { heading: 'High Interactivity', content: 'Use SPA (Single Page App). React/Vue with client-side state. Rich dashboards, editors need immediate feedback.' },
+            { heading: 'Medium Interactivity', content: 'Hybrid works well. SSR for initial load + client-side hydration for interactive parts.' },
+            { heading: 'Low Interactivity', content: 'MVC or SSR works fine. Server-rendered pages, minimal JavaScript needed.' }
+          ]
+        }
+      },
+      {
+        id: 'files',
+        category: 'Data Requirements',
+        categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>',
+        title: 'Will users upload files?',
+        description: 'File types determine storage and processing infrastructure.',
+        type: 'multiple',
+        options: [
+          { value: 'images', title: 'Images', description: 'Profile photos, product images, galleries', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>' },
+          { value: 'video', title: 'Video', description: 'Uploads, streaming, transcoding needed', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>' },
+          { value: 'audio', title: 'Audio', description: 'Podcasts, voice messages, music', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>' },
+          { value: 'documents', title: 'Documents', description: 'PDFs, spreadsheets, documents', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' },
+          { value: 'none', title: 'No File Uploads', description: 'Text/data only, no media', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+        ],
+        knowledge: {
+          title: 'File Storage Infrastructure',
+          sections: [
+            { heading: 'Images', content: 'Object storage (S3, Supabase Storage, Cloudflare R2) + CDN + image processing (resizing, optimization).' },
+            { heading: 'Video', content: 'Streaming service (Mux, Cloudflare Stream) or self-hosted with transcoding (FFmpeg). Chunk uploads, progress tracking.' },
+            { heading: 'Audio', content: 'Storage + CDN. Consider audio processing for normalization, format conversion.' },
+            { heading: 'Documents', content: 'Storage + preview generation (PDF.js, document converters). Secure signed URLs for private files.' }
+          ]
+        }
+      },
+      {
+        id: 'realtime',
+        category: 'Data Requirements',
+        categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
+        title: 'Do you need real-time features?',
+        description: 'Live updates, notifications, or collaboration features.',
+        type: 'single',
+        options: [
+          { value: 'yes', title: 'Yes - Real-time Required', description: 'Chat, live notifications, collaborative editing', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>' },
+          { value: 'no', title: 'No - Not Required', description: 'Standard request/response is fine', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+        ],
+        knowledge: {
+          title: 'Real-time Architecture',
+          sections: [
+            { heading: 'WebSockets', content: 'Persistent connections for bidirectional communication. Supabase Realtime, Socket.io, Pusher.' },
+            { heading: 'Pub/Sub', content: 'Event-driven architecture for broadcasting updates. Redis Pub/Sub, PostgreSQL LISTEN/NOTIFY.' },
+            { heading: 'Use Cases', content: 'Chat applications, live notifications, collaborative editing, real-time dashboards, presence indicators.' }
+          ]
+        }
+      },
+      {
+        id: 'scale',
+        category: 'Scale',
+        categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>',
+        title: 'What is your expected user scale?',
+        description: 'Scale determines database and infrastructure strategy.',
+        type: 'scale',
+        options: [
+          { value: '100', label: '100 users', implication: 'Single database instance, simple setup' },
+          { value: '1000', label: '1,000 users', implication: 'Single database, basic optimization' },
+          { value: '10000', label: '10,000 users', implication: 'Consider indexing, basic caching' },
+          { value: '100000', label: '100,000 users', implication: 'Read replicas, caching layer, rate limiting' },
+          { value: '1000000', label: '1,000,000+ users', implication: 'Horizontal scaling, CDN, microservices, full infrastructure' }
+        ],
+        knowledge: {
+          title: 'Scale-Based Architecture',
+          sections: [
+            { heading: '< 10K Users', content: 'Single database instance sufficient. Focus on clean schema and proper indexing.' },
+            { heading: '10K - 100K', content: 'Read replicas for scaling reads. Consider basic Redis caching.' },
+            { heading: '100K - 1M', content: 'Redis caching layer essential. Horizontal database scaling, CDN for static assets.' },
+            { heading: '1M+ Users', content: 'Microservices architecture. Multi-region deployment. Advanced caching. Message queues for async processing.' }
+          ]
+        }
+      },
+      {
+        id: 'teamSize',
+        category: 'Team',
+        categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+        title: 'How many developers will maintain this?',
+        description: 'Team size influences codebase organization and complexity.',
+        type: 'single',
+        options: [
+          { value: '1', title: 'Solo Developer', description: 'Just you, keeping things simple is key', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' },
+          { value: '2-5', title: 'Small Team (2-5)', description: 'Small team, modular structure helps', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
+          { value: '6-20', title: 'Medium Team (6-20)', description: 'Domain separation, clear boundaries important', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
+          { value: '20+', title: 'Large Team (20+)', description: 'Microfrontends, strong boundaries needed', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' }
+        ],
+        knowledge: {
+          title: 'Team Size & Codebase',
+          sections: [
+            { heading: 'Solo Developer', content: 'Keep architecture simple. Monolith is fine. Focus on shipping, not complexity.' },
+            { heading: 'Small Team (2-5)', content: 'Modular monolith works well. Clear domain separation without overhead of microservices.' },
+            { heading: 'Medium Team (6-20)', content: 'Modular Frontend Monolith. Domain-driven boundaries. Clear ownership areas.' },
+            { heading: 'Large Team (20+)', content: 'Microfrontends possible. Independent deployments. Significant complexity - only if needed.' }
+          ]
+        }
+      },
+      {
+        id: 'auth',
+        category: 'Backend Modules',
+        categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
+        title: 'Do you need authentication?',
+        description: 'User auth impacts security and user management.',
+        type: 'single',
+        options: [
+          { value: 'yes', title: 'Yes - Auth Required', description: 'User accounts, login, protected routes', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' },
+          { value: 'no', title: 'No Auth Needed', description: 'Public access, no user accounts', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+        ],
+        knowledge: {
+          title: 'Authentication Options',
+          sections: [
+            { heading: 'Supabase Auth', content: 'Built-in authentication with email, social logins, magic links. Integrated with database RLS.' },
+            { heading: 'NextAuth.js', content: 'Flexible authentication for Next.js. Multiple providers, easy to customize.' },
+            { heading: 'Auth Considerations', content: 'Password reset, email verification, session management, RBAC (Role-Based Access Control).' }
+          ]
+        }
+      },
+      {
+        id: 'payments',
+        category: 'Backend Modules',
+        categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>',
+        title: 'Do you need payment processing?',
+        description: 'Subscriptions, one-time payments, or no payments.',
+        type: 'single',
+        options: [
+          { value: 'subscriptions', title: 'Subscriptions', description: 'Recurring billing, SaaS model', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>' },
+          { value: 'one-time', title: 'One-time Payments', description: 'Single purchases, not recurring', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>' },
+          { value: 'no', title: 'No Payments', description: 'Free app, no monetization', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+        ],
+        knowledge: {
+          title: 'Payment Integration',
+          sections: [
+            { heading: 'Stripe', content: 'Industry standard for SaaS. Supports subscriptions, one-time payments, SCA compliance. Excellent developer experience.' },
+            { heading: 'Subscription Considerations', content: 'Tier management, trial periods, upgrades/downgrades, failed payment handling, invoice generation.' },
+            { heading: 'Marketplace Payments', content: 'Stripe Connect for marketplace platforms. Split payments between platform and sellers.' }
+          ]
+        }
+      },
+      {
+        id: 'search',
+        category: 'Backend Modules',
+        categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+        title: 'Do you need search functionality?',
+        description: 'Simple database search or full-text search engine.',
+        type: 'single',
+        options: [
+          { value: 'basic', title: 'Basic (Simple)', description: 'Keyword matching, simple filters', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>' },
+          { value: 'advanced', title: 'Advanced Search', description: 'Fuzzy matching, facets, ranking, autocomplete', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>' },
+          { value: 'no', title: 'No Search', description: 'Browse-only navigation', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+        ],
+        knowledge: {
+          title: 'Search Implementation',
+          sections: [
+            { heading: 'Basic Search', content: 'PostgreSQL LIKE queries or simple text search. Works for small datasets.' },
+            { heading: 'Advanced Search', content: 'Meilisearch, Algolia, or Elasticsearch. Typo tolerance, faceted search, ranking, instant results.' },
+            { heading: 'Supabase', content: 'pg_search extension for PostgreSQL full-text search. Good balance of features and simplicity.' }
+          ]
+        }
+      },
+      {
+        id: 'backgroundJobs',
+        category: 'Backend Modules',
+        categoryIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+        title: 'Do you need background job processing?',
+        description: 'Async tasks, scheduled jobs, email sending, webhooks.',
+        type: 'single',
+        options: [
+          { value: 'yes', title: 'Yes - Background Jobs', description: 'Email, webhooks, data processing', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' },
+          { value: 'no', title: 'No - Synchronous Only', description: 'All processing in request lifecycle', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' }
+        ],
+        knowledge: {
+          title: 'Background Processing',
+          sections: [
+            { heading: 'Use Cases', content: 'Sending emails, processing uploads, webhooks, scheduled tasks, report generation, batch operations.' },
+            { heading: 'Options', content: 'Inngest (recommended for Next.js), Trigger.dev, Bull Queue + Redis, Supabase Edge Functions.' },
+            { heading: 'Inngest/Trigger.dev', content: 'Developer-friendly, no infrastructure to manage. Define jobs as TypeScript functions.' }
+          ]
+        }
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+    let answers = {};
+    let projectName = '';
+
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    const questionScreen = document.getElementById('questionScreen');
+    const reviewScreen = document.getElementById('reviewScreen');
+    const resultsScreen = document.getElementById('resultsScreen');
+
+    const progressContainer = document.getElementById('progressContainer');
+    const progressText = document.getElementById('progressText');
+    const progressFill = document.getElementById('progressFill');
+
+    const projectNameInput = document.getElementById('projectName');
+    const startBtn = document.getElementById('startBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const backBtn = document.getElementById('backBtn');
+    const reviewBackBtn = document.getElementById('reviewBackBtn');
+    const generateBtn = document.getElementById('generateBtn');
+    const downloadAllBtn = document.getElementById('downloadAllBtn');
+    const restartBtn = document.getElementById('restartBtn');
+
+    projectNameInput.addEventListener('input', () => {
+      startBtn.disabled = !projectNameInput.value.trim();
+    });
+
+    projectNameInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && projectNameInput.value.trim()) {
+        startQuiz();
+      }
+    });
+
+    startBtn.addEventListener('click', startQuiz);
+
+    function startQuiz() {
+      projectName = projectNameInput.value.trim();
+      if (!projectName) return;
+      
+      answers = {};
+      currentQuestionIndex = 0;
+      
+      showScreen('question');
+      showQuestion();
+      updateProgress();
+    }
+
+    nextBtn.addEventListener('click', () => {
+      if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+        showQuestion();
+        updateProgress();
+      } else {
+        showScreen('review');
+      }
+    });
+
+    backBtn.addEventListener('click', () => {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        showQuestion();
+        updateProgress();
+      } else {
+        showScreen('welcome');
+      }
+    });
+
+    reviewBackBtn.addEventListener('click', () => {
+      showScreen('question');
+      showQuestion();
+    });
+
+    generateBtn.addEventListener('click', generateBlueprint);
+
+    restartBtn.addEventListener('click', () => {
+      projectNameInput.value = '';
+      startBtn.disabled = true;
+      answers = {};
+      currentQuestionIndex = 0;
+      showScreen('welcome');
+    });
+
+    function showScreen(screen) {
+      welcomeScreen.classList.remove('active');
+      questionScreen.classList.remove('active');
+      reviewScreen.classList.remove('active');
+      resultsScreen.classList.remove('active');
+      progressContainer.style.display = 'none';
+
+      if (screen === 'welcome') {
+        welcomeScreen.classList.add('active');
+      } else if (screen === 'question') {
+        questionScreen.classList.add('active');
+        progressContainer.style.display = 'flex';
+      } else if (screen === 'review') {
+        reviewScreen.classList.add('active');
+        progressContainer.style.display = 'flex';
+        renderReview();
+      } else if (screen === 'results') {
+        resultsScreen.classList.add('active');
+        progressContainer.style.display = 'flex';
+      }
+    }
+
+    function showQuestion() {
+      const q = questions[currentQuestionIndex];
+      
+      document.getElementById('categoryLabel').textContent = q.category;
+      document.getElementById('categoryBadge').innerHTML = q.categoryIcon + '<span>' + q.category + '</span>';
+      document.getElementById('questionTitle').textContent = q.title;
+      document.getElementById('questionDescription').textContent = q.description;
+      document.getElementById('currentQ').textContent = currentQuestionIndex + 1;
+      document.getElementById('totalQ').textContent = questions.length;
+
+      backBtn.style.display = currentQuestionIndex === 0 ? 'none' : 'flex';
+      nextBtn.innerHTML = currentQuestionIndex === questions.length - 1 
+        ? 'Review <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>'
+        : 'Next <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+
+      const optionsGrid = document.getElementById('optionsGrid');
+      optionsGrid.innerHTML = '';
+      optionsGrid.className = 'options-grid';
+
+      if (q.type === 'scale') {
+        optionsGrid.classList.add('columns-1');
+        q.options.forEach(opt => {
+          const scaleOption = document.createElement('div');
+          scaleOption.className = 'scale-option' + (answers[q.id] === opt.value ? ' selected' : '');
+          scaleOption.innerHTML = `
+            <div class="scale-radio"></div>
+            <span class="scale-label">${opt.label}</span>
+            <span class="scale-implication">${opt.implication}</span>
+          `;
+          scaleOption.addEventListener('click', () => selectOption(q.id, opt.value, 'scale'));
+          optionsGrid.appendChild(scaleOption);
+        });
+      } else if (q.type === 'single') {
+        optionsGrid.classList.add(q.options.length <= 3 ? 'columns-3' : 'columns-2');
+        q.options.forEach(opt => {
+          const optionCard = document.createElement('div');
+          optionCard.className = 'option-card' + (answers[q.id] === opt.value ? ' selected' : '');
+          optionCard.innerHTML = `
+            <div class="option-icon">${opt.icon}</div>
+            <div class="option-title">${opt.title}</div>
+            <div class="option-description">${opt.description}</div>
+          `;
+          optionCard.addEventListener('click', () => selectOption(q.id, opt.value, 'single'));
+          optionsGrid.appendChild(optionCard);
+        });
+      } else if (q.type === 'multiple') {
+        optionsGrid.classList.add('columns-2');
+        const selected = answers[q.id] || [];
+        q.options.forEach(opt => {
+          const optionCard = document.createElement('div');
+          optionCard.className = 'option-card' + (selected.includes(opt.value) ? ' selected' : '');
+          optionCard.innerHTML = `
+            <div class="option-icon">${opt.icon}</div>
+            <div class="option-title">${opt.title}</div>
+            <div class="option-description">${opt.description}</div>
+          `;
+          optionCard.addEventListener('click', () => selectOption(q.id, opt.value, 'multiple'));
+          optionsGrid.appendChild(optionCard);
+        });
+      }
+
+      renderKnowledge(q.knowledge);
+      updateNextButton();
+    }
+
+    function selectOption(questionId, value, type) {
+      if (type === 'single' || type === 'scale') {
+        answers[questionId] = value;
+      } else if (type === 'multiple') {
+        if (!answers[questionId]) answers[questionId] = [];
+        const idx = answers[questionId].indexOf(value);
+        if (idx > -1) {
+          answers[questionId].splice(idx, 1);
+        } else {
+          answers[questionId].push(value);
+        }
+      }
+      
+      showQuestion();
+    }
+
+    function updateNextButton() {
+      const q = questions[currentQuestionIndex];
+      if (q.type === 'multiple') {
+        nextBtn.disabled = !answers[q.id] || answers[q.id].length === 0;
+      } else {
+        nextBtn.disabled = !answers[q.id];
+      }
+    }
+
+    function renderKnowledge(knowledge) {
+      const content = document.getElementById('knowledgeContent');
+      let html = `<p>${knowledge.title}</p>`;
+      knowledge.sections.forEach(section => {
+        html += `<h4>${section.heading}</h4><p>${section.content}</p>`;
+      });
+      content.innerHTML = html;
+    }
+
+    function updateProgress() {
+      const total = questions.length;
+      const current = currentQuestionIndex + 1;
+      const percent = Math.round((current / total) * 100);
+      
+      progressText.textContent = `${percent}% Complete`;
+      progressFill.style.width = `${percent}%`;
+    }
+
+    function renderReview() {
+      const grid = document.getElementById('reviewGrid');
+      grid.innerHTML = '';
+
+      const reviewItems = [
+        { key: 'productType', label: 'Product Type', getValue: v => questions[0].options.find(o => o.value === v)?.title || v },
+        { key: 'clients', label: 'Clients', getValue: v => v ? (Array.isArray(v) ? v.map(c => questions[1].options.find(o => o.value === c)?.title).join(', ') : v) : 'None' },
+        { key: 'seo', label: 'SEO', getValue: v => v === 'yes' ? 'Required' : v === 'no' ? 'Not Required' : 'Partial' },
+        { key: 'interactivity', label: 'Interactivity', getValue: v => v ? v.charAt(0).toUpperCase() + v.slice(1) : 'None' },
+        { key: 'files', label: 'File Uploads', getValue: v => v && v.length ? (Array.isArray(v) ? v.map(f => f.charAt(0).toUpperCase() + f.slice(1)).join(', ') : v) : 'None' },
+        { key: 'realtime', label: 'Real-time', getValue: v => v === 'yes' ? 'Required' : 'Not Required' },
+        { key: 'scale', label: 'User Scale', getValue: v => v ? (parseInt(v).toLocaleString() + ' users') : 'Not specified' },
+        { key: 'teamSize', label: 'Team Size', getValue: v => v ? (v + ' developer' + (v === '1' ? '' : 's')) : 'Not specified' },
+        { key: 'auth', label: 'Authentication', getValue: v => v === 'yes' ? 'Required' : 'Not Required' },
+        { key: 'payments', label: 'Payments', getValue: v => v === 'subscriptions' ? 'Subscriptions' : v === 'one-time' ? 'One-time' : 'None' },
+        { key: 'search', label: 'Search', getValue: v => v === 'basic' ? 'Basic' : v === 'advanced' ? 'Advanced' : 'None' },
+        { key: 'backgroundJobs', label: 'Background Jobs', getValue: v => v === 'yes' ? 'Required' : 'Not Required' }
+      ];
+
+      reviewItems.forEach(item => {
+        const value = answers[item.key];
+        const displayValue = item.getValue(value);
+        
+        const card = document.createElement('div');
+        card.className = 'review-card';
+        card.innerHTML = `
+          <div class="review-card-header">
+            <div class="review-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+            </div>
+            <span class="review-card-title">${item.label}</span>
+          </div>
+          <div class="review-card-value">${displayValue}</div>
+        `;
+        grid.appendChild(card);
+      });
+
+      const percent = Math.round(((questions.length) / questions.length) * 100);
+      progressText.textContent = `${percent}% Complete`;
+      progressFill.style.width = `${percent}%`;
+    }
+
+    function generateBlueprint() {
+      const results = calculateArchitecture();
+      renderResults(results);
+      showScreen('results');
+    }
+
+    function calculateArchitecture() {
+      const a = answers;
+      
+      let frontend = 'Next.js';
+      let rendering = 'SSR + React Server Components';
+      let pattern = 'BFF (Backend for Frontend)';
+      let structure = 'Modular Frontend Monolith';
+      let backend = 'Supabase';
+      let database = 'PostgreSQL';
+      let storage = '';
+      let modules = [];
+      let entities = [];
+
+      if (a.productType === 'marketplace') {
+        modules.push('orders', 'payments', 'inventory', 'reviews', 'search', 'messaging');
+        entities.push('users', 'products', 'orders', 'payments', 'reviews', 'messages');
+      } else if (a.productType === 'saas') {
+        modules.push('auth', 'billing', 'dashboard', 'settings', 'users');
+        entities.push('users', 'subscriptions', 'payments', 'settings');
+      } else if (a.productType === 'social') {
+        modules.push('auth', 'feed', 'notifications', 'posts', 'followers', 'messaging');
+        entities.push('users', 'posts', 'comments', 'follows', 'notifications', 'messages');
+      } else if (a.productType === 'ecommerce') {
+        modules.push('products', 'cart', 'checkout', 'orders', 'inventory', 'payments');
+        entities.push('products', 'categories', 'orders', 'cart_items', 'payments');
+      } else if (a.productType === 'internal') {
+        modules.push('auth', 'admin', 'data-management', 'reports');
+        entities.push('users', 'data_records', 'audit_logs');
+      } else if (a.productType === 'content') {
+        modules.push('content', 'categories', 'media', 'seo');
+        entities.push('posts', 'pages', 'categories', 'media');
+      }
+
+      if (a.clients && (a.clients.includes('ios') || a.clients.includes('android'))) {
+        pattern = 'BFF + Mobile API Layer';
+      }
+
+      if (a.clients && a.clients.length === 1 && a.clients[0] === 'web') {
+        pattern = 'Standard API';
+      }
+
+      if (a.seo === 'yes') {
+        rendering = 'SSR (Server-Side Rendering) + ISR';
+      } else if (a.seo === 'no') {
+        rendering = 'SPA (Client-Side Rendering)';
+      } else {
+        rendering = 'SSR + SPA Hybrid';
+      }
+
+      if (a.interactivity === 'high') {
+        rendering = 'SPA with Server Components';
+        structure = 'Modular Frontend Monolith';
+      } else if (a.interactivity === 'low') {
+        rendering = 'SSR / SSG';
+        structure = 'Simple Pages';
+      }
+
+      if (a.files) {
+        if (a.files.includes('images') || a.files.includes('documents')) {
+          storage = 'Supabase Storage + CDN';
+        }
+        if (a.files.includes('video') || a.files.includes('audio')) {
+          storage = 'Cloudflare Stream / Mux';
+        }
+      }
+
+      if (a.realtime === 'yes') {
+        modules.push('realtime', 'presence');
+      }
+
+      if (a.auth === 'yes') {
+        modules.push('auth');
+      }
+
+      if (a.payments === 'subscriptions' || a.payments === 'one-time') {
+        modules.push('billing', 'invoices');
+        if (!modules.includes('payments')) modules.push('payments');
+      }
+
+      if (a.search === 'advanced') {
+        modules.push('search-engine');
+      }
+
+      if (a.backgroundJobs === 'yes') {
+        modules.push('jobs', 'webhooks', 'email-queue');
+      }
+
+      const scale = parseInt(a.scale) || 1000;
+      if (scale >= 1000000) {
+        database = 'PostgreSQL + Read Replicas + Redis Cache';
+        storage += storage ? ' + CDN' : 'CDN';
+      }
+
+      modules = [...new Set(modules)];
+      entities = [...new Set(entities)];
+
+      return { frontend, rendering, pattern, structure, backend, database, storage, modules, entities };
+    }
+
+    function renderResults(results) {
+      const tabs = document.getElementById('tabs');
+      const contents = document.getElementById('tabContents');
+      
+      tabs.innerHTML = '';
+      contents.innerHTML = '';
+
+      const docs = [
+        { id: 'architecture', name: 'Architecture', content: generateArchitectureDoc(results) },
+        { id: 'stack', name: 'Tech Stack', content: generateStackDoc(results) },
+        { id: 'modules', name: 'Modules', content: generateModulesDoc(results) },
+        { id: 'crud', name: 'CRUD Matrix', content: generateCrudDoc(results) },
+        { id: 'deployment', name: 'Deployment', content: generateDeploymentDoc(results) }
+      ];
+
+      docs.forEach((doc, idx) => {
+        const tab = document.createElement('button');
+        tab.className = 'tab' + (idx === 0 ? ' active' : '');
+        tab.textContent = doc.name;
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+          tab.classList.add('active');
+          document.getElementById(doc.id + 'Content').classList.add('active');
+        });
+        tabs.appendChild(tab);
+
+        const content = document.createElement('div');
+        content.className = 'tab-content' + (idx === 0 ? ' active' : '');
+        content.id = doc.id + 'Content';
+        content.innerHTML = `
+          <div class="document-card">
+            <div class="document-header">
+              <span class="document-title">${doc.name}</span>
+              <button class="btn btn-secondary" onclick="downloadDoc('${doc.id}')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Download
+              </button>
+            </div>
+            <div class="document-body">
+              <pre>${doc.content}</pre>
+            </div>
+          </div>
+        `;
+        contents.appendChild(content);
+      });
+    }
+
+    function generateArchitectureDoc(r) {
+      return `# Architecture Recommendation for ${projectName}
+
+## Frontend Architecture
+- **Framework**: ${r.frontend}
+- **Rendering Strategy**: ${r.rendering}
+- **Pattern**: ${r.pattern}
+- **Structure**: ${r.structure}
+
+## Why This Architecture?
+
+### ${answers.productType === 'marketplace' ? 'Marketplace Requirements' : answers.productType === 'saas' ? 'SaaS Requirements' : answers.productType === 'social' ? 'Social Platform Requirements' : 'Your Requirements'}
+
+Based on your product type (${answers.productType}), interactivity level (${answers.interactivity}), and team size (${answers.teamSize}), this architecture optimizes for:
+
+- **Development Speed**: Using proven frameworks with excellent developer experience
+- **Scalability**: Built to grow from your current scale to millions of users
+- **Maintainability**: Modular structure that grows with your team
+- **SEO**: ${answers.seo === 'yes' ? 'Server-side rendering ensures excellent search visibility' : answers.seo === 'partial' ? 'Hybrid approach balances SEO and interactivity' : 'No SEO required - pure SPA for maximum interactivity'}
+
+### Key Architectural Decisions
+
+${answers.seo === 'yes' ? '- **SSR + ISR**: Best for SEO while maintaining dynamic content capabilities' : ''}
+${answers.interactivity === 'high' ? '- **SPA Components**: Rich client-side interactivity for dashboards and real-time features' : ''}
+${answers.clients && answers.clients.length > 1 ? '- **BFF Pattern**: Separate API layers for each client type' : ''}
+${answers.realtime === 'yes' ? '- **Real-time**: WebSocket infrastructure for live updates' : ''}
+${answers.scale && parseInt(answers.scale) >= 100000 ? '- **Scale Prep**: Caching, CDN, and database optimization for high traffic' : ''}
+
+### Project Structure
+
+\`\`\`
+src/
+  domains/
+    ${r.modules.slice(0, 5).map(m => m + '/').join('\n    ')}
+  shared/
+    ui/
+    hooks/
+    services/
+  app/           # Next.js App Router
+  lib/           # Utilities
+\`\`\`
+`;
+    }
+
+    function generateStackDoc(r) {
+      return `# Technology Stack for ${projectName}
+
+## Frontend
+- **Framework**: ${r.frontend}
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **State Management**: React Context / Zustand
+- **Forms**: React Hook Form + Zod
+
+## Backend
+- **Primary**: ${r.backend}
+- **Edge Functions**: Deno/TypeScript
+- **Database**: ${r.database}
+${r.storage ? `- **Storage**: ${r.storage}` : ''}
+
+## Key Dependencies
+- \`@supabase/supabase-js\` - Database client
+- \`@supabase/auth-helpers-nextjs\` - Authentication
+- \`@supabase/ssr\` - SSR utilities
+- \`tailwindcss\` - Styling
+- \`lucide-react\` - Icons
+- \`react-hook-form\` - Form handling
+- \`zod\` - Schema validation
+
+## Development Tools
+- **Editor**: VS Code
+- **Linting**: ESLint
+- **Formatting**: Prettier
+- **Type Checking**: TypeScript
+
+${answers.payments !== 'no' ? `## Payment Integration
+- **Provider**: Stripe
+- **Features**: 
+  - ${answers.payments === 'subscriptions' ? 'Subscription management' : 'One-time payments'}
+  - Multiple price tiers
+  - Invoice generation
+  - Webhook handling
+` : ''}
+
+${answers.search === 'advanced' ? `## Search
+- **Provider**: Meilisearch / Algolia
+- **Features**:
+  - Full-text search
+  - Typo tolerance
+  - Faceted filtering
+  - Instant results
+` : ''}
+
+${answers.backgroundJobs === 'yes' ? `## Background Jobs
+- **Provider**: Inngest / Trigger.dev
+- **Use Cases**:
+  - Email sending
+  - Webhook processing
+  - Scheduled tasks
+  - Async data processing
+` : ''}
+`;
+    }
+
+    function generateModulesDoc(r) {
+      return `# Backend Modules for ${projectName}
+
+## Required Modules
+
+${r.modules.map((m, idx) => `${idx + 1}. **${capitalize(m)}**`).join('\n')}
+
+## Module Details
+
+${r.modules.map(m => {
+  const details = {
+    'auth': 'User authentication, login/logout, password reset, email verification, session management',
+    'billing': 'Subscription management, payment processing, invoice generation, usage tracking',
+    'dashboard': 'User dashboards, analytics widgets, data visualization',
+    'settings': 'User preferences, account settings, notification preferences',
+    'users': 'User management, profiles, roles, permissions',
+    'orders': 'Order creation, status tracking, order history',
+    'payments': 'Payment processing, refunds, payment methods',
+    'inventory': 'Stock management, product availability, low stock alerts',
+    'reviews': 'User reviews, ratings, review moderation',
+    'search': 'Full-text search, filters, sorting',
+    'messaging': 'Direct messages, notifications, in-app messaging',
+    'feed': 'Activity feed, timeline, content aggregation',
+    'notifications': 'Push notifications, email notifications, in-app alerts',
+    'posts': 'Content creation, editing, deletion, publishing',
+    'followers': 'Follow/unfollow, follower lists, following lists',
+    'products': 'Product CRUD, categories, variants, pricing',
+    'cart': 'Shopping cart, cart persistence, cart management',
+    'checkout': 'Checkout flow, address collection, payment integration',
+    'categories': 'Content categorization, taxonomy management',
+    'media': 'File uploads, image processing, CDN delivery',
+    'seo': 'Meta tags, sitemaps, structured data, robots.txt',
+    'admin': 'Admin panels, user management, system configuration',
+    'data-management': 'CRUD operations, data import/export, bulk actions',
+    'reports': 'Analytics reports, data exports, scheduled reports',
+    'content': 'CMS integration, content versioning, drafts',
+    'realtime': 'WebSocket connections, live updates, presence',
+    'presence': 'User presence, online status, typing indicators',
+    'invoices': 'Invoice generation, PDF creation, payment tracking',
+    'search-engine': 'Advanced search, autocomplete, faceted search',
+    'jobs': 'Background job processing, queue management',
+    'webhooks': 'Webhook endpoints, event dispatching, retry logic',
+    'email-queue': 'Email queuing, templates, delivery tracking'
+  };
+  return `### ${capitalize(m)}\n${details[m] || 'Module for handling ' + m + ' functionality'}\n`;
+}).join('\n')}
+
+## Implementation Priority
+
+1. **Phase 1** (Core): ${r.modules.slice(0, 3).map(capitalize).join(', ')}
+2. **Phase 2** (Enhancement): ${r.modules.slice(3, 6).map(capitalize).join(', ')}
+3. **Phase 3** (Advanced): ${r.modules.slice(6).map(capitalize).join(', ')}
+`;
+    }
+
+    function generateCrudDoc(r) {
+      return `# CRUD Matrix for ${projectName}
+
+## Database Entities
+
+| Entity | Create | Read | Update | Delete |
+|--------|--------|------|--------|--------|
+${r.entities.map(e => `| ${capitalize(e)} | ✓ | ✓ | ✓ | ✓ |`).join('\n')}
+
+## Entity Details
+
+${r.entities.map(entity => {
+  const fields = {
+    'users': 'id, email, name, avatar_url, role, created_at, updated_at',
+    'products': 'id, name, description, price, category_id, images, stock, created_at',
+    'orders': 'id, user_id, status, total, items, shipping_address, created_at',
+    'payments': 'id, order_id, amount, method, status, stripe_payment_id, created_at',
+    'reviews': 'id, product_id, user_id, rating, comment, created_at',
+    'messages': 'id, sender_id, receiver_id, content, read, created_at',
+    'posts': 'id, author_id, title, content, status, published_at, created_at',
+    'subscriptions': 'id, user_id, plan, status, stripe_subscription_id, current_period_end',
+    'settings': 'id, user_id, key, value, updated_at',
+    'categories': 'id, name, slug, parent_id, description',
+    'cart_items': 'id, user_id, product_id, quantity, created_at',
+    'data_records': 'id, user_id, data, created_at, updated_at',
+    'audit_logs': 'id, user_id, action, entity_type, entity_id, metadata, created_at',
+    'pages': 'id, title, slug, content, meta_title, meta_description, published_at',
+    'media': 'id, filename, url, type, size, uploaded_by, created_at',
+    'comments': 'id, post_id, user_id, content, parent_id, created_at',
+    'follows': 'id, follower_id, following_id, created_at',
+    'notifications': 'id, user_id, type, title, body, read, created_at'
+  };
+  return `### ${capitalize(entity)}
+**Table**: \`${entity}\`
+**Fields**: ${fields[entity] || 'id, name, description, created_at, updated_at'}\`
+**RLS Policies**: 
+- Users can read all
+- Owners can CRUD their own records
+- Admins have full access
+`;
+}).join('\n')}
+
+## API Endpoints Structure
+
+\`\`\`
+/api/v1/
+├── auth/
+│   ├── POST /signup
+│   ├── POST /login
+│   └── POST /logout
+${r.entities.slice(0, 5).map(e => `├── ${e}/
+│   ├── GET    /list
+│   ├── GET    /:id
+│   ├── POST   /create
+│   ├── PUT    /:id/update
+│   └── DELETE /:id/delete`).join('\n')}
+└── webhooks/
+    └── POST /stripe
+\`\`\`
+`;
+    }
+
+    function generateDeploymentDoc(r) {
+      return `# Deployment Guide for ${projectName}
+
+## Vercel + Supabase Stack
+
+### Prerequisites
+- Vercel account
+- Supabase account
+- Git repository (GitHub/GitLab)
+
+## Supabase Setup
+
+### 1. Create Project
+1. Go to [supabase.com](https://supabase.com)
+2. Create new project
+3. Note project URL and anon key
+
+### 2. Database Setup
+\`\`\`sql
+-- Enable RLS
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+
+-- Create policies
+CREATE POLICY "Users can read all users" ON users FOR SELECT USING (true);
+CREATE POLICY "Users can update own profile" ON users FOR UPDATE USING (auth.uid() = id);
+\`\`\`
+
+### 3. Storage Buckets
+- \`avatars\` - User profile images
+- \`products\` - Product images
+- \`files\` - User uploads
+
+## Vercel Setup
+
+### 1. Deploy
+\`\`\`bash
+npm i -g vercel
+vercel
+\`\`\`
+
+### 2. Environment Variables
+\`\`\`
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+STRIPE_SECRET_KEY=your_stripe_key
+${answers.payments !== 'no' ? 'STRIPE_WEBHOOK_SECRET=your_webhook_secret' : ''}
+\`\`\`
+
+### 3. Edge Functions (optional)
+\`\`\`bash
+supabase functions new my-function
+supabase functions serve my-function
+\`\`\`
+
+## Domain & SSL
+
+1. Add custom domain in Vercel dashboard
+2. Configure DNS records
+3. SSL auto-provisioned
+
+## CI/CD Pipeline
+
+\`\`\`yaml
+# .github/workflows/deploy.yml
+name: Deploy
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: \${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: \${{ secrets.ORG_ID }}
+          vercel-project-id: \${{ secrets.PROJECT_ID }}
+          vercel-args: '--prod'
+\`\`\`
+
+## Monitoring
+
+- **Vercel Analytics**: Built-in performance monitoring
+- **Supabase Dashboard**: Database metrics, logs
+- **Error Tracking**: Sentry (optional)
+
+## Scaling Considerations
+
+${parseInt(answers.scale) >= 100000 ? `- **Database**: Upgrade to Pro plan with auto-scaling
+- **CDN**: Enable for all static assets
+- **Caching**: Add Redis for session/response caching
+- **Edge Functions**: For global API endpoints` : `- **Current**: Starter plan sufficient
+- **Future**: Monitor and upgrade as needed`}
+`;
+    }
+
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    window.downloadDoc = function(docId) {
+      const docs = {
+        'architecture': generateArchitectureDoc(calculateArchitecture()),
+        'stack': generateStackDoc(calculateArchitecture()),
+        'modules': generateModulesDoc(calculateArchitecture()),
+        'crud': generateCrudDoc(calculateArchitecture()),
+        'deployment': generateDeploymentDoc(calculateArchitecture())
+      };
+      
+      const content = docs[docId];
+      const blob = new Blob([content], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${docId}.md`;
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+
+    downloadAllBtn.addEventListener('click', () => {
+      const docs = ['architecture', 'stack', 'modules', 'crud', 'deployment'];
+      docs.forEach(docId => {
+        setTimeout(() => window.downloadDoc(docId), 100);
+      });
+    });
+  </script>
+</body>
+</html>
