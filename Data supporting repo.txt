@@ -1,0 +1,4403 @@
+So I am building a repo that I wanna be able to clone for the use of injection business logic that implies a crud checklist that orients the users needs via a module based to do list for a full stack build for vercel and supabase deployment in a project. 
+
+Now conventionally I wanna use genetic tools and the process free entirely to print SaaS but I do not know the concepts in their entirety to do so. My plan is to leverage web crawling technologies from open sources models to gain the documentation from vercel and supabase for a mobile/desktop client project. Though all of that needs to be in the repo. 
+
+Once in the repo(git - stackstandards) it should delineate the concepts and checklists of to dos for the AI to begin the project utilizing the anythingllm and laravel 
+
+
+Thoughts? 
+
+You’re circling a solid idea, but a few things in the plan need tightening or the repo will turn into chaos instead of a reusable SaaS printer.
+
+I’ll break it down bluntly.
+
+1. What you’re actually trying to build
+
+What you described is essentially a “SaaS scaffolding intelligence repo.”
+
+A repo that:
+
+Gets cloned.
+
+Reads internal docs + framework docs.
+
+Produces a task plan.
+
+Executes CRUD scaffolding and modules.
+
+Deploys to Vercel + Supabase automatically.
+
+So the repo is not the SaaS.
+
+It is a SaaS factory template.
+
+Think:
+
+Repo → AI planning → module checklist → code generation → deploy
+2. The main problem with your current idea
+
+You said:
+
+crawl documentation from vercel and supabase and store it in the repo
+
+That’s the wrong way.
+
+Three reasons:
+
+Docs change constantly.
+
+Repo size explodes.
+
+Crawlers create garbage context.
+
+Instead you want RAG knowledge packs, not crawled docs.
+
+Meaning:
+
+/knowledge
+    /vercel
+        routing.md
+        deployment.md
+        edge-functions.md
+
+    /supabase
+        auth.md
+        storage.md
+        rls.md
+        migrations.md
+
+These are curated concept docs, not scraped pages.
+
+Small.
+Targeted.
+Readable by LLM.
+
+3. Your architecture (clean version)
+
+Here’s the structure you actually want.
+
+saas-factory/
+│
+├── agent/
+│   planner.md
+│   system-prompt.md
+│   task-engine.md
+│
+├── knowledge/
+│   vercel/
+│   supabase/
+│   laravel/
+│
+├── modules/
+│   auth/
+│   billing/
+│   dashboard/
+│   crud/
+│
+├── templates/
+│   nextjs/
+│   laravel-api/
+│
+├── checklist/
+│   product-definition.md
+│   system-design.md
+│   crud-matrix.md
+│
+├── generators/
+│   module-generator.ts
+│   crud-generator.ts
+│
+├── deployment/
+│   vercel.json
+│   supabase/
+│
+└── README.md
+4. The checklist system (this is the real power)
+
+You mentioned a CRUD checklist orientation system.
+
+That’s actually the right instinct.
+
+Example:
+
+module: users
+
+[ ] database table
+[ ] supabase migration
+[ ] laravel model
+[ ] api controller
+[ ] auth policy
+[ ] frontend page
+[ ] create form
+[ ] edit form
+[ ] delete
+[ ] list table
+
+AI reads this and generates tasks.
+
+This becomes the execution engine.
+
+5. The agent layer
+
+You mentioned AnythingLLM.
+
+That’s fine, but understand its role.
+
+AnythingLLM = RAG + memory
+
+You still need:
+
+Planner agent
+Executor agent
+Validator agent
+
+Example pipeline:
+
+idea.md
+   ↓
+planner agent
+   ↓
+system architecture
+   ↓
+crud matrix
+   ↓
+executor agent
+   ↓
+generate modules
+   ↓
+validator agent
+   ↓
+lint + fix
+6. Laravel + Supabase (be careful here)
+
+Laravel already wants to be the backend.
+
+Supabase is also a backend.
+
+So if you combine them you must define roles clearly.
+
+Option A (recommended):
+
+Next.js → Supabase → Postgres
+
+No Laravel.
+
+Option B:
+
+Next.js → Laravel API → Supabase Postgres
+
+Laravel only handles:
+
+business logic
+
+auth rules
+
+orchestration
+
+Supabase becomes:
+
+database
+
+storage
+
+realtime
+
+7. “Genetic tools”
+
+I assume you mean generative tools.
+
+Free stack that works today:
+
+LLM options
+
+Ollama
+
+AnythingLLM
+
+Open WebUI
+
+Models
+
+Qwen2.5-Coder
+
+DeepSeek Coder
+
+Code Llama
+
+Your RTX 4050 can run them.
+
+8. The real missing piece in your plan
+
+You don’t just need docs.
+
+You need patterns.
+
+Your repo should include examples like:
+
+patterns/
+    saas-auth-flow.md
+    multitenancy.md
+    stripe-billing.md
+    rbac-permissions.md
+
+AI copies patterns far better than it invents them.
+
+9. The real long-term goal
+
+What you’re describing eventually becomes something like:
+
+AutoGPT
+
+Devika AI
+
+OpenDevin
+
+But specialized for:
+
+SaaS deployment
+
+Not general coding.
+
+That specialization is where the power comes from.
+
+10. My blunt advice
+
+Don’t start with crawling.
+Don’t start with agents.
+
+Start with three things:
+
+1️⃣ SaaS repo template
+2️⃣ CRUD checklist engine
+3️⃣ module generator
+
+Agents come later.
+
+Otherwise you’ll build an “AI orchestrator” with nothing useful underneath it.
+
+If you want, I can also show you something very useful:
+
+The “SaaS factory architecture” used by YC startups in 2025–2026 — the pattern that lets a single developer spin up 10–50 SaaS products from one codebase.
+
+That’s very close to what you’re trying to build.
+
+i think having adecisison level process of simple questions is a big deal. i think understanding the types of front-ends, the backends and the client types goes a long ways in app dev especially fullstack. so we should have that process of okay answer this...example but you must pull down knowledge on such......  : example - Do you want a app or website? mobile or desktop? apple or android / win mac linus etc? pick the number of users you'd expect 100, 1,000, 10,000 100,000 1,000,000? video or audio uploads? pictures uploads? :  etc right so understanding we may need to dive deep into such things to project the variables neeeded for the user to understand their schema.   ideally it must trigger a response similar to this kind of contextual arguement rights?:
+
+1. The Correct Frontend Architecture for Puvu Global Coffee
+
+Your product characteristics:
+
+Marketplace
+
+Buying/selling transactions
+
+User accounts
+
+Analytics on user behavior
+
+Some dashboards
+
+Few thousand users
+
+Not massive enterprise scale
+
+Needs good performance
+
+Needs strong security boundaries
+
+Needs maintainable code
+
+That profile points very clearly to this architecture:
+
+SSR Hybrid SPA with a Modular Frontend Monolith
+
+In practical stack terms:
+
+Next.js (SSR + React Server Components)
++
+SPA interactivity for dashboard areas
++
+BFF layer for APIs
++
+Modular monolith repo structure
+Why this works
+
+SSR / React Server Components
+
+Fast first load
+
+Good SEO
+
+Good for product catalog pages
+
+Good for marketing pages
+
+SPA sections
+
+dashboards
+
+user accounts
+
+analytics panels
+
+marketplace filtering
+
+These areas benefit from client state.
+
+BFF (Backend for Frontend)
+
+isolates frontend from microservices
+
+simplifies auth
+
+centralizes security
+
+aggregates APIs
+
+Modular Frontend Monolith
+
+your codebase stays organized
+
+avoids microfrontend complexity
+
+supports domain separation
+
+Example domains for your app:
+
+domains/
+  marketplace
+  accounts
+  orders
+  analytics
+  messaging
+  suppliers
+What you should NOT use
+
+Avoid these for your situation:
+
+Microfrontends
+
+Reason:
+
+unnecessary complexity
+
+only useful with hundreds of developers
+
+worse performance
+
+Pure SPA
+
+Reason:
+
+poor SEO
+
+slow first load
+
+worse for marketplaces
+
+Static-only
+
+Reason:
+
+cannot support marketplace logic
+
+Your likely stack
+
+Example real-world stack:
+
+Frontend
+Next.js
+React Server Components
+TypeScript
+Tailwind
+
+Architecture
+Modular Frontend Monolith
+
+Backend
+Supabase
+Edge functions
+or Node API
+
+Pattern
+BFF
+
+This is modern SaaS architecture used by many startups.
+
+2. Frontend Architecture Decision Matrix (For Your Repo)
+
+This is the important part for your SaaS scaffolding intelligence repo.
+
+You want something like this:
+
+frontend-architecture/
+    decision-tree.md
+    architecture-types.md
+    architecture-selection.md
+
+Below is the knowledge you want to encode.
+
+3. The Frontend Architecture Types (Extracted from the Video)
+1. Static Pages
+Concept
+
+Pure HTML/CSS.
+
+No dynamic logic.
+
+Characteristics
+
+Thin client
+
+Pros
+
+extremely fast
+
+cheap
+
+simple
+
+Cons
+
+no real interaction
+
+no dynamic data
+
+Used for
+
+landing pages
+
+documentation
+
+blogs
+
+Stack
+HTML
+CSS
+CDN
+2. MVC (Model View Controller)
+Concept
+
+Server renders the HTML.
+
+Backend combines data and template.
+
+Example frameworks
+
+Django
+
+Ruby on Rails
+
+Laravel
+
+ASP.NET
+
+Pros
+
+simple
+
+easy backend control
+
+Cons
+
+tight frontend/backend coupling
+
+page reloads
+
+poor scalability
+
+Used for
+
+Traditional web apps.
+
+3. SPA (Single Page Application)
+Concept
+
+Frontend becomes a full application.
+
+Backend only serves data APIs.
+
+Popular frameworks
+
+React
+
+Vue
+
+Angular
+
+Pros
+
+very interactive
+
+scalable UI logic
+
+rich dashboards
+
+Cons
+
+heavy JavaScript
+
+slow first load
+
+poor SEO
+
+Used for
+
+SaaS dashboards
+
+internal tools
+
+admin panels
+
+4. BFF (Backend For Frontend)
+Concept
+
+Each frontend gets its own backend layer.
+
+Web frontend
+     |
+     BFF
+     |
+Microservices
+Benefits
+
+optimized API responses
+
+frontend independence
+
+easier authentication
+
+Downsides
+
+more infrastructure
+
+single failure point
+
+Used when
+
+multiple clients exist
+
+Example:
+
+mobile app
+web app
+admin app
+5. SSG / ISR / SSR
+
+These are rendering strategies, not complete architectures.
+
+SSG (Static Site Generation)
+
+Pages generated at build time.
+
+Example:
+
+Next.js build
+→ HTML
+→ CDN
+
+Pros:
+
+fastest
+
+Cons:
+
+content updates require rebuild
+
+Used for:
+
+blogs
+
+marketing pages
+
+ISR (Incremental Static Regeneration)
+
+Static pages regenerate after a time limit.
+
+Pros:
+
+dynamic updates
+
+fast CDN delivery
+
+Used for:
+
+product catalogs
+
+SSR (Server Side Rendering)
+
+Pages generated on request.
+
+Pros:
+
+fast initial load
+
+good SEO
+
+Cons:
+
+server load
+
+more infrastructure
+
+Used for:
+
+marketplaces
+
+ecommerce
+
+SaaS with SEO
+
+6. Modular Frontend Monolith
+
+A large SPA organized into domains.
+
+Example structure:
+
+src/
+  domains/
+    users
+    payments
+    marketplace
+    analytics
+  shared/
+    ui
+    hooks
+    services
+
+Benefits:
+
+maintainable
+
+scalable for medium teams
+
+clear boundaries
+
+Drawbacks:
+
+build times grow
+
+boundaries hard to enforce
+
+Best for:
+
+10-100 developers
+7. Microfrontends
+
+Multiple independent frontends assembled together.
+
+Example:
+
+Header app
+Cart app
+Search app
+Profile app
+
+Loaded together by a shell.
+
+Benefits:
+
+huge team scaling
+
+independent deployments
+
+Drawbacks:
+
+heavy complexity
+
+performance overhead
+
+Used by:
+
+Amazon
+
+Spotify
+
+enterprise SaaS
+
+Not recommended for startups.
+
+4. Repo Decision Tree (The Part You Actually Want)
+
+Here is the decision logic you can encode.
+
+Step 1 — Is the site mostly static?
+YES → Static Pages / SSG
+NO → Continue
+Step 2 — Does the product require high interactivity?
+
+Examples:
+
+dashboards
+
+editors
+
+marketplaces
+
+realtime updates
+
+YES → SPA architecture
+NO → SSR / SSG
+Step 3 — Does SEO matter?
+YES → SSR / ISR hybrid
+NO → SPA
+Step 4 — Do you support multiple client apps?
+
+Examples:
+
+mobile app
+web app
+admin portal
+YES → BFF
+NO → standard API
+Step 5 — Team size
+< 20 devs
+    → Modular Frontend Monolith
+
+20–200 devs
+    → Strong modular architecture
+
+200+ devs
+    → Microfrontends possible
+5. Final Answer For Puvu
+
+Your architecture:
+
+Frontend Architecture
+SSR Hybrid SPA
+
+Rendering
+SSR + React Server Components
+
+Pattern
+BFF
+
+Codebase
+Modular Frontend Monolith
+
+Framework
+Next.js
+6. The Missing Piece Your Repo Should Add (Very Important)
+
+Your scaffolding repo should not just ask:
+
+What frontend framework?
+
+It should ask:
+
+1 What is the product type?
+2 Is SEO required?
+3 Is the app highly interactive?
+4 What is the expected user scale?
+5 How many engineers will maintain it?
+6 Are there multiple client apps?
+7 Does the app require realtime state?
+
+Then generate architecture recommendations automatically.
+
+: but you must keep in mind we are needing to create a backend too so all backend concepts need to be there as well. here is a video with context:
+
+https://www.youtube.com/watch?v=oVfw8Oj-uH8 : now here is its transcripts:
+
+standby
+
+You’re thinking in the right direction. What you’re describing is essentially a software architecture decision engine that lives inside the repo. Instead of the AI randomly generating stacks, it forces a structured interrogation of the product first, then derives architecture choices from that. That’s exactly how experienced engineers work.
+
+But the key is: the questions must map directly to architecture consequences. If the questions don’t change system design, they’re useless.
+
+Below is how to structure this properly.
+
+1. The Core Idea: Architecture Interrogation Layer
+
+Your repo should start with a decision engine before any code generation happens.
+
+Think of it as:
+
+User answers questions
+        ↓
+Architecture engine
+        ↓
+Stack recommendation
+        ↓
+System blueprint
+        ↓
+Module checklist
+        ↓
+Code generation
+
+So the repo’s workflow becomes:
+
+clone repo
+→ run architecture wizard
+→ generate architecture.md
+→ generate crud-matrix.md
+→ AI begins building
+
+This prevents the biggest failure of AI coding: building the wrong system.
+
+2. The Correct Question Categories
+
+You should divide questions into five domains.
+
+product
+clients
+data
+scale
+team
+
+Each domain influences architecture differently.
+
+3. Product Type Questions
+
+These determine interaction patterns.
+
+Example questions:
+
+What type of product are you building?
+
+1 marketplace
+2 SaaS dashboard
+3 social platform
+4 ecommerce
+5 internal tool
+6 content site
+7 mobile-first app
+
+Why this matters:
+
+Different products require different systems.
+
+Example:
+
+Marketplace requires
+
+payments
+search
+inventory
+orders
+users
+analytics
+
+Social platform requires
+
+feeds
+notifications
+realtime updates
+content moderation
+4. Client Architecture Questions
+
+These determine frontend architecture.
+
+Questions:
+
+Which clients will exist?
+
+1 web browser
+2 iOS
+3 Android
+4 desktop app
+5 public API
+
+Logic outcome:
+
+single client
+    → standard API
+
+multiple clients
+    → BFF layer
+
+This is where Next.js, Supabase, or Laravel decisions get influenced.
+
+5. Data Type Questions
+
+These determine infrastructure requirements.
+
+Example:
+
+Will users upload:
+
+images
+video
+audio
+documents
+none
+
+Architecture consequences:
+
+Images
+
+object storage
+CDN
+image processing
+
+Video
+
+transcoding
+chunk uploads
+streaming
+
+Realtime messaging
+
+websockets
+pub/sub
+event queues
+
+These answers influence whether you use things like:
+
+Supabase Storage
+
+Cloudflare R2
+
+streaming services
+
+6. Scale Questions
+
+This determines database and infrastructure strategy.
+
+Example scale selector:
+
+Expected active users:
+
+100
+1,000
+10,000
+100,000
+1,000,000+
+
+Then translate that to architecture.
+
+Example logic:
+
+<10k users
+    → single database instance
+
+10k–100k
+    → read replicas
+
+100k–1M
+    → caching layer
+
+1M+
+    → horizontal scaling
+
+This also influences rate limiting, queues, and caching.
+
+7. Interaction Complexity
+
+These questions determine frontend rendering strategies.
+
+Example:
+
+Does the application require:
+
+SEO pages
+dashboards
+realtime updates
+complex forms
+search filtering
+
+Logic results:
+
+SEO required
+
+SSR
+ISR
+
+Dashboards
+
+SPA components
+client state
+
+This leads to hybrid architectures like:
+
+SSR + SPA sections
+
+Which is exactly what you described.
+
+8. Backend Architecture Questions
+
+Your system must also decide backend patterns.
+
+Example questions:
+
+Do you require:
+
+authentication
+payments
+realtime updates
+file uploads
+search
+background jobs
+
+Each answer triggers backend modules.
+
+Example output:
+
+backend-modules/
+    auth
+    billing
+    notifications
+    queue-workers
+    search
+9. Repo Structure for This System
+
+Your repo should include a decision knowledge system.
+
+Example:
+
+architecture/
+    decision-engine.md
+    frontend-matrix.md
+    backend-matrix.md
+    scale-matrix.md
+
+Then a separate folder for rules.
+
+rules/
+    frontend.rules
+    backend.rules
+    infrastructure.rules
+
+Example rule:
+
+IF
+    product = marketplace
+THEN
+    enable modules:
+        orders
+        payments
+        inventory
+        search
+10. The Output Files
+
+After the decision process the repo generates:
+
+architecture.md
+stack.md
+modules.md
+crud-matrix.md
+deployment.md
+
+Example architecture output:
+
+Frontend
+Next.js
+SSR + SPA hybrid
+
+Backend
+Supabase Postgres
+Edge Functions
+
+Pattern
+Backend for Frontend
+
+Structure
+Modular monolith
+
+Then the AI begins coding.
+
+11. Why This Matters
+
+Most AI coding fails because the AI skips system design.
+
+Real engineers always do this first:
+
+requirements
+→ architecture
+→ modules
+→ implementation
+
+Your repo should force that process.
+
+12. One More Very Important Layer
+
+Your system should also generate data models first.
+
+Example:
+
+entities/
+
+users
+orders
+products
+messages
+analytics
+
+From this the system generates:
+
+database schema
+API endpoints
+CRUD pages
+
+Without entity modeling first, AI systems create messy schemas.
+
+13. The Hidden Power of Your Idea
+
+If you implement this well, your repo becomes a product architecture generator.
+
+Instead of prompting AI like:
+
+build a SaaS
+
+You generate:
+
+a fully specified system blueprint
+
+Then AI simply executes it.
+
+If you want, I can also show you something extremely useful for this project:
+
+the full 2026 SaaS architecture decision tree engineers use internally (frontend, backend, database, queues, caching, deployment).
+
+It’s about 10× more detailed than what you outlined and would make your repo dramatically smarter.
+
+
+Search in video
+Intro
+0:00
+everything you need to be aware of as a backend engineer is going to be talked about in this video I put together this
+0:06
+insane mind map which is going to talk about every major technology and show you where it fits in in the bigger
+0:12
+context now if you want to become a backend engineer or strengthen your backend engineering skills you don't
+0:18
+have to know every single technology in this mind map this is about helping you think and speak intelligently about
+0:24
+different Technologies and helping you understand how everything is connected if you want to take this information and
+0:30
+turn it into a step-by-step road map I'm going to do that in a followup video so
+0:35
+stay tuned for that and we're going to go through this if you want to follow along I have a link to this down below
+0:42
+this will help you get the most up to-date version if I do end up adding or changing anything in this list you can
+0:48
+also print it if you want to use it as some kind of reference so to start we're going to go into the backend Frameworks
+Backend Frameworks
+0:54
+and there are a bunch of different languages here the main takeaway from this is that you can program a backend
+0:59
+in pretty much any major programming language certain ones are going to be more popular for web development and I
+1:05
+would generally recommend to pick something that has a decent level of popularity because this will basically
+1:12
+show that enough people have gone through it and issues have been resolved and you're not working with some super
+1:18
+cuttingedge technology that doesn't have a lot of development over time or resources for support and that's going
+1:24
+to be something that you can apply for pretty much any technology I generally like to recommend people get newer
+1:31
+technology that's not super dated but not so new that you're working in
+1:37
+basically a beta software where you have to worry about breaking changes or running into issues that nobody else has
+Language vs Framework
+1:43
+faced before so we'll go through each one of these but it's important to understand that you first have the programming language so for example we
+1:50
+have Python and within python you will also pick a framework so a framework is basically just a more extensive library
+1:58
+that someone or some team creat created to help you build applications that way you don't have to build everything
+2:04
+completely from scratch so in the example of python three popular ones are D Jango flask and fast API there's
+2:11
+probably like a million others the goal isn't to know all of the Frameworks the main thing is to know the most popular
+2:18
+Frameworks for each major language and when it comes to choosing a framework it's often the case you'll want to pick
+2:24
+one that makes sense based off of what your team is using if you're working in an existing company or software so if
+2:31
+you're given an application written in Jango then yeah use Jango but if you're starting with a brand new project you
+2:36
+can think of the targeting of that particular framework often it's the case a framework will Target simple small
+2:43
+applications or building large Enterprise applications and it makes sense to pick the one based off of what
+2:49
+you're trying to build so in this case flask will give you a really Simple Start you can get an application going
+2:55
+in a single python file whereas Django is going to give you a little bit more Str structure and the setup is more
+3:02
+complex but it might be the framework for you if you eventually are going to have a more complex backend then it's
+3:08
+probably the case there will exist Frameworks that will Target a particular feature or capability so with fast API
+3:14
+it's all about creating very performant apis so that might be something for you as well and if you're watching this
+3:20
+thinking wow there's so much stuff here where do I even start it's often the case that you can achieve the results
+3:26
+you want with many different languages or Frameworks you don't have to choose exactly the right one so I recommend
+3:33
+following some learning path and sticking to that so you can become familiar with all of these different
+3:38
+technology categories so at the bottom of the road map I have an example learning road map and you can follow
+Example Learning Roadmap
+3:44
+through with that or you can wait for my upcoming video which will go through that material now if you need a little
+3:50
+bit more support I do offer one-on-one mentorship and this is if you want me to meet you where you are in terms of skill
+3:57
+and help you bring you to the point of being a professional backend engineer so I have a link for that application Down
+4:04
+Below in addition to the road map so check out those two resources and if you do end up applying for the mentorship I
+4:10
+look forward to working with you but let's get back to working on the backend Frameworks let's just go through each
+JavaScript
+4:17
+one of these in no particular order but I'll grab some of the more popular ones first so we have JavaScript there are a
+4:23
+lot of different options here one of the biggest ones is expressjs this will give you a really easy way of building a
+4:29
+backend API next up we have nestjs which is going to achieve similar results but
+4:34
+it gives you that larger framework so you could kind of compare this to Python's Django and flask expressjs
+4:41
+gives you the Simplicity ease of starting like you would get with flask and then nestjs is going to give you
+4:47
+everything you would possibly need kind of like Jango and when you have larger
+4:52
+systems like that it often comes with different conventions or opinionated
+4:58
+approaches to developing software for some people that's great it gives you exactly how to do things but for others
+5:04
+you might want a little bit more freedom and not to have to kind of fit into a strict system so in that case you might
+5:09
+want to go with something like Express instead of nestjs then we have fastify which boasts faster speeds and a better
+5:16
+development experience that's ultimately going to be up to your judgment but that's another option as well then on
+5:23
+here we have two other ones njs and nextjs these two are kind of interesting
+5:28
+because the these are often used to create full stack applications and they just have a backend component to it so
+5:35
+these are kind of different Technologies than Express nextjs and fastify but I
+5:41
+wanted to put them in here because they're going to give you a JavaScript backend so let's take a look at nextjs
+5:46
+first nextjs is going to be pretty similar nextjs is going to utilize react
+5:51
+components and it's going to give you the framework for building a full stack application so both front end and
+5:58
+backend with this you're going to get things like static site generation overall it's a really cool technology
+6:04
+and has grown a ton in popularity so if you're building a new application it's definitely worth considering especially
+6:10
+if you want to work within JavaScript and you're already using react then it would just make sense to check out
+6:16
+nextjs and see if it's right for you nextjs is very similar but it's utilizing the view JavaScript framework
+6:24
+so Vue is similar to react a frontend framework but it's a little bit different so if you're working within a
+6:30
+view environment you might want to check out njs next up we have C the major framework with this asp.net core you may
+C
+6:38
+also hear asp.net MVC this is a great option but it's within C which is largely tied to the Microsoft
+6:44
+environment so in this context there's a good chance you'll be working with Microsoft SQL Server Microsoft Azure if
+6:51
+you're in a Microsoft shop then yeah it makes sense to use C otherwise there's a lot of other options on here that aren't
+6:58
+coupled to a particular system now that doesn't mean if you use C you have to use Windows or you have to use SQL
+7:04
+server or any of these other Microsoft products but it's developed by Microsoft so that's where you might get the best
+7:10
+experience ICP for various things and overall it's really great you'll probably get a very similar experience
+Java
+7:16
+with Java and spring boot Java being the main programming language in the Oracle
+7:21
+ecosystem now if you're going for spring boot within Java there's also cotlin
+Kotlin
+7:27
+which is often positioned as a potential replacement for Java and Colin also has a spring boot framework as well as this
+7:34
+kto R framework I'm actually not sure how to pronounce that so I don't want to assume I haven't personally worked with
+7:40
+that but it's probably a good option if you're working within cotlin PHP is very huge for the web it Powers things like
+PHP
+7:47
+WordPress you can use it for custom backends with code igniter or laravel haven't personally used PHP in this
+7:53
+context but I know it's very popular it wouldn't be my personal first choice but
+7:59
+there's not anything necessarily wrong with it I would just probably choose JavaScript or python or I've actually
+Rust
+8:05
+worked with rust professionally and I use the axom framework so the interesting about rust while it is newer
+8:11
+and might not have the established history that you might get with some of these other options it is a really good
+8:18
+ecosystem and gives you the power of a programming language like C++ but has a
+8:24
+better ecosystem for things like API development so you wouldn't typically build an API with something like C++ but
+8:31
+with rust you can easily do that actic is another popular one but within every language there's like a 100 Frameworks
+8:37
+so I'm just putting a few of the most important ones so I had a pretty good experience developing in Rust definitely
+8:43
+did have that feeling of like wow this is newer not nearly enough support or
+8:48
+people who've solved this particular issue yet but if you're already working within a rust environment maybe you're
+8:55
+using rust for some lower level programming and you want to build an API then this is awesome so I definitely see
+Go
+9:01
+rust being a much more popular option going forward as well as languages like go which you can see as a lower level
+9:09
+language but often more used in the context of web apps and microservices so
+9:14
+go is a great option if you're already in that kind of environment here are two Frameworks with go next up let's talk
+Elixir and Ruby
+9:20
+about Elixir we have Phoenix and then Ruby we have Ruby on Rails all of these would be great options just depends on
+9:26
+which language you end up going with elixir is a functional programming language the people that use Elixir seem
+9:32
+to love it it's not super popular and also probably wouldn't be my first choice as a language to use for building
+9:39
+a backend I did use it for one particular job and it was kind of a rough experience learning it as it's not
+9:46
+super similar to some of the other languages and Frameworks I've used while a lot of the principles of how to design
+9:52
+the app were the same I just felt the learning curve to go to a functional language like elixir was a little bit
+9:58
+High but if you're starting from scratch and for some reason you want to use Elixir go for it just keep in mind if
+10:04
+it's something where other developers might end up having to work on it not nearly as many people work with languages like elixir rust cotlin and
+Swift
+10:12
+Swift which I really wouldn't recommend for a backend language I think it's too tightly coupled to the Apple ecosystem
+10:20
+you may use Swift for building the actual iPhone application but when it comes to the back end I probably
+10:25
+wouldn't choose Swift unless I knew it was only going to be used in that
+10:30
+specific iPhone app environment and I didn't need to use it for anything else
+10:35
+but if I was just building a backend for a general web app I would not choose Swift personally similar idea with
+10:42
+cotlin which I think is probably a little bit more open and a good choice
+10:48
+than using Swift but cin is often used for Android app development so you might end up using cotlin for the Android app
+10:55
+but then choose a different language for the backend if you're already developing in cotlin then you could potentially
+11:00
+create some stuff in cotland for the backend but if you were just trying to create a general backend and you needed to choose one of these programming
+11:06
+languages I probably would choose something that more people have used such as JavaScript or python I generally
+11:12
+do concern myself about the popularity of the language and the framework it's not the only thing I use to make a
+11:19
+decision on which one of these to use but it definitely is a factor a great way to get an idea on popularity is
+Popularity of a Language
+11:25
+using surveys such as the stack Overflow survey so here are some popular Technologies JavaScript being the top of
+11:31
+the list here then we have python typescript which is basically JavaScript Java C PHP so if you're working with
+11:39
+some language or some framework that's down here yeah there might just not be very much support which is one of the
+11:46
+big Reasons I'm a little bit hesitant about Elixir the learning curve is steep and not a lot of people use Elixir and I
+11:52
+only listed some of the major programming languages there's probably web development Frameworks for a lot of these other languages that we didn't
+11:58
+even talk about about but this will give you a pretty good starting point and if you are familiar with all of these you should be good to go because you'll
+12:05
+understand how other languages and Frameworks fit into this larger mind map now I have a small comment up here that
+webAssembly
+12:12
+says worth mentioning web assembly I couldn't figure out where to put this so I was like here looks great web assembly
+12:18
+is a technology basically allowing you to use any of the major backend
+12:24
+programming languages to do certain things on the front end so if you're familiar with development you probably
+12:30
+know that JavaScript is the main programming language for front-end development so if it comes to just
+12:36
+learning as little languages as possible you can pick JavaScript because you can do the front end and the backend and you
+12:43
+don't have to learn a different programming language for the back end however this could be changing with the adoption of web assembly as it is
+12:49
+allowing us to use other programming languages for things on the front end I think this should have a capital W here
+12:55
+but you know everything has different upper cases and lower cases so but web assembly is a target so if you imagine
+13:02
+taking a compiled language such as rust and instead of compiling that to run on
+13:08
+an x86 machine you could compile it to run on web assembly which is supported in a browser so the browser is acting as
+13:14
+an interpreter for web assembly allowing us to use these other languages for frontend work so it's likely the case
+13:21
+you're still going to have JavaScript it's more so that for certain things you could use these backend languages for
+13:28
+frontend and things especially if it's very performance heavy if you're trying to make a video editor or a Maps
+13:36
+application or something that requires a lot of computation and you want to run that within a browser web assembly might
+13:44
+come up to make that more performant it's not a different language it's just a technology that'll utilize these
+13:49
+languages you're already familiar with it's just going to help you have more functionality from these languages this
+13:56
+does kind of get into the front end but this is likely something you'll want to be aware of as a backend engineer next
+ORMs and Database Libraries
+14:03
+up on this list I have ORS and database libraries now I didn't go through every omm and library that exists there's just
+14:11
+unlimited for every major programming language there's going to be libraries for working with databases now these
+14:17
+could be libraries to work with one particular database or it could be an OM
+14:23
+which will work with multiple databases so let's take a look at this list to give you an idea of some of the most
+14:28
+popular ones here now I listed out omm and I'll explain what that means here in
+14:33
+a second but you may also find libraries to work with a particular database so if you were working with postgress in a
+14:41
+certain language there might be a library to do that for you to make that connection easier to retrieve data edit
+14:47
+data and all of that so for example within python you might work with pyop G if you wanted to work with postgress the
+14:53
+first four on this list are examples of OMS which we'll talk about here in a moment then we have a database Library
+15:00
+sqlx let's talk about this one first so this is an example that I used with rust
+15:07
+and this is a database library that will allow you to execute SQL or SQL to
+15:12
+different databases so it's not a library to work with one particular database it will allow you to work with
+15:18
+multiple databases but it's not exactly an omm so the difference between this
+15:25
+kind of library that can work with multiple databases but is not an omm and then these kinds of libraries which are
+15:31
+OMS is that these are object relational mappers they will execute the SQL for
+15:38
+you bring them into objects in your code and then the way you interact with those
+15:43
+objects would be methods and properties on those objects so I didn't want to get
+15:48
+into all of the details and split out the types of database libraries into different branches as I didn't really
+15:54
+feel it to be necessary the main thing you need to understand is that you can basically do one of three different
+16:01
+things you can use a library to work with a specific database directly so an example would be pyop G2 with python to
+16:08
+work with the postgress database you may also hear of this as an adapter basically a tool to connect your code to
+16:14
+the database next up you might have a library that somebody would write to work with multiple databases and give
+16:21
+you some easy commands but it's not an omm the main difference here is it doesn't abstract away the SQL itself
+16:29
+you are the one who will still write out the SQL language and we're going to get into databases here in a moment but
+16:35
+you're going to basically write that SQL and then the library will take care of actually executing that on the database
+16:41
+and retrieving that data bringing it into memory for your application you might then have to do some manual
+16:48
+mapping taking the results of those queries and putting those into objects
+16:53
+in your code finally we have OMS which is the highest level of abstraction this
+16:59
+is basically when you will write something like users. getet all you're not using the
+17:05
+SQL language but you're actually using whatever programming language you're working with so if you're working within
+17:11
+the context of a python application you might make your query in Python using
+17:17
+python syntax and that omm will translate that to SQL for you retrieving
+17:24
+the data from the database and then bringing that into your code as objects the ORS have the highest level of
+17:31
+abstraction and it is often the way to easily get started working with databases but they do have some
+17:37
+downsides they often do not have as much control because the library authors give
+17:43
+you a specific set of functions you can use you're limited to those functions
+17:48
+they may give you an option to execute raw SQL but that just depends on the
+17:54
+library this is usually fine for most applications so when people get started working with an omm is often an easy way
+18:01
+to build out applications without having to get super deep into all the database stuff as you get more specialized
+18:07
+queries you might not find the specific function you need or behind the scenes
+18:12
+that function might not be executing the most optimized query where the OM could
+18:18
+be doing something fancy in code that you wouldn't expect if you just executed that SQL directly on a database this
+18:25
+section of the Mind map is really just designed to give you an introduction to database libraries because I wanted to
+18:32
+mention the potential concerns around om so you can do some additional research
+18:37
+on OMS when you start to build out a project you can decide if it's something you want to use it is a great way to get
+18:44
+started but I highly encourage that everybody picks up SQL and has an
+18:49
+understanding of the database at the database level and not just from within your application so one of the sections
+18:55
+we're going to get to will be databases and that's an extensive list of of the most popular databases so we'll get to
+19:01
+that in a moment but for now just be aware that within your application you're going to need a way to connect to
+19:06
+your database that will either be just a small direct library or adapter to work with a particular database or it will be
+19:12
+a library for you to execute SQL or it will be an even larger library or framework which will be an OM so the
+19:19
+first one on here we have is Entity framework and that is within the C environment so if you're working with an
+19:25
+asp.net core application this can help help you generate your tables and work
+19:31
+with data that's another cool thing about ORS they abstract away a lot of stuff making it really easy to create
+19:38
+tables and not have to worry about all the uh ddl which you would have to worry about if you were creating the tables
+19:44
+yourself next up we have Prisma this is really popular in the JavaScript World
+19:50
+however I have noticed that Prisma is growing beyond that to where you can use
+19:55
+the Prisma syntax with other om or libraries so definitely worth looking
+20:01
+into I used Prisma within a node or JavaScript environment and I was able to use it to work with a postgress database
+20:08
+but it also supported mongodb which is pretty uncommon for omms so the fact
+20:14
+that it had some nosql support and I needed to do something with mongod DB this was a really good choice for me
+20:20
+next up we have SQL Alchemy and D Jango omm these are both within the python world I just wanted to list two from the
+20:27
+same language to show you that it's not always the case that there's only one om as an option just like back in
+20:33
+Frameworks there's often multiple ORS you can choose from so you just got to weigh the options looking at the pros
+20:39
+and cons of each maybe try one out see if you like it but you probably won't go wrong with any of the major OMS all
+Content Management Systems (CMS)
+20:45
+right now I want to get into an interesting section which is CMS or content management system and this is
+20:53
+going a little bit away from core backend development but is going to introduce a a lot of interesting things
+20:59
+that you should be aware of as a backend engineer CMS is short for Content management system if you're not sure
+21:05
+what that is it's a system that helps you manage your content so you can think of basic examples such as WordPress and
+21:12
+one of the major benefits of a CMS is that people who are non-technical can use the CMS to create content and manage
+21:20
+the website so this is going away from Custom web apps and getting a little bit more into content creation but this is
+21:26
+still an extremely popular thing you might need to do as a backend developer now it's not often the case you're going
+21:33
+to be working with these content Management Systems as a backend developer you might for example you
+21:39
+might be working in PHP for these three or C with umco but another popular route
+21:45
+is the Headless CMS so a headless CMS will give you just the backend so the
+21:51
+system for people to go in and create content and organize and manage that content but it doesn't tightly couple
+21:58
+that with a front end so within the backend career you might want to be familiar with these different cms's
+22:05
+because say one of these cms's delivers the content as an API you might need to
+22:10
+configure that or set it up in a certain way or make sure the connection between that API and the front end is working
+Static Site Generators (SSG)
+22:17
+these are often coupled with a front end and I put here SSG which stands for static site generation so it's often the
+22:25
+case that these will be paired with one of these tools which will be just the front end that will then make requests
+22:31
+to your back end to retrieve the content to be displayed on the page if this all sounds like crazy jargon don't worry you
+22:38
+don't have to know all of the information when it comes to cms's I just wanted to leave it in here as a
+22:43
+section because you should at least be familiar with the idea so you can imagine say you're familiar with
+22:49
+WordPress what if we had WordPress but instead of automatically showing that in
+22:54
+a WordPress front end we just had a headless WordPress that delivered the content through an API then you could
+23:01
+use one of these front-end tools to consume that API and display that
+23:06
+information on a page so we're not going to get into the details of all of these different cms's and static site
+23:12
+generators you can do additional research if you want I'm actually not even sure the difference between all of
+23:18
+these but I just know that these are some of the most popular ones so we're making pretty good progress in this but
+23:24
+we still have a lot of sections to go through so next up we're going to take a look
+Databases
+23:32
+at we'll go databases since we just got done talking about om's this will help
+23:37
+us kind of tie that information together now the key thing with databases is to not be overwhelmed with the number of
+23:45
+databases out there I've only listed some of the most popular databases and I have a pretty big list here there are a
+23:51
+lot more and it seems like every database has some specialty or some fancy marketing words and it's sometimes
+23:58
+challenging to understand what it is even for so my goal is to give you an idea of what each of the major databases
+24:05
+is for and how it's different than the other databases that being said the main way to categorize these is easy either
+24:12
+SQL or nosql SQL stands for structured query language and is a programming
+24:19
+language but it's more of a standard so all of the SQL databases will use the
+24:25
+SQL language but might have variations and things that are different between databases overall though if you learn
+24:31
+one you're going to be able to effectively work with all of them things might just be a little bit different in how that database works or some of the
+24:38
+data types or things like that the nosql and this is confusing it doesn't mean
+24:44
+that there's no structure it means not only structured query language so some
+24:49
+of the databases in the nosql category might still have the option to use
+24:55
+structured data but they might have other things as well so we'll get to that in a moment let's first take a look
+SQL
+25:01
+at the structured databases we have all the major ones here that you should be familiar with and just to get started
+25:07
+from the beginning we have two down here red shift and snowflake which are a little bit different than the rest up
+25:13
+here they're all structured and that they store things in tables and that's the main thing that makes something a
+25:19
+structured database but these two are largely prioritizing analytics so if you
+Data Warehouses
+25:24
+have a lot of data and you want to run analytics on that data you you will use an analytical database that's if the
+25:32
+core features of these structured databases is not adequate which usually it is and you have some serious
+25:38
+analytical needs then you can look into an analytical database or you might hear it as a data warehouse so I didn't do it
+25:45
+in this example but if you wanted to you could split this whole section up into two categories
+25:51
+oap which is online analytical processing and then everything else being oltp online transactional
+25:59
+processing a transaction being a purchase an interaction that you need to record creating a post basically the
+26:07
+creates the updates and the deletes and obviously these databases are all going
+26:13
+to be capable of reading data but if your primary thing is just to read data
+26:19
+and then calculate numbers off of that data that's where you would go for the analytical types of databases so
+26:27
+transactional analytical I'm hesitant to do too much splitting though because then it just becomes hard to organize
+26:33
+the main thing that these things have in common is that they're table based so everything goes into tables with columns
+26:40
+there is a whole world that you could explore if you start looking down the path of red shift and snowflake which
+26:47
+are two popular data warehouses red shift is part of AWS we're going to talk a lot about AWS here soon and then
+26:54
+snowflake is another option out there there's probably a lot more of these analytical databases or data warehouses
+27:01
+but the thing that I was trying to get to is that if you start exploring data analytics and data warehouses there is a
+27:09
+whole realm of information and this is going to get you into the world of big
+27:14
+data which is going to talk a lot about things like data streaming and Hadoop or
+27:20
+Kafka this is something I don't talk a whole lot about in this mind map I do this on purpose because while you might
+27:27
+explore some of that stuff as a backend developer there is pretty much an entire different career path or you could
+27:34
+create an entire different mind map for the world of analytics so that's going to bring in things like data engineering
+27:41
+ETL and even some analytics like Predictive Analytics so getting into
+27:47
+machine learning and AI it's a very interesting world but I just felt it to be kind of out of scope of what I'm
+27:54
+trying to accomplish in this mind map which is really about focusing on backend Services databases apis and how
+28:01
+all of that stuff works together you most certainly might encounter some of those things so you should be aware that
+28:07
+they exist but you might not so you don't have to go and learn about data
+28:12
+warehouses I personally have never needed a data warehouse for anything as all of the standard SQL databases for
+28:20
+transactional processing can do a lot of the same stuff it just might not be able to do it at a very large scale but for
+28:27
+the majority of use cases probably most of the use cases I'm going to encounter and you're going to encounter will be
+28:34
+fine just to use a transactional database so that's specifically if you really need to get into advanced
+28:39
+analytics let's now go through the main transactional databases I will just go from top to bottom here SQL Server it's
+Transactional Databases
+28:47
+the Microsoft database similar to C and Microsoft ashure it's just an offering
+28:53
+from Microsoft competing with similar things from other providers so SE server is really good it's been around for a
+28:59
+while I've used it for Stuff nothing to complain about it's just very tightly
+29:05
+coupled to Microsoft same idea with others on this list so Oracle database
+29:10
+it's just the Oracle equivalent some database administrators probably freaking out that I just said that
+29:16
+Oracle and SQL Server are basically the same thing they're all databases storing
+29:22
+structured data as a developer you're probably not going to notice a major difference switching between these two
+29:27
+as get into the details yeah there's probably some really critical differences between them but day-to-day
+29:34
+it's not going to impact us as developers unless you really get into more of like database Administration but
+29:41
+most of that is out of scope as well plus the SQL between these is going to be pretty similar the differences with
+29:47
+syntax and language will really come up if you start working with the procedural languages with databases so a lot of
+29:54
+these databases are going to have their own procedural language you can use to do more custom stuff so if you need to
+29:59
+do custom logic you would use plsql for an Oracle database SQL PL is the SQL
+30:06
+Server equivalent and there's probably languages for all of these it's not
+30:11
+something you're going to probably do a whole lot but it might come up and those are just languages specific to that
+30:17
+particular database these languages may come up if you're working with stored procedures and you're not just doing
+30:23
+standard SQL so there is a chance it will come up I generally try to bring
+30:30
+that logic into the application layer instead of leaving it in the database but if you're in a company or an
+30:37
+environment that's pretty database heavy there's a chance that they'll leave some of that logic at the database layer and
+30:44
+you'll just have to familiarize yourself with that procedural language for that database that would be for things like
+30:51
+database triggers or procedures where you need to do additional validation or whatever it may be but you're not going
+30:56
+to be using the procedural language for day-to-day SQL like creating rows or
+31:02
+reading data whatever you need to do for creating crud applications for creating
+31:07
+reading updating and deleting next up we have db2 this is IBM's Flagship database
+31:13
+and those are the three major Enterprise databases SQL Server is probably the
+31:18
+most common of these three that is used by developers but there is often times
+31:25
+you'll be working in Oracle or db2 if you are in an Enterprise setting but
+31:30
+it's often the case that Oracle db2 these are pitched to large Enterprises
+31:36
+with some pretty intense data needs SQL Server kind of fills the middle ground
+31:42
+between small scale developers and Enterprise and then we have the open- source databases which usually will be
+31:49
+the pick for firsttime developers creating their own app so hopefully that gives you a general idea of where these
+31:55
+databases fit it's kind of a generaliz so it's probably not always the case but
+32:01
+if you just want to know what people think about certain databases these guys are Enterprise SQL Server is kind of
+32:08
+Middle Ground developer friendly but can still be considered Enterprise coming from Microsoft and the MySQL and
+32:14
+postgress notel Enterprise these are open source the main thing you should know is that MySQL is owned by Oracle
+32:21
+the original MySQL team forked MySQL creating Mariah DB so this is kind of
+32:27
+like a my SQL sticking to its roots if that makes any sense basically some concerns about MySQL now being owned by
+32:34
+Oracle is that it's going to pull you into that Oracle ecosystem trapping you for eternity and some people don't
+32:41
+really like that which looking at this from Oracle perspective it's kind of funny if somebody can make a successful
+32:47
+product just advertising that they're not in your ecosystem so that's something to consider when you're
+32:54
+looking into these databases do you want to be tightly coupled to a particular ecosystem doesn't mean you can't ever
+33:01
+move but things are just going to work better for example if you're SQL Server if you're in Azure working with C they
+33:08
+kind of make an entire ecosystem kind of like apple and all of their products all right I'm kind of ranting you can tell I
+33:14
+like databases if you're not sure which database to go with postgress is a great option because it's open source it's
+33:20
+free and you can use it for free in a commercial setting but my thought is if you're just starting out and you're
+33:26
+trying to pick a database go with postgress and if you need one of these other databases for some reason you can switch over fairly easily because it's
+33:33
+all based off of the SQL standard all right last structured database on this list is SQL light you may also hear
+33:39
+people say SQ light I've always said SQL light you may also hear some variations in pronunciation with postgress as the
+33:46
+full word has a ql at the end so you might hear postgressql or variations of that I just call it postgress so sqlite
+33:53
+is a bit special because it's an embedded database and what that means is it's delivered with the software now for
+34:00
+a backend developer you probably won't use sqlite for the majority of the
+34:06
+applications you build and that's because you're building a system you can imagine that system over here and lots
+34:12
+of clients connect to the server so you have a single location and that's going to host the database sqlite would be a
+34:19
+popular choice if you were delivering software to a bunch of clients and they actually ran it locally so instead of
+34:25
+having a centralized server you actually distributed software and that software needed a database to store some
+34:31
+information locally that's where sqlite would shine you can use sqlite for
+34:37
+centralized storage but it's not the first choice that being said I have
+34:42
+learned sqlite I think it's a great option to learn and practice with it's super easy to use and set up because it
+34:49
+doesn't have a dedicated database management system it's really just a file on your computer it's super easy to
+34:56
+start working with databases when you're working with SQL light it's even included with some programming languages
+35:01
+so for example if you're working with python and you want to store some data in a database you can just use sqlite
+35:07
+immediately without having to go install stuff and get things configured and set up so that's one of the main reasons I
+35:12
+like sqlite and it's also good to understand what people mean when they say an embedded database it doesn't
+35:18
+always mean embedded systems like people are talking about when they say they're an embedded engineer working on iot
+35:25
+devices or something like that it can just be desktop software I like to think of it more as the database is embedded
+35:32
+with the software and it's not at a remote destination acting as a server
+35:38
+client setup so I'm pretty sure that covers the core SQL databases I'm sure there are more out there but again you
+35:43
+know exactly how they're going to fit into this larger structure next up let's talk about nosql databases and this one
+NoSQL
+35:51
+can be a little bit overwhelming because these don't all have core similarities
+35:56
+like the structured databases a lot of these are just competing products from different companies in nosql databases
+36:03
+some of these are specialized databases for certain use cases that are different than some of the other nosql databases
+36:11
+and sometimes there are competitors so a little bit more complicated but we're going to work our way through this list
+36:16
+getting a basic idea of each of these now just so it's clear and I think I've made this point already you do not have
+36:22
+to get experience with each of these I have not used most of the databases in this list it's really about becoming
+36:28
+good at a few of these and using certain ones for certain use cases so when you have some application and you know you
+36:34
+might need to do X Y or Z you can research which database might be the best for that so let's first take a look
+36:41
+at mongodb here now this is known as a document database and what a document is
+36:46
+is basically key value pairs pretty much like an object in JavaScript so this is
+36:52
+going to be pretty similar to Json if you are familiar with that which we'll get to notations here soon it's a little
+36:58
+bit different because it contains data types Beyond just Json so you can look
+37:04
+up the bson spec if you wish but you can tell this is describing what looks like a person it has their age and their
+37:10
+status and groups the main difference between a nosql database and an SQL
+37:16
+database is that there can be differences between individual documents so the next person you put in this
+37:23
+collection could have a name an age and then maybe favorite books or something
+37:28
+totally different than this document comparing that to a structured database
+37:34
+you're going to define the columns which will be general not specific values this is just what you will store in the table
+37:41
+and then every Row in this table can only put those particular columns so that's the major difference if you have
+37:47
+variation in structure between documents then it makes sense to consider a nosql
+37:53
+database mongodb is one of the more common ones that Developers start learning now I'll skip over index DB for
+37:59
+just a sec and talk about document DB which is pretty much the same idea provided by Amazon so AWS document DB
+38:08
+it's going to allow you to store documents and what that means practically is that document DB is a
+38:14
+managed database AWS hosts it and you can access that database and pay for it
+38:21
+as you use it compare that to mongodb while you can get Cloud offerings you're
+38:26
+not require ired to so you can download mongodb and you can run it locally
+38:32
+however there are major mongodb providers such as mongodb Atlas which
+38:37
+will host mongodb for you so that's always an option as well now let's take a look at index DB not really sure why I
+38:43
+put those between the two but no big deal index DB is a database in the
+38:48
+browser and this is really kind of cool because it allows you to store information that the user that is using
+38:55
+your page might need to store to temporarily giving them a consistent experience between visits but it's not
+39:02
+something that's persisted to the backend this gives you a database structure in the browser and that might
+39:07
+be more useful than just using something like local storage now I generally wouldn't recommend this for any critical
+39:13
+information because it's local to the client meaning they could disconnect
+39:18
+from the server they're not going to be able to give that information to you and because it's client side they can access
+39:26
+that information as well so it's not something you would use for storing critical information or if you needed to
+39:32
+make sure that information was persisted indefinitely you would not want to use this because the client could never come
+39:39
+back or they could clear all of their browser stuff and then they're not going to have that data any longer couch DB
+39:46
+offers some interesting similarities between index DB now I wouldn't say these are a direct comparison but one of
+39:52
+the selling points of couch DB that makes people use it is it will allow people to store data locally and then if
+39:59
+they later regain a connection to a server they can then sync their local
+40:04
+data with the server so if you need that offline experience but you still want to
+40:10
+store data in a centralized location a server then you might want to check out couchdb next up we have
+40:17
+neo4j and the best way to describe this besides saying that it's a graph database is to show you some of the
+40:24
+examples from their website so here are some of the use cases such as knowledge
+40:29
+graphs accessing deep Dynamic context by connecting data so this really shows how
+40:35
+data is related and can lead to some really cool visualizations if that's something you're interested in you can
+40:40
+see a basic example here showing how things are connected here's a visual I was able to
+40:46
+find without actually going in there and creating a database you can see that it shows the nodes and how they're
+40:52
+connected and it has like this cool liquid movement thing but yeah that's an
+40:57
+interesting project you might want to check out next up we have Dynamo DB this is a serverless database provided by
+41:04
+Amazon the whole idea of something being serverless is not that it doesn't use a server behind the scenes more so that
+41:12
+you as the developer are not responsible for the server it's kind of like a managed database but it's completely
+41:18
+managed where you don't even provision a server that someone else manages you
+41:24
+don't provision anything you just pay for for the use of the database so it's a key value nosql database giving you
+41:32
+singled digigit millisecond performance at any scale and that's obviously one of the selling points because it's
+41:37
+serverless you just pay for what you use if you need to scale it up or scale it down and the idea with serverless is no
+41:42
+cold starts version upgrades maintenance Windows patching and no downtime big table is a product from Google and is
+41:50
+the inspiration for Cassandra and hbase so this is different than some of the
+41:56
+other datab Bas is out there because it specializes in wide data and by wide we
+42:02
+mean lots of columns so if for some reason you have some data and you need to store thousands of columns about that
+42:11
+data you might want to look at something like big table this is a fully managed database from Google Cassandra took some
+42:18
+of these principles and designed it to be a fault tolerant database so this is something that will be replicated across
+42:25
+multiple nodes and can support basically a distributed system using commodity
+42:31
+Hardware so you could have thousands of nodes and they don't have to be expensive servers so you can read about
+42:38
+some of the use cases or case studies with Cassandra I think Apple at one point said they had 75,000 Cassandra
+42:45
+nodes supporting 10 pedabytes of data so this will basically enable a company to
+42:50
+have a distributed system making that possible with commodity Hardware with a higher node count comparing to paying
+42:56
+for just a couple really expensive servers for example so this is decentralized in Tech but it's not
+43:02
+decentralized in ownership so these would all still be owned by Apple which is just something interesting if you
+43:09
+ever do research in like decentralized technology or blockchain this is a
+43:14
+little bit different where it's still all the same owner of the data it's
+43:19
+really just about decentralizing the data across a substantial number of nodes hbas is similar in idea to big
+43:26
+table in Cassandra being a wide column database however the difference here is
+43:32
+that it's all within the Hadoop ecosystem so if you have no idea what that is probably don't worry about it
+43:38
+right now but again as I mentioned earlier about analytics this is an
+43:43
+entire environment around big data and you might run into hbas if you're working within a Hadoop environment
+43:50
+otherwise I would look at some of the other options here next up on this list we have surreal DB which is a newer
+43:57
+database that you may have seen people talking about online or maybe it's something you will run into but the
+44:04
+target audience of surreal DB is not entirely clear because it's kind of a database that does everything so that's
+44:11
+really their marketing it's like the database that could replace a lot of other databases you might be using so
+44:17
+it's the ultimate multimodel database they definitely have good marketing and branding but it's probably up for you to
+44:23
+decide if it's a great database or not with full graph database functionality surreal DB enables more advanced
+44:29
+querying and Analysis which allows for multi-table multi-depth document retrieval efficiently in the database
+44:36
+without the use of complicated joins next on this list we have redis and this is definitely a good one to know so be
+44:43
+aware of it but I would encourage you to try it out and become familiar with it
+44:48
+because reddis is an inmemory cache that's what it's primarily known for reddest has a variety of other things it
+44:56
+provides provides and can do but the main thing redus is known for is caching
+45:01
+of data so you can make your backends faster or use less computation by not
+45:07
+having to retrieve or compute things that you've already computed so in memory cache very valuable for improving
+45:15
+the speed of your applications now if you're using reddis purely as an in-memory cache it's going to likely be
+45:21
+used in addition to some other database so you'll have some database that's
+45:26
+powering your backend application if you wanted to visualize it you could then think of reddis as sitting between your
+45:32
+backend application and the request from the client so it will first ask reddis
+45:38
+hey has this value been retrieved or calculated before if yes we just give that value back to the user but if it
+45:45
+has not then we'll go process whatever needs to be processed retrieve new information from the database and then
+45:51
+give that to the client caching it so if anybody asks for it again we can just get that cached file value now when we
+45:57
+say in memory that just means this is not persisted to disk so if the Reddit
+46:03
+server is restarted all of the data that has been cached will be reset and this
+46:08
+is generally fine resetting a cach or clearing a cach is a pretty typical thing you would need to do anyways so
+46:15
+it's not the end of the world if your cash is cleared you're not storing anything in there that's critical that
+46:20
+you couldn't lose now I did mention reddis can do a variety of things so for example you can have it persist data but
+46:27
+when people think of reddis they usually are talking about an inmemory cache now let's take a look at mem cach tier this
+46:33
+is another inmemory cache so this could be seen as an alternative to redis while it's also pretty popular it's not as
+46:41
+popular as reddis and if you were to choose a new caching system you're probably going to go with redis but if
+46:47
+you even go to get hosted reddis for example you might see M cached as an alternative option so there might be
+46:52
+some specific scenarios where mem cast shines and I don't want to say to never use that but reddis is going to probably
+47:00
+be your default choice now elastic search we're going to keep this real simple it's a nosql database used for
+47:06
+searching data so if you have some complex data set and you want to be able
+47:11
+to full text search it you could look into elastic search now let's take a look at Firebase and really there is
+47:19
+like a couple of different products within that so there's Firebase fire store which is the default choice if
+47:25
+you're going to go with Firebase but you might also hear of the other option which was Firebase realtime database
+47:32
+which is still an option to use but pretty much in every scenario you're going to go with Firebase fir store so
+47:38
+here is a quick comparison and just scrolling through this you can see that fir store is preferred in every one of
+47:45
+their scenarios so they are pushing to use fir store and to not use the real-time database but without getting
+47:52
+into the details of the differences between these two let's first talk about what even is cloud fire store and when
+47:57
+you might want to use it it's another Json compatible document database now I'm going to explain one of the reasons
+48:03
+why I believe Firebase has become so popular while I'm sure there's lots of other features and capabilities when
+48:10
+there's millions of different databases what is the reason Firebase has taken off it's because it's very useful for
+48:17
+what I would typically say are primarily frontend developers because the entire
+48:22
+Firebase ecosystem is a good ecosystem to provide an entire backend so when you
+48:29
+use Firebase not only do you get that database but you also can get a backend layer which can make it very easy to
+48:35
+have a backend to connect your front-end application to so you can almost think of Firebase as a backend as a service
+48:42
+you can just use Firebase for all of your backend setup and you just worry about the front end I've seen a lot of
+48:49
+content creators on YouTube basically using Firebase so that they can focus on the front end material not having to
+48:55
+build out an entire backend from scratch it's also extremely popular for mobile applications as well so you'll often see
+49:02
+Firebase being the backend for mobile app devs now one more important thing to know about Firebase is that it is a
+49:09
+managed backend so this is hosted on the cloud by Google it's a Google product so
+49:16
+it's going to be something that you have to connect to the cloud you don't download Firebase on your local computer
+49:22
+however that's where a Supa base can come in and that is positioned as an alternative to Firebase that's open
+49:28
+source and the magic here is that you can get it hosted or you can self-host it so it's something that you could
+49:34
+download put on your own server and use as you please this means there are also multiple options out there when it comes
+49:40
+to managed super base hosting most likely though if you're looking for fully managed superbase you'd probably
+49:46
+just go with the superbase company themselves who offers hosting or self-hosting it with any of the other
+49:52
+major Cloud providers without having the managed aspect throughout this video we've talked about hosting some but we
+Hosting
+49:59
+haven't really gotten into the details of the different types of hosting and what that looks like that's what we're going to talk about next now as always
+50:06
+when you're doing a video that covers a billion different Technologies it's kind of challenging not to overgeneralize or
+50:15
+potentially not have everything 100% split up into the perfect categories
+50:20
+because some of the things we're going to talk about will probably cross over into some of these other categories so
+50:26
+if you're a rep from one of these hosting providers and maybe you offer a little bit of everything here totally
+50:31
+understand that and it's also something that you should understand as a developer often these services will
+50:36
+provide a variety of different things but what I try to do here is kind of categorize by what these companies are
+50:42
+most known for so first let's get the foundation what is hosting basically if you want to run a web server or some
+50:48
+application and you don't want to run it from a computer in your house and have people connect to it over the internet
+50:53
+you can host that application you pay money to hosting provider they run all the services and then people can connect
+51:00
+to it there we have three General categories I grouped these into so we have the shared hosting companies we
+51:06
+have platform as a service and then infrastructure as a service we'll get to those two in a moment let's first talk
+Shared Hosting
+51:13
+about these shared hosting providers so when I sign up for shared hosting I may run say a WordPress website and there
+51:20
+might be a lot of other people running WordPress websites from the same server sharing resources so you can think of
+51:27
+your application as just one of many applications running on that server all the resources are shared and there's no
+51:34
+real separation from the different websites now while there's probably things set up to keep things secure
+51:41
+between websites and make sure one website doesn't impact the others that
+51:46
+is a potential risk so if you're paying for shared hosting and it's sharing Resources with another website on that
+51:52
+same machine let's say something goes wrong with that other website and it starts to consume too many resources or
+51:59
+maybe there's a security issue there's a chance that could impact your website while it's ideal that that doesn't
+52:04
+happen or that you know there's some things in place by these hosting providers to make sure that doesn't happen it's not something that would
+52:11
+likely be guaranteed and because of that some people avoid shared hosting not only does shared hosting limit your
+52:17
+resources but you're sharing the machine resources with other people it's the cheapest option and this will give you
+52:23
+things like hosting for a few bucks a month or whatever it might be the way the companies package the hosting
+52:28
+changes so on one website you might pay per website or you might just pay a
+52:33
+certain amount and get unlimited shared hosting so then you could set up as many websites as you want as long as you're a
+52:38
+paying customer the big ones on this list you might be familiar with God Daddy dream host blue host sight ground
+52:45
+these do all basically the same thing and I don't really have a recommendation on which one to go with I've personally
+52:52
+used a lot of dream host I've used blue host and I've used GoDaddy all have been pretty good I've also used hostinger I
+52:59
+hosted a Minecraft server from hostinger at one point that was pretty cool 99% of the time you're not going to be using
+53:04
+shared hosting as a backend engineer this is really if you just want to launch a simple website and you don't
+53:10
+really want to do anything with custom backend coding you might be able to do some WordPress plugins or something but
+53:16
+you're likely not going to be running a custom API from shared hosting in fact a lot of the shared hosting is only going
+53:22
+to provide a very limited set of options when it comes to what language and version so you might be able to use PHP and
+53:29
+nothing else or there might be a few different options but most of the time it's going to be very limited so that's
+53:34
+where the idea of a virtual private server comes in and often it's the case that you'll go from shared hosting and
+53:40
+then upgrade to a VPS this is where you get basically a dedicated server but it's virtualized behind the scenes they
+53:47
+
+
+
+Your instinct is actually very solid. What you're describing is basically building a “thinking repo” for AI-assisted system design + scaffolding. If done right, it becomes something extremely powerful: a decision-driven SaaS generator rather than a dumb template.
+
+Right now most “AI SaaS starter kits” are shallow. They just give:
+
+Next.js template
+
+Stripe auth
+
+basic CRUD
+
+deploy to Vercel
+
+They don’t contain architectural reasoning.
+
+What you're proposing is closer to:
+
+An architecture-aware repo that teaches the AI how to design a system before coding it.
+
+That’s the correct direction.
+
+The Real Architecture of What You're Building
+
+Your repo should have 4 layers of intelligence.
+
+1. Product Decision Layer
+
+This asks the user questions about the product.
+
+Example:
+
+product-intake/
+    questions.md
+    decision-engine.md
+    architecture-matrix.md
+
+Questions like:
+
+Website or mobile app?
+
+SEO required?
+
+Expected users?
+
+Media uploads?
+
+Realtime?
+
+Marketplace or SaaS?
+
+Offline capability?
+
+Multi-tenant?
+
+Analytics heavy?
+
+This generates system requirements.
+
+Example output:
+
+Product Type: Marketplace SaaS
+Expected Users: 10k
+Uploads: images + video
+SEO: yes
+Realtime: no
+Mobile: yes
+2. Architecture Reasoning Layer
+
+This layer translates answers into architecture.
+
+Exactly like the reasoning you posted.
+
+Example output:
+
+Frontend
+Next.js SSR Hybrid SPA
+
+Backend
+Node API (BFF pattern)
+
+Database
+Postgres
+
+Storage
+Object storage for media
+
+Auth
+Supabase auth
+
+Hosting
+Vercel + Supabase
+
+Repo structure:
+
+architecture/
+    frontend/
+        decision-tree.md
+        architectures.md
+    backend/
+        backend-types.md
+        service-patterns.md
+    database/
+        sql-vs-nosql.md
+        database-selection.md
+3. Stack Generator Layer
+
+Once architecture is chosen, the repo tells the AI how to build it.
+
+Example:
+
+scaffolding/
+    nextjs/
+    laravel/
+    node-api/
+    supabase/
+    mobile-react-native/
+
+Example structure:
+
+scaffolding/
+    fullstack-next-supabase/
+        repo-structure.md
+        auth.md
+        crud-pattern.md
+        deployment.md
+
+This is what your AI agent reads to generate the repo automatically.
+
+4. Execution Layer (Agent System)
+
+This is where tools like:
+
+AnythingLLM
+
+AgentZero
+
+Open source LLM
+
+crawler
+
+come in.
+
+The agent workflow:
+
+User answers questions
+        ↓
+Decision engine selects architecture
+        ↓
+Agent crawls documentation
+        ↓
+Agent generates scaffold
+        ↓
+Repo builds project
+        ↓
+Deploy to Vercel + Supabase
+
+This is AI system architecture, not just code.
+
+Your Web Crawler Idea (Very Good)
+
+You mentioned crawling:
+
+Vercel docs
+
+Supabase docs
+
+This is smart but must be done correctly.
+
+You should store docs locally in the repo as RAG knowledge.
+
+Example structure:
+
+knowledge/
+    vercel/
+        deployments.md
+        edge-functions.md
+        routing.md
+    supabase/
+        auth.md
+        postgres.md
+        storage.md
+
+Then your agent uses retrieval augmented generation instead of random internet scraping.
+
+Tools that work well:
+
+Firecrawl
+
+Crawlee
+
+Apify
+
+LlamaIndex
+
+LangChain loaders
+
+Backend Knowledge Layer (Important)
+
+From that backend video transcript, your repo should encode major backend concepts.
+
+Example:
+
+backend-knowledge/
+    languages.md
+    frameworks.md
+    ORMs.md
+    databases.md
+    caching.md
+    hosting.md
+
+Key knowledge categories:
+
+Backend Frameworks
+
+Examples:
+
+Node
+Express
+NestJS
+Fastify
+
+Python
+Django
+FastAPI
+
+PHP
+Laravel
+
+Java
+Spring Boot
+
+Go
+Gin / Fiber
+Database Layer
+
+Your repo should explain selection.
+
+Example logic:
+
+If relational data
+    → Postgres
+
+If flexible schema
+    → MongoDB
+
+If caching required
+    → Redis
+
+If analytics
+    → Data warehouse
+Storage Layer
+
+Example decision tree:
+
+If images/videos
+    → object storage
+
+If structured data
+    → database
+
+If fast lookup
+    → Redis cache
+The Most Important Part You're Missing
+
+Right now you’re thinking checklists.
+
+But the real power is:
+
+A SYSTEM DESIGN ENGINE
+
+Instead of:
+
+todo:
+- create api
+- create db
+- deploy
+
+You want something like:
+
+System Design Output
+
+Frontend
+Next.js SSR Hybrid
+
+Backend
+Node BFF
+
+Database
+Postgres
+
+Caching
+Redis
+
+Storage
+Supabase Storage
+
+Auth
+Supabase Auth
+
+Hosting
+Vercel
+
+Then the AI builds that stack.
+
+Repo Structure I Recommend
+
+Something like this:
+
+ai-saas-engine/
+
+README.md
+
+decision-engine/
+    product-questions.md
+    architecture-tree.md
+    scale-matrix.md
+
+knowledge-base/
+    frontend/
+    backend/
+    databases/
+    hosting/
+    security/
+
+stack-templates/
+    nextjs-supabase/
+    laravel-postgres/
+    react-native-firebase/
+    nextjs-bff-node/
+
+agents/
+    crawler/
+    architecture-agent/
+    scaffold-agent/
+    deploy-agent/
+
+docs/
+    vercel/
+    supabase/
+
+examples/
+    marketplace-example/
+    saas-dashboard-example/
+The Stack You're Leaning Toward
+
+From everything you've said, your stack naturally becomes:
+
+Frontend
+
+Next.js
+
+Backend
+
+Laravel
+
+Node BFF
+
+Supabase
+
+AI Layer
+
+AnythingLLM
+
+local model
+
+Infrastructure
+
+Docker
+
+Deployment
+
+Vercel
+
+Supabase
+
+That’s actually a very practical stack.
+
+Major Pitfall to Avoid
+
+Most AI builders fail because they try to:
+
+“Generate the whole SaaS automatically”
+
+That doesn't work.
+
+The correct approach is:
+
+1 Ask questions
+2 Decide architecture
+3 Generate scaffold
+4 Human reviews
+5 AI assists coding
+
+AI should assist — not hallucinate the whole system.
+
+My Honest Opinion
+
+Your idea is very good but you are mixing 3 concepts.
+
+You’re building:
+
+1️⃣ Architecture knowledge base
+2️⃣ AI decision engine
+3️⃣ SaaS scaffolding framework
+
+Those should be separate modules.
+
+If you want, I can also show you something extremely powerful:
+
+How to turn this repo into a “Self-building SaaS Factory”
+
+Where one command does:
+
+npx create-ai-saas
+
+Then:
+
+Answer 10 questions
+
+Then it builds the entire production stack automatically.
+
+That’s the real endgame of what you're trying to build.
+
+might be running multiple of these virtual private servers on a single server so there's some limitations
+53:53
+however it's pretty much a dedicated server from your perspective so this is where you can basically have a Linux
+53:59
+server you can run whatever you want on it and because of that you can run custom apis or anything that you need
+54:06
+from that server now when you're doing this you're kind of in control to manage the inbound and outbound of this and
+54:12
+you're likely going to need some kind of web server we'll talk about some of the most popular web servers here in a
+54:17
+moment but just letting you know that you're kind of in complete control of that environment next up we have
+54:23
+dedicated servers and this is pretty much what it sounds like they host a server and you pay for it monthly you
+54:29
+can do whatever you want with it it's not virtualized so you're not sharing Resources with anybody else you can research why you might want to go with a
+54:35
+VPS versus a dedicated server it often comes down just to what you need and costs in this scenario you're basically
+54:41
+just paying for the infrastructure so it's kind of infrastructure as a service and we're going to talk about more
+54:46
+infrastructure as a service in a moment whenever something says as a service it basically just means a subscription
+54:53
+payment model they're running the computers for you and you're paying a month fee to use them however as a
+54:58
+backend developer I don't tend to think of these companies when I'm looking for my backend hosting
+55:04
+Solutions yes you you might run into that but most likely you're going to look at one of the major Cloud providers
+55:10
+for infrastructure so Amazon web services Google Cloud platform Microsoft
+55:15
+Azure those are the major three there are a few others we'll look at but those are going to give you a lot of more
+55:21
+services and you tend to really think about those when you say infrastructure as a service
+PaaS
+55:26
+so we'll get into this next category here which is paas this is platform as a
+55:32
+service and here are some of the most common ones you're going to run into as always there are a ton out there so this
+55:38
+list is not comprehensive but versel netlify are two really popular ones right now and then we have a lot of
+55:43
+these other ones from major companies which will often help you deploy apps onto that particular Cloud so we'll talk
+55:51
+about what that means in a sec but for versel and netlify basically you can think of them as abstracting away all
+55:57
+the computer hardware and they just give you a really good experience for deploying backend applications and often
+56:04
+you can do front-end stuff as well so it's not just specific to backend but that's what we're talking about in this
+56:10
+video so if you're looking for a place to deploy an API you can do it on these
+56:15
+platforms and they're going to make the experience as easy as possible that's really what you're paying for when
+56:20
+you're paying for a platform so to explain the difference real quick between a platform and infrastructure as
+56:26
+service platform makes the experience very easy it's basically a wrapper around infrastructure whereas if you're
+56:33
+paying for infrastructure you're in charge of setting everything up yourself which can be very painful it is a
+56:39
+valuable skill but you don't get that nice oneclick deploy experience so
+56:44
+versel netfi to my knowledge do not run any servers on their own they are going
+56:50
+to use the infrastructure companies so AWS and other Cloud providers and
+56:56
+they're just writing software to make it very easy to do that without you having to go into AWS and set up a bunch of
+57:04
+stuff because of this if you're doing cost comparisons if you just look in general versell is going to be more
+57:09
+expensive than if you hosted on AWS directly that might not be 100% true all of the time especially if one of these
+57:16
+platforms are able to provide some special pricing or you know perhaps set up the infrastructure in a way that
+57:23
+would save money compared to how you might set it up if you did it on your own or they might just be reducing
+57:29
+prices for customer acquisition you can go to one of these platforms do something cheaper than if you went to
+57:35
+one of the cloud providers directly Heroku is another one that's pretty similar in concept to versel netlify I
+57:41
+guess I just didn't see it at first in this group because I had it prefixed with Salesforce I wanted to put Salesforce there because I didn't even
+57:47
+realize Heroku was owned by Salesforce until recently so Heroku is another platform as a service that's going to
+57:54
+help you deploy to some of the major Cloud providers now let's take a look at this next one here AWS elastic bean
+58:00
+stock this is a platform as a service on AWS so it's going to make the experience
+58:05
+deploying to various AWS infrastructure a lot easier so while AWS provides the
+58:12
+infrastructure they also provide a platform to deploy to it without you having to set up everything on your own
+58:19
+similar idea with these other ones so I'm not going to go through each individual one Azure has something
+58:24
+that's very similar for Microsoft cloud and then Google app engine same idea for Google Cloud then we have
+58:30
+digital ocean app platform I think they host their own stuff so they use their own infrastructure same idea with Oracle
+58:37
+Cloud platform with the Oracle Cloud so let's take a look now at the infrastructure platforms these are the
+IaaS
+58:44
+major ones so we have Oracle Cloud infrastructure that's just the full name for Oracle Cloud we have Amazon web
+58:50
+services Google Cloud platform Microsoft Azure IBM Cloud Alibaba cloud
+58:56
+digital Ocean aami or LOD and there's a ton of other ones out there as well
+59:02
+pretty much any companies that provide infrastructure or Computing Hardware they're going to be in infrastructure as
+59:08
+a service which I mentioned briefly but you know some of these that offer dedicated servers could be considered
+59:13
+infrastructure as well I just group them separately because I tend to think of those more as easy hosting providers and
+59:20
+then I kind of think of this group here as companies where the main thing that they try to sell is infrastructure so
+59:27
+when you go to one of these websites they don't advertise hosting a website for $3.99 a month or whatever they're
+59:34
+basically selling a variety of different Services all of those around infrastructure so far so good we've made
+Clients and Servers
+59:40
+it through three major sections in this Center section and then we have these two floating over here on the sides but
+59:46
+let's go through the next one which The Logical next one is going to be clients and servers since we were just talking
+59:52
+about hosting what web server software is actually used well if you're working with the infrastructure directly or you
+Servers
+59:59
+have a dedicated server you're going to be responsible for choosing what web
+1:00:04
+server you want to use and the web server is what actually handles requests to that computer and makes it possible
+1:00:11
+to run applications from that computer the three major ones I'm familiar with are engine X Apache and IIs there's also
+1:00:18
+caddy on here which I've heard a little bit about when I was just researching different web server software but I haven't used or experienced that
+1:00:24
+directly and as always there's other ones out there I'm sure but these are the big ones you might run into so let's just talk about I real quick this is a
+1:00:31
+web server that's really popular for asp.net and Microsoft applications so if you're not doing that then I would
+1:00:38
+probably go with one of these two in the middle I have used both of these a bit but I've grown to kind of like engine X
+1:00:44
+really it's just about getting them set up and then probably never touching them again because they work you might have
+1:00:50
+to do a little bit of stuff with like SSL certificates and maybe some configurations for routing or
+1:00:56
+redirection but overall you're not going to be doing a whole lot at this level hopefully it's just something that you
+1:01:02
+can set up once and it works this is where more differences show up between using infrastructure and using a platform if you're using a platform as a
+1:01:08
+service there's a good chance they abstract away all the web server stuff for you so you don't have to even think
+1:01:14
+about setting up engine X or Apache it's just done the difference is if they just
+1:01:19
+hand you a virtual machine or a dedicated server you're going to have to learn how to set all that stuff up yourself now let's talk about things
+Browsers (client)
+1:01:26
+from the other end so the client that actually makes a request to the web server so when I say client here I'm
+1:01:33
+specifically referring to the software that makes the request so the browser that's going to be the case majority of
+1:01:39
+the time people are going to make requests to your web application through HTTP or https doing that through a
+1:01:46
+browser so I group these in three different categories but if I expand these it'll basically just be the major
+1:01:53
+browsers you might be familiar with already the first word over here is the engine that powers those web browsers
+1:01:59
+and then in parenthesis is the JavaScript engine similar ideas and you can do more research on the differences
+1:02:05
+but behind the scenes these four here in This Blink V8 section have similarities
+1:02:12
+because they share the same JavaScript engine the engine is what actually makes it possible to execute JavaScript code
+1:02:18
+within the browser and you're probably going to get a more consistent experience between these four because
+1:02:23
+they all use the same JavaScript engine now just to get sidetracked for a minute if you're studying JavaScript and
+1:02:28
+browsers and engines you might hear the term runtime V8 is not the runtime you
+1:02:34
+can think of the runtime as where the JavaScript code is executed so you could say the runtime is the browser here but
+1:02:40
+if you use node.js or backend JavaScript the runtime is actually node.js and the
+1:02:47
+engine is still V8 so we still have the same core JavaScript processing it's
+1:02:53
+just the location is changed from front end in a Brower browser to backend with no JS so just saying that to be careful
+1:02:59
+not to say V8 runtime it's the V8 engine not to be too picky on words but you
+1:03:05
+might hear people say one or the other and just wanted to clarify what is correct now as for the words webkit
+1:03:12
+blink and gecko you might hear these as the rendering engine they are what take the HTML CSS and JavaScript and make it
+1:03:19
+functional in the browser by providing different browser apis and different things you can do with Java script so
+1:03:26
+it's a partnership between the JavaScript engine which provides the language and the execution of the
+1:03:32
+JavaScript and the rendering engine which provides the apis and the Dom so
+1:03:37
+while this isn't really designed to be a tutorial on web browsers it's just important to know that behind the scenes
+1:03:43
+of these common web browsers there are a lot of things going on and the introduction of a web browser has
+1:03:48
+changed a lot of things as we go on web browsers are becoming more powerful and
+1:03:54
+more standardized and readily available on more and more systems and what this can do is give us
+1:04:00
+a standard environment that we can build upon so that we can create apps that run on any systems this is kind of similar
+1:04:08
+to how operating systems abstract away differences in Hardware one layer higher
+1:04:14
+browsers abstract away differences between computers so you can create an application to work correctly in a
+1:04:22
+browser and we don't have to worry about whether it's being ran on Windows Windows Mac or x86 or Arm based systems
+1:04:30
+we just create it to work in JavaScript with these different JavaScript engines and rendering engines you may also hear
+1:04:37
+of this set of browsers as chromium browsers which is an open source browser project that Chrome was built on so that
+1:04:44
+scratches the surface of web browsers there is a ton more on how web browsers work they're kind of magical that does
+1:04:51
+get more into the realm of front-end development but certainly not not a waste of time in terms of studying as
+1:05:00
+likely even as a backend engineer your work is going to be tightly coupled to a browser environment especially going
+1:05:06
+forward as more and more apps are moving to browsers the skills that you develop
+1:05:11
+in browsers definitely will not be wasted now let's talk about cdns which kind of sit between servers and browsers
+CDNs
+1:05:18
+so if you make a request from a browser to hit somebody's web server you might
+1:05:23
+go through a CDN which stands for content delivery Network here are the most popular ones you've probably heard
+1:05:30
+of cloud flare if you've worked in back in development at all and then we have cloudfront which is Amazon's aami CDN
+1:05:38
+Azure CDN Alibaba CDN Google Cloud platform CDN seems like every major cloud provider has some CDN service and
+1:05:45
+even cloudflare does offer some infrastructure as a service we didn't talk about it specifically but you can
+1:05:50
+look up cloudflare workers this is their serverless compute option and then they also have R2 which is their storage but
+1:05:56
+let's not get back to infrastructure let's focus on cdns here the CDN is a
+1:06:02
+Content delivery Network and its purpose is to do two things the first of those two things being Edge distribution so if
+1:06:09
+you imagine a graph and you have a bunch of different locations where the center might be your web server the CDN is
+1:06:16
+basically going to copy the pages that people request and distribute them to all of these different locations so that
+1:06:21
+when somebody closer to one of these Edge locations makes a request they don't have to go all the way to the main
+1:06:28
+server they can just request it from an edge location now in general the internet is very fast you can make a
+1:06:33
+request to something on the other side of the world and get a response relatively quickly but if you're building a service and you want to make
+1:06:40
+sure the times for loading are as quickly as possible the less distance the request has to travel because you
+1:06:47
+know there's actual networking for these requests the faster the response to that request is going to be received back by
+1:06:54
+the client so this can drastic Ally improve performance so that's the first major thing and then the second major
+1:06:59
+thing which is included in this concept is caching so when someone makes a request instead of having to recompute
+1:07:04
+that information they are just getting a cached version of that page which is going to be a lot faster because there
+1:07:10
+doesn't have to be any computation or requests to a database now caching is a more challenging topic when it comes to
+1:07:17
+backend engineering and it's probably something I'd like to make a dedicated video on like all the different layers
+1:07:23
+of caching but just as an example you can have caching in the browser you can have caching at the CDN level you can
+1:07:29
+have in memory database caching with something like redis so there's a lot of different spots where information can be
+1:07:37
+cached if you're ever in a scenario where you make some change but you're not seeing that change reflected there's
+1:07:42
+a good chance it's being cached to fix that you may have to clear some caches so if you deploy a new change to your
+1:07:49
+API there's a good chance you'll need to go into cloudflare or any of these other cdns clear the cache so that the new
+1:07:56
+pages and the new requests get sent to the edge notes and then you could also have questions about do you cach the
+1:08:02
+actual API responses or do you just cash frontend pages and these are all things that you can have control over the main
+1:08:09
+thing you need to understand is that any level of caching you'll need to clear that cache if you need new changes to be
+1:08:16
+propagated so that users get the latest data so that's your basic intro to cdns
+1:08:21
+definitely an important topic to be really familiar with as a backend and engineer now another section that may be
+ISPs
+1:08:27
+interesting to add in here that I did not put in here would be internet service providers isps these are the
+1:08:33
+people you pay for internet access and I say that because isps are responsible for the routing between these different
+1:08:40
+sections so when you make a request from the browser to some server on the other side of the world it's because of your
+1:08:46
+ISP that that request is made possible I didn't want to put that here right now though because I didn't want to get too much into the physical networking
+1:08:54
+because it is something you can kind of just abstract away from your mind you just know that requests go through the
+1:09:00
+magical internet Black Box you don't really need to know all of those details as a backend engineer but if you are
+1:09:06
+working in a role that might be a little bit lower level working at the network level you may benefit from having a
+1:09:12
+deeper understanding of how the actual internet networking works I obviously decided to leave that out but just
+1:09:18
+wanted to give it a quick mention if it's something you wanted to spend more time studying that wraps up the section on clients and servers up next we have
+Communication Protocols and APIs
+1:09:27
+communication and this is a general category where I wanted to talk about some protocols as well as different
+1:09:33
+notation or basically the language or the way you decide how to write things
+1:09:38
+that you communicate you can imagine calling somebody in real life on a phone and just because you have a means to
+1:09:45
+communicate doesn't mean that you can communicate you still have to have the same language so if I'm speaking English
+1:09:51
+you're speaking another language we're not going to be able to communicate Translating that back to our example here the phone would be the means of
+1:09:58
+communication but the actual language would be the notation and that would basically just be the exact syntax we
+1:10:05
+use in our code to communicate let's first look at this section here these
+APIs
+1:10:11
+are the main approaches to communicating you don't necessarily have to have experience using all of these but you
+1:10:17
+should at least be familiar with these now I say this with pretty much every section there's probably a lot more in
+1:10:23
+software engineering there's pretty much Unlimited information so don't feel like you have to know everything but you
+1:10:28
+should at least be familiar with these main ones so if somebody says you know web hooks you know what that is that's
+1:10:36
+actually probably a good one to get experience with but for example someone says a soap API you don't want to be
+1:10:42
+like what I already like took a shower today like what are you talking about so we're going to give you the basics of
+1:10:49
+what each one of these are but you don't need to go and actually Implement all of these there's just a few you should
+1:10:54
+really have EXP experience in so let's first talk about rest apis because that's going to be the most popular this
+APIs
+1:11:00
+stands for representational State transfer which basically is a way to
+1:11:06
+transfer state or data through HTTP or https which is one of the protocols
+1:11:12
+we're going to talk about here in a moment so the way you do this is you associate a particular verb you can kind
+1:11:20
+of think of it as the official term is HTTP methods but you can get data you can post data you can delete data put
+1:11:27
+data and there are a variety of other HTTP methods this describes your intent
+1:11:32
+when you make a request so when you go to a website such as youtube.com that is a get request you're
+1:11:39
+requesting the HTML JavaScript CSS from the server there's also scenarios where
+1:11:45
+you post data or you can think of it as create data and this would be submitting a form in that situation you're giving
+1:11:51
+information to the server and you associate that with an http method so the server understands how to interpret
+1:11:58
+it when you're building a rest API you're going to make end points on the server side to accept different request
+1:12:04
+types so the user the end client could receive data with a get request or it
+1:12:09
+could give us data with a post requests this is often going to use Json which is the notation that's basically the syntax
+1:12:16
+for transferring data back and forth and this is probably something you're familiar with if you've done any backend development so rest it's a really good
+1:12:23
+thing to know you should probably prioritize that here first so let's talk about soap real quick the only thing you really need to know is that this was the
+1:12:30
+approach to building apis before rest and it used XML so rest is the modern
+1:12:36
+replacement and you shouldn't be creating a soap API at any point now that's a general statement there might be scenarios where you need to build a
+1:12:42
+soap API to interact with some Legacy systems or something but really rest is
+1:12:48
+going to be the modern default now let's talk about the flip of this so a rest API the client makes a request
+1:12:55
+with a web hook the server actually announces something so this is really
+1:13:01
+popular with Integrations so if you want to be notified when something happens often times services will provide web
+1:13:08
+hooks that you can hook up to so that you receive a notification when something happens so that's pretty much
+1:13:13
+the summary of web hooks definitely important if you're building any kind of notification systems or interacting with
+1:13:19
+other services out there on the internet now let's talk about graphql this will serve a similar purpose to something
+1:13:25
+like a rest API but the way it's done is different the idea here is you can make
+1:13:30
+a request to the server let's say you were trying to retrieve some information but you can adjust that request almost
+1:13:38
+like a structured query language query SQL with it instead being called graphql
+1:13:43
+so the client can adjust that request and retrieve just the information it needs the cool thing here is that on the
+1:13:49
+back end you just set up the graphql endpoint you know set up some rules or restrictions but then the client has
+1:13:55
+control and can request exactly what it needs the control is put into the client's hand relieving some effort on
+1:14:02
+the back end so pretty cool structure especially if you do enjoy like the
+1:14:08
+database feel of it where you can select exactly what you need to retrieve from the back end so definitely something
+1:14:15
+worth looking into and there's also a lot of services around graphql for
+1:14:20
+generating the appropriate requests so you can set this up in your application
+1:14:26
+so that the clients can go in and adjust their requests with like a web page and
+1:14:31
+it's not always in code so pretty cool thing that you should probably at least know the basics of next up we have a
+1:14:37
+couple things here that say RPC which stands for remote procedure call which you can think of that idea as invoking a
+1:14:43
+function on another computer Json RPC is a very simple implementation of a
+1:14:48
+communication protocol but a major difference is that it's bir directional so rest is a one-way thing thing where
+1:14:55
+the client makes a request and then the server responds but the server is never going to initiate the communication with
+1:15:02
+Json RPC you can have bidirectional communication where the server initializes some communication this is
+1:15:08
+Handy for real-time communication because the server can say something as soon as it needs to instead of waiting
+1:15:14
+for a client to make a request grpc is a very similar idea and this is a protocol
+1:15:19
+built by Google and it's going to utilize protuff which is one of the other notations we're going to talk
+1:15:26
+about so protuff are really useful for intera communication so if you have microservices or perhaps you are working
+1:15:33
+with some lower level languages and you want to integrate that with an API you built in another language you might
+1:15:39
+communicate between these apps using protuff so grpc is a communication
+1:15:45
+protocol that utilizes protuff and it's a bidirectional protocol so the server can communicate to the client directly
+1:15:51
+without waiting for a request web RTC server side events and websockets are
+1:15:56
+all things for real-time app development so you can look up all of the differences about these I would say that
+1:16:03
+web rtc's specialty is with things like video serers side events is when servers
+1:16:08
+need to broadcast events and then web sockets are ideal if you want ongoing instant communication so if you had a
+1:16:15
+video game or instant messaging that's probably where I would go with websockets so when it comes to getting a
+1:16:21
+grip on all of these rest is the default for API learn that when it comes to
+1:16:26
+realtime stuff learn websockets when it comes to broadcasting announcements web hooks when it comes to intera
+1:16:33
+communication grpc or rest so that gives you a pretty good idea of these
+1:16:38
+different comms protocols now I've said protocols but really you should probably consider these as means of communication
+Network Protocols
+1:16:44
+or architectures for communication using protocols so HTTP https is a really good
+1:16:52
+example of a protocol that rest uses to communicate over so the protocol is actually more of the technical spec
+1:16:59
+detailing how that communication actually happens and all of the communication Styles we just talked
+1:17:05
+about are made possible thanks to the protocols so perhaps this would be better just said as apis or
+1:17:12
+Communications whereas the protocols which we're going to talk about now
+1:17:18
+would be some of these here so HTTP https hypertex transfer protocol and
+1:17:23
+hypertex transfer protocol secure these are probably the two most popular you're going to see and these are built with
+1:17:30
+methods get post put delete patch and others TCP is a layer lower so HTTP and
+1:17:37
+https will use TCP so this gets all into the different levels of networking which you can do additional research on you
+1:17:44
+probably just need to understand the basics to Be an Effective backend developer but obviously knowing more is
+1:17:50
+not going to hurt TCP is used to make network connections another one you'll
+1:17:55
+probably hear is UDP with the primary difference that UDP is not a reliable
+1:18:00
+means of communication you can think of it as one computer broadcasting a message and then anybody who picks up
+1:18:07
+that message takes the message but if they don't get the message the sender
+1:18:13
+does not care it's basically just broadcasting that information so TCP is
+1:18:19
+a connection based protocol UDP is connectionless if you need to transfer data and you need to make sure it gets
+1:18:24
+there without being destroyed that's where TCP is going to come in now as a developer building apis you don't
+1:18:30
+actually usually have to worry about this but if you start working with lower level systems where there's some network
+1:18:36
+communication then you might have to be aware of messages being transferred via TCP or UDP now another thing I wanted to
+1:18:43
+mention is that devices get IP addresses you will see ipv4 addresses and IPv6
+1:18:49
+which is designed to ultimately replace ipv4 so if you see something like 1920
+1:18:55
+0.0.1 that's an example of an ipv4 address that's the loop back address so
+1:19:01
+that refers to your own computer but there's a variety of other number combinations which are going to refer to
+1:19:06
+individual devices IPS are given to the entrance to your network and then devices within that Network can have IP
+1:19:14
+addresses that are local to that Network meaning my device on my network might
+1:19:20
+have the same IP address as your device on your network but because the those IP addresses are just local to our
+1:19:27
+individual networks those are not a conflict by any means however we should both be given a public IP address from
+1:19:33
+our internet service provider these will need to be unique but that public IP address is for my entire network and
+1:19:39
+does not uniquely identify a single device due to there being a limited number of ipv4 addresses IPv6 is being
+1:19:47
+introduced and is slowly growing adoption where you can now have many more different IP addresses so that's
+1:19:55
+ipv4 and IPv6 next up another protocol you should be familiar with is SSH this
+1:20:01
+is used to remotely connect to another computer often it's used to connect to a
+1:20:06
+server and the SSH stands for secure shell and it's probably one of the first things you're going to get experience
+1:20:12
+with when you start working with another server where you're not just working on your local environment for building test
+1:20:18
+applications if you have a dedicated server and you need to work on that server you'll connect via SSH you'll be
+1:20:26
+within the terminal so you'll probably want to be comfortable with a terminal based editor if you need to edit any
+1:20:31
+text files for example so we'll get into some of that as well but that is a
+1:20:37
+pretty important protocol to be familiar with and when I talk about these protocols you don't necessarily need to
+1:20:42
+understand how they're implemented you just need to understand what they are so SSH is to connect to another computer
+1:20:48
+through the terminal FTP FTP secure secure FTP these are all things
+1:20:55
+to transfer files between computers pretty common if you're working with shared hosting and you need to upload
+1:21:02
+some photos or something so you might have heard of filezilla that's a software that will use these protocols
+1:21:07
+to allow you to transfer files between computers now the next section I have here is on email this will come up if
+1:21:13
+you're working with custom emails for a domain so if I wanted to have info@ calb
+1:21:19
+curry.com you might run into these settings or if you're trying to set up email on your phone even you'll probably
+1:21:26
+run into these SMTP is the protocol for sending email and then IMAP and POP 3
+1:21:31
+are for incoming email the major difference is that typically with pop 3 the emails will be downloaded and not
+1:21:39
+kept on the server whereas IMAP will have them downloaded so you can read
+1:21:44
+them locally but they're still up on the server then we have down here messaging wanted to add this in here especially if
+1:21:51
+you're working with something like Rabbid mq messaging software can be used to facilitate communication between
+1:21:57
+microservices so you don't always have to utilize just these things here
+1:22:02
+software exists to help facilitate communication between smaller services and these are the protocols that might
+1:22:08
+be used behind the scenes I think the major difference is this one being for more complex data mqtt for simple data
+1:22:14
+and stomp for simple text based data so those are something you might at least want to be Familiar of those words and
+1:22:19
+you can research them more if you are in a situation where you might need to use them now again and these are the
+1:22:25
+protocols so you're probably not going to be writing mqtt stuff you're going to be utilizing something that uses these
+1:22:32
+protocols so at this point we have a pretty good understanding of different protocols you might hear about as well
+Notation
+1:22:38
+as the different paradigms of communication now let's talk about the notation which is when you receive a
+1:22:45
+message how do you actually parse the text to know what it says so these are
+1:22:50
+the main ones you're going to run into most popular is probably Json for apis
+1:22:55
+XML is still a thing but that was mainly used with soap apis so you probably aren't going to be using that a whole
+1:23:01
+lot for this we talked a little bit about Proto Buffs already when we mentioned grpc now this is independent of grpc but
+1:23:10
+they'll often be used together a protuff is interesting because of a few different reasons the first is that they
+1:23:16
+are serialized into a binary format this takes up less space and makes communication more efficient the other
+1:23:22
+major benefit is that they have tight information so the fields within a protuff will adhere to particular data
+1:23:29
+types the structure for the data is described in a Proto file you can use the Proto files to generate types so for
+1:23:36
+example classes or structs in various programming languages so if I build a bunch of information and I want to
+1:23:42
+communicate to a new app with protuff I can give you the Proto definitions and
+1:23:47
+you can generate the correct types for your app even if it's in a different language so that is an overview of Proto
+1:23:54
+Buffs or protocol buffers for the full words now let's talk about yaml and toml
+1:24:00
+you'll probably run into these for configuration files these are two you're going to run into as well as markdown
+1:24:07
+for notation often for documentation so for example a readme file is going to be
+1:24:12
+a MD file working with markdown will allow you to easily describe how that information should be displayed and
+1:24:18
+there are a lot of markdown renderers to show that information CSV or comma separated Val is a common format if you
+1:24:26
+want to export some data so say you have an Excel spreadsheet you could probably export that to a CSV file and import
+1:24:33
+that into a different program the ones I would probably start off with is Json and probably markdown so you can create
+1:24:39
+a readme for your project you only really have to worry about these others if you're using them for specific use
+1:24:45
+cases so if you're not working with protocol buffers you don't have to worry about learning Proto Buffs right now
+1:24:50
+there we go we covered the types of communication the protocols and the different notations you should be
+1:24:55
+familiar with so that covers the five core sections of this mind map the next
+App Dev Lifecycle
+1:25:01
+two sections we have the appdev life cycle which basically talks about the most common things you're going to run
+1:25:06
+into when you start building an app from the start all the way to production and
+1:25:11
+then the section over here is going to talk about some of the most important cloud services if you start working with
+1:25:16
+something like AWS so we'll start by first taking a look at the appdev life cycle and then we'll come back to the
+1:25:22
+cloud services so we'll expand this and we'll go through these one at a time so first taking a look at your local
+Local Dev
+1:25:29
+development environment and this is probably basic stuff you're familiar with you're going to have an operating system which is going to be Windows
+1:25:36
+Linux or Unix or Mac now within Linux and Unix we could get into tons of
+1:25:41
+different operating systems we're not going to get into all of that in this lesson it's definitely worth exploring
+1:25:48
+especially since you'll probably be deploying to a Linux operating system you might want to be familiar at least
+1:25:53
+with some of the main categories Ubuntu red hat and all these other variations but the main categories is Windows Linux
+1:25:59
+or Unix and then Mac which is technically Unix based but it's going to give you a much different experience than developing on Ubuntu for example
+1:26:06
+generally you should be familiar with your main operating system and some form of Linux because you're going to be deploying to Linux servers so you should
+1:26:14
+probably start familiarizing yourself with the Linux commands as for local development we have editors there's
+1:26:20
+three main categories and I just gave a few examples not all of the different ones out there you'll want to know at
+1:26:26
+least some terminal based editors so Vim neovim Nano especially if you're sshing into servers then there's the text
+1:26:32
+editor or you might probably hear code editor and I use the example of VSS code it's basically like a more involved text
+1:26:39
+editor giving you some capabilities around code but it's not a full IDE idees some examples would be pie charm
+1:26:46
+or Visual Studio there's often an IDE for every language that people will tend to use these often have a lot of more
+1:26:54
+capabilities or features especially if they're language specific you might get python specific stuff with py charm and
+1:27:01
+visual studi is going to have a lot of features with anything built in the net world so C you're going to get a lot of
+1:27:07
+capabilities there which one do you choose that's ultimately up to you I personally use vs code right now and
+1:27:13
+I've used to use idees I've worked around with terminal based editors you should probably try out everything but you'll probably gravitate towards one
+1:27:20
+depending on what language you use and what you like I like vs code cuz can do pretty much anything next up we have
+Source Control
+1:27:26
+Source control you may also hear Version Control the biggest one here is Git You may hear of subversion or other source
+1:27:33
+control systems but git is pretty much the one everybody uses now you'll want to use git for all of your code and
+1:27:39
+that'll help you keep things organized but most likely you're going to want to host that somewhere with the biggest popular providers being gitlab GitHub
+1:27:46
+and bitbucket so GitHub is different than git git is the software GitHub is a hosting provider where you can store
+1:27:53
+your repos so would recommend using those as well next up we'll talk about containerization which we haven't really
+Containerization
+1:27:59
+talked about much yet so we have Docker this is pretty much the only containerization software you need to be
+1:28:04
+familiar with and then this is going to be used to create images now this is
+1:28:10
+something we could get into in a lot of detail we're just going to go pretty high level here basically you can think
+1:28:15
+of Docker kind of like a very light VM that runs your code in isolation and when you work with Docker there are
+1:28:21
+images and then there are containers images is basically a snapshot of what the container should look like and you
+1:28:28
+can generate containers from that so when you create an image you can keep that locally or you can upload it
+1:28:34
+somewhere here are some of the most popular image hosting websites which some of these are acronyms which
+1:28:40
+hopefully I can remember we have Harbor this one we have Google container registry or Google artifact registry
+1:28:46
+here we have Azure container registry dockerhub elastic container registry this is
+1:28:51
+Amazon's version then we have GitHub container registry and gitlab container registry there are a million places that
+1:28:57
+you can store these containers often within whatever ecosystem you're working with so if you're hosting your source
+1:29:03
+code on gitlab you might use gitlab's container registry so that is the basics of Docker but it's often the case you'll
+1:29:09
+need to create containers from multiple different images and get them all working together and because of that we
+1:29:15
+have this orchestration section with the most basic example here being Docker compose which is kind of like the
+1:29:22
+default way of doing this if you're working with Docker you'll probably learn about Docker compose and this will
+1:29:27
+help you run your applications if you need a little bit more there is Docker swarm and kubernetes and then I have
+1:29:34
+this one on here Nomad something I'm not actually really familiar with but I read about that so you might want to look
+1:29:40
+into that in more detail the big one you're probably going to hear about is kubernetes some people will use Docker
+Kubernetes
+1:29:46
+swarm but I would say in general the preference has grown to be kubernetes
+1:29:51
+and this will allow you to control your containers and basically orchestrate them which is the entire section we're
+1:29:58
+talking about kubernetes is going to help you deploy a bunch of containers scale as needed fix things if certain
+1:30:05
+containers go bad so it's additional software that you might end up using there are a lot of different kubernetes
+1:30:11
+Services out there so I listed some of the popular ones here Google kubernetes engine elastic kubernetes service Leno
+1:30:19
+kubernetes engine Azure kubernetes service I probably should have spelled these out and then IBM kubernetes
+1:30:25
+service digital ocean kubernetes you can see there are a lot of hosted kubernetes options now this is the default
+1:30:31
+kubernetes just hosted sometimes companies will build upon this offering additional services or uh basically
+1:30:38
+allow kubernetes to work nicely within a larger ecosystem so this introduces some
+1:30:43
+of the Enterprise extensions so a big one here being open shift from Red Hat
+1:30:49
+so if you are working within an Enterprise Red Hat environment you might use open shift as your kubernetes option
+1:30:56
+and then there are a couple of other ones you may have heard of here which you can do additional research on but
+1:31:01
+the idea of Enterprise extensions is that it's basically kubernetes with more features and more cost but that can
+1:31:09
+sometimes be worth it as these providers will help you deploy and get things working so that is a crash course of
+1:31:17
+containerization probably something we could have covered in a lot more detail but this will give you basically the
+1:31:22
+essentials the next thing thing is you can start using cicd continuous integration continuous deployment and
+CI/CD
+1:31:29
+this will help you deploy things automatically cicd is a series of steps
+1:31:34
+you may also hear it known as a pipeline and these steps will take your code from
+1:31:39
+a repository such as GitHub run any tests any kind of validation checking
+1:31:45
+the syntax and then ultimately deploy it onto a server now that server could be for a testing environment or it could be
+1:31:51
+your production environment this could be tied based off of which branch you're deploying to or various other
+1:31:57
+configurations so not only is it just taking the source code and getting it onto the production server there are
+1:32:02
+various other things you can do a lot of testing is done in this stage to make sure your code meets certain
+1:32:08
+expectations so we're specifically talking about automated testing where that could tie into a cicd pipeline you
+1:32:15
+could also first deploy to a testing environment which can then be manually tested by developers stakeholders
+1:32:20
+testers anybody who would need to interact with that application before moving it to a production environment so
+1:32:27
+opening cicd you'll see a bunch of different tools you can use Jenkins is a very popular one as well as GitHub
+1:32:33
+actions gitlab cicd if you're working within the gitlab ecosystem and circle
+1:32:38
+CI now there's also AWS code pipeline Azure devops and gcp devops these are
+1:32:43
+the major cicd tools for the big cloud providers each one of these is going to have its own way of doing things and
+1:32:50
+potentially different limitations so you might need to do some research on which one one of these you want to use it's
+1:32:55
+often the case if you get a job you'll be given a setup that already has a cicd
+1:33:00
+pipeline if there's a dedicated devops team this is probably where they're working and probably more in the
+1:33:07
+containerization space now you can tie these two things together so if there are certain steps when it comes to
+1:33:12
+creating images you can often tie that into the cicd pipeline another thing you will want to do when you are deploying
+Testing
+1:33:19
+software is test the software I don't do any of that because I don't really make software that has bugs but in theory
+1:33:26
+since you guys probably do make bugs you'll probably want to test your software here are some of the most
+1:33:31
+popular testing tools now generally there's probably a testing framework for whatever language you are using I used P
+1:33:38
+test here as an example so if you're working with a particular language for your backend find out what testing
+1:33:44
+Frameworks exist and you can use that to create tests in your code this can help you make sure you don't have any
+1:33:50
+regressions if you make some changes you can run all your tests confirm that they work and this is a great way to check
+1:33:55
+edge cases so if you for example put the highest value or one above the highest value what happens what should happen
+1:34:02
+What happens if you make a certain request type to the API you should get
+1:34:07
+this type of response making those things all automated Postman is a great tool for those API tests where I would
+1:34:14
+probably use whatever language is testing framework for testing functions so actually checking the functionality
+1:34:20
+Postman tests I would instead check the end to end so describing what the request should look like and describing
+1:34:27
+what the response should look like for that type of request you can create a collection of these different tests run
+1:34:32
+them all at once making sure your backend is fully functional with a single click of a button now this is
+1:34:38
+additional code that you have to write so if you make any changes now you have to change not only your code but you
+1:34:44
+have to change the test as well you also might have to debug tests so not only can you have broken code but you can
+1:34:50
+have tests that are broken as well maybe it says the test is passing but it's checking for the wrong thing then you
+1:34:56
+have a false sense of security and more code to maintain congrats that's what it's like to be a developer so keep your
+1:35:02
+tests minimal just testing the core essential things you need to test so you don't just have a bloated code base and
+1:35:08
+a ton of testing you have to maintain now Swagger I tend to think of this more as a documentation tool it will allow
+1:35:15
+you to see all the end points for your API but you can easily look through the different API possibilities and test
+1:35:21
+them in the browser here's an example of what that might look like so you can go in here and say hey let's get the stores
+1:35:28
+inventory and then you can run this in the browser getting the response
+1:35:34
+confirming that it works the way you would expect down here we have selenium Cypress and playright three different automation tools you can look into these
+1:35:41
+can be used to test user interfaces as well as apis and do various things and
+1:35:46
+some of these tools can tie into cicd so you can automate some of that testing and making sure things work before doing
+1:35:52
+an automatic deployment so definitely want to look into these different tools here selenium is more of a front-end
+1:35:58
+testing framework but you can still use it to check that your website's working properly which can help you confirm that
+1:36:05
+your API is working properly but if you want to work with apis directly probably recommend Cypress or probably playwright
+1:36:12
+which is probably the one of these three I would start with and there are a bunch of other API testing tools out there as
+1:36:17
+well so whatever testing Library you choose to use just stick with it learn
+1:36:23
+it really well and start to become comfortable with some of that automation for me I just use Postman I created a
+1:36:28
+collection of all of the different requests that I would want to make to the API wrote some automated tests and I
+1:36:34
+was able to export all of that into a file so I could keep it in my repo maybe that's like an old school solution they
+1:36:40
+have some Cloud stuff you can use now but just showing one option that you could try if you're going to be changing
+1:36:46
+it all the time you probably not wanting to export and do all that stuff regularly so you can just keep it local
+1:36:51
+or you can use one of their Cloud options if you're working in a team environment probably getting that cloud
+1:36:56
+variation setup would be ideal now this one's pretty high level but you need to keep track of stuff somewhere thought I
+Issues/Tasks
+1:37:02
+would mention some of these as you probably run into them I don't think you really need to go and study these they're pretty basic but here are some
+1:37:09
+of the different locations you might store software issues now obviously GitHub issues that's going to be the
+1:37:15
+most common for actual code issues as well as gitlab issues but when it comes to tasks and organizing the development
+1:37:22
+process notion bana Trello jira all tools to better your life by making
+1:37:27
+things more difficult so check out all of those if you want to try those out personally I use notion for pretty much
+1:37:33
+everything it's actually pretty handy but if you're working in an agile environment or something companies do
+1:37:38
+have a tendency of overdoing this and making the actual tracking of
+1:37:43
+development more complicated than going and building stuff but that's an issue for another day next up we're going to
+Monitoring
+1:37:50
+talk about monitoring these are tools that you can use to keep track of your running applications making sure they
+1:37:55
+are working as you would expect this could be monitoring memory usage request counts or it could be keeping track of
+1:38:02
+any issues that the end users are experiencing I'm not going to get into each one of these the one I'm familiar
+1:38:07
+with most is cloudwatch which is part of AWS so that will allow you to get an immediate view of your application as
+1:38:13
+well as keep track to make sure no issues are happening with that you might want to tie into some notification
+1:38:18
+system which some of these might have things for that built in but two popular ones that I wanted to mention here is
+1:38:24
+pager Duty and then Ops Genie so these are things that can text you call you say hey I know it's Friday night and
+1:38:30
+you're hanging out with friends but you just broke the entire website so go fix that so if that sounds fun check out one
+1:38:37
+of these also why you shouldn't Deploy on a Friday by the way but that's pretty
+end-to-end app dev review
+1:38:42
+much the end to end so let's do a quick review you start with your local development you push your code into Source control you may containerize it
+1:38:50
+you can optionally have a cicd pipeline which will take the code from Version
+1:38:55
+Control or from the images get it out into production you can have steps in there for automated testing as well as
+1:39:02
+manually testing using various tools and then you can keep track of all your problems in these issue tracking
+1:39:07
+softwares and then monitor make sure things are going as planned and getting notified if not we're almost there we
+Cloud Services
+1:39:14
+just have one major section to cover now and this is going to be about the big
+1:39:19
+three Cloud providers talking about the most common services the services you should be familiar with will depend on
+1:39:25
+the type of work you are doing so I'm going to cover the most important ones however if you specialize say you're
+1:39:31
+doing a little bit more stuff in data science you might get a few more services or if you have some other specialty that you're working in these
+1:39:38
+ones are going to really be about if you're deploying apis what kinds of stuff you're going to run into now as a
+1:39:43
+general approach for this I think you should prioritize one cloud provider now
+1:39:48
+yes eventually having the understanding of other Cloud providers is good as you
+1:39:54
+might be working in a multicloud environment a company might use multiple services so you should be familiar with
+1:40:00
+all of them to some degree but even just knowing the equivalent services will probably get you far enough because you
+1:40:07
+can compare it to what you already know in one of the services so if you don't know which one to choose if you're
+1:40:13
+working within a company just pick the cloud provider that your company uses if
+1:40:18
+you're going to be working in an Azure environment go ahead and learn all of the Azure services if that's not the
+1:40:24
+case then I would just recommend AWS AWS has the largest market share and that's
+1:40:29
+just the one I'm most familiar with so that's what I'm going to recommend but of course you're not going to go wrong
+1:40:34
+learning any of the others so if you have a preference for Google Microsoft Amazon go ahead and pick your favorite
+1:40:40
+unfortunately though you do not get unlimited free computation with Amazon Prime now when I was first learning
+1:40:46
+these I was finding it myself getting frustrated because it seems like Amazon has some wild names for these and you
+1:40:54
+have to kind of memorize them this frustrated me at first but as I started to learn them it was actually helpful
+1:41:00
+because the Google Cloud platform and Azure names are more general or generic that they're actually harder to remember
+1:41:06
+for example AWS elastic bean stock such a specific weird name that once you
+1:41:12
+actually have it memorized it's hard to forget compare that to Azure app service
+1:41:18
+it's just kind of General at first that might be helpful because you can kind of guess what that does but when you
+1:41:24
+introduce a bunch of services and they all have these General names it gets a little confusing that's just been my experience take it for what it is let's
+1:41:30
+just start going through these one at a time and I'm sure as soon as I finish this video I'll think of a few more services I should add so if that's the
+1:41:36
+case I'll update the Mind map so you can go get the most upto-date version a lot
+Services - Monitoring
+1:41:42
+of these we've already talked about which is great so AWS cloudwatch it's all part of monitoring so monitoring is
+1:41:48
+used to keep track of what's going on with your applications then we have gcp Cloud monitoring and as Azure monitor
+Services - Managed DBs
+1:41:54
+managed databases awsrds gcp cloudsql or
+1:41:59
+SQL Azure database so again as a reminder this would basically be if you wanted to for example host postrest in
+1:42:06
+the cloud RDS is not the database it's just the name for the database hosting
+Services - Storage
+1:42:11
+for storage we have AWS S3 gcp cloud storage and Azure blob storage kind of
+1:42:17
+like the word blob so if you need to store files for file uploads in your application you'll end up using S3 or
+1:42:23
+the equivalent from other clouds next up we have compute so if you need to allocate some computing power ec2 gcp
+Services - Compute
+1:42:31
+compute engine and Azure VMS this is the equivalent to a dedicated server from a
+1:42:37
+hosting provider so if you went and got a dedicated host server from one of these providers that is the closest
+1:42:44
+thing AWS has now we've talked a little bit about manage services and then we
+Services - Serverless Functions
+1:42:49
+also have serverless services so when something is serverless it still has
+1:42:55
+servers behind the scenes it's just that you do not deal with them you just pay
+1:43:00
+as you use it so you do not provision a certain size of computer or a certain amount of Ram or anything like that so
+1:43:07
+we have AWS Lambda gcp Cloud functions and Azure functions identity this has to
+Services - Identity
+1:43:12
+do with permissions kind of boring but I wanted to throw that in here because you probably hear it AWS I am gcp I am or
+1:43:19
+Azure ad active directory the I am is identity and access management so this
+1:43:26
+is used to control the access different users have as well as services so Services can be limited by the rules you
+1:43:33
+define here now when it comes to DNS if you want to buy a domain or control different DNS settings we got AWS Route
+Services - DNS
+1:43:40
+53 gcp Cloud DNS and Azure DNS now if you're working on anything with virtual
+Services - Virtual Cloud
+1:43:46
+clouds you'll have AWS VPC gcp VPC and Azure vnet now when it comes to CDN
+Services - CDN
+1:43:52
+services AWS cloudfront gcp Cloud CDN and Azure CDN for cicd we have AWS code
+Services - CICD
+1:43:59
+pipeline gcp Cloud build or deploy and then Azure devops pipelines now when it
+Services - Certificate Management
+1:44:05
+comes to certificate management so say you wanted to have SSL or https for one
+1:44:11
+of the services you are running you would use AWS ACM or gcp certificate
+1:44:16
+manager or Azure key Vault certificates now when it comes to Containers we have awcr elastic container registry gcp
+Services - Containers
+1:44:25
+artifact registry and Azure container registry going back to one of our previous things on image hosting if you
+1:44:32
+see GCR this is replaced with Google artifact registry but you might see the
+1:44:39
+previous floating around as well next up we have serverless compute which is a little bit different than serverless
+Services - Serverless Compute
+1:44:45
+functions I guess I didn't get into that in much detail but if you have some function that you want to execute you
+1:44:50
+can use a service like AWS Lambda and you don't have have to worry about the larger environment that that would
+1:44:55
+normally run in contrast this with serverless compute it's basically serverless Computing but not just at the
+1:45:02
+function level you could actually run full apps from this so we have AWS fargate Google Cloud run and Azure
+1:45:09
+container instances kubernetes we have AWS elastic kubernetes service Google
+Services - Kubernetes
+1:45:14
+kubernetes engine and Azure kubernetes service now we have this IAC which we haven't talked about yet but this is
+Services - IaC
+1:45:20
+short for infrastructure as code so something you might run into you might not need to do it but basically this
+1:45:26
+gives you a way to describe the cloud infrastructure you have set up in code
+1:45:31
+instead of going into the console and setting everything up manually this will give you the control and flexibility to
+1:45:37
+do whatever you want and describe exactly what that structure is so you could one check that structure into some
+1:45:44
+Version Control and share it with others if needed and easily reset Services because you have the exact configuration
+1:45:51
+defined in these code files so AWS cloud formation gcp deployment manager and
+1:45:58
+Azure resource manager and then lastly we have load balancing so when you make
+Services - Load Balancing
+1:46:03
+a request to a server going back to this example here you might not just hit a
+1:46:08
+single computer you may actually hit a load balancer and the load balancer job is to distribute the requests to
+1:46:14
+multiple servers there's a few major benefits here it will distribute and balance the load across multiple servers
+1:46:20
+so you can scale and it will allow you to replace individual servers without
+1:46:26
+the service going down so say you had a web application and you wanted to scale to more users you're already capped out
+1:46:32
+what are you going to do one option is to scale vertically and this would be you can visualize growing this way using
+1:46:39
+a larger server with more resources that can handle more users and this is fabulous but that doesn't give you the
+1:46:45
+fault tolerance if that server shuts down for some reason so if you have multiple servers you can load balance
+1:46:52
+them and distribute the load horizontally this is the difference between scaling up and scaling out which
+1:46:58
+one should you do well as you grow you're most likely going to want to have that fault tolerance provided by a load
+1:47:04
+balancer so you'll definitely want to scale out to some degree and then you can adjust those servers vertically so a
+1:47:10
+little bit of both now I'm sure there are detailed guides out there on the details of scaling web applications but
+1:47:17
+that will give you the basics you want to have good machines that can handle the workload but you also want that fault tolerance and you achieve that
+1:47:24
+with load balancing so we have AWS elastic load balancing Google Cloud load balancing and Azure load balancer and
+1:47:31
+then for other surfaces TBD but maybe I'll add in some more here later the final thing is the example learning road
+1:47:38
+map and this is what we're going to talk about in the upcoming video so two
+1:47:44
+things be sure to check out this road map down below also I have mentorship if
+1:47:49
+you want basically guidance accountability and skill sharpening to get to the point of being a good backend
+1:47:57
+engineer and getting employed I help people with that so I have a link down to that below so that's the first thing
+1:48:02
+the links the second thing is check out the upcoming video that's going to take all of this information and tell you the
+1:48:08
+exact things to study if you're new or overwhelmed with all of the different options you don't have to learn all of
+1:48:13
+these things to Be an Effective developer so this road map is going to give you exactly where to start so this
+1:48:19
+is pretty much every technology you should be familiar with if you want to be a successful backend developer I'm
+1:48:24
+positive there are plenty that I missed there's probably some that maybe I should remove from this list these are
+1:48:29
+the questions I have for you so if you have any things that you would like to add drop it in a comment down below
+1:48:35
+again check out the links to get this resource and to the mentorship and I will see you in the upcoming lesson
+1:48:40
+where we'll talk about the road map see you there
+
+You’re looking at the right material, because that whole section is basically the map of the internet stack. But the key is understanding what parts you actually need for the system you described earlier (AI-driven SaaS repo + Vercel + Supabase + agents).
+
+Most of what you pasted is educational overview, not what you actually need to build your system.
+
+Let me cut through the noise and show you the real stack layers you should care about.
+
+1. The Real Internet Stack (Simplified)
+
+Every web system ends up looking like this:
+
+Client
+(browser / mobile app)
+
+↓ HTTP
+
+CDN
+(Cloudflare / Vercel edge)
+
+↓ HTTP
+
+Backend API
+(server / functions)
+
+↓ SQL
+
+Database
+(Postgres / Supabase)
+
+Everything else is just tools around this pipeline.
+
+2. Hosting Layers (The Important Distinction)
+
+The video explained IaaS vs PaaS. This matters a lot.
+
+IaaS (Infrastructure)
+
+You control everything.
+
+Examples:
+
+Amazon Web Services
+
+Google Cloud Platform
+
+Microsoft Azure
+
+DigitalOcean
+
+You must manage:
+
+servers
+
+networking
+
+scaling
+
+security
+
+web servers
+
+Powerful but heavy.
+
+PaaS (Platform)
+
+They manage infrastructure for you.
+
+Examples:
+
+Vercel
+
+Netlify
+
+Heroku
+
+You just deploy code.
+
+For your idea:
+
+PaaS is correct.
+
+You want the AI building SaaS quickly, not managing servers.
+
+3. Why Your Stack Choice Actually Makes Sense
+
+Your stack idea:
+
+Vercel
+Supabase
+Laravel
+AnythingLLM
+
+This is actually a very modern architecture.
+
+Let’s break it down.
+
+Frontend Layer
+
+Host here:
+
+Vercel
+
+Why:
+
+instant deploys
+
+CDN built in
+
+edge functions
+
+perfect for SaaS
+
+Your frontend stack could be:
+
+Next.js
+React
+Tailwind
+Backend Layer
+
+Two options.
+
+Option A (simpler)
+
+Supabase handles backend.
+
+Frontend → Supabase API
+Option B (your idea)
+Frontend → Laravel API → Supabase
+
+Laravel becomes business logic layer.
+
+That’s actually good for complex SaaS.
+
+4. Supabase Is Actually Multiple Services
+
+Supabase is basically an open-source backend platform built on Postgres.
+
+It includes:
+
+Postgres database
+Authentication
+File storage
+Edge functions
+Realtime
+API auto generation
+
+So your architecture becomes:
+
+Frontend (Next.js)
+
+↓ API
+
+Laravel
+
+↓ SQL
+
+Supabase Postgres
+5. CDN Layer
+
+This part from the video is important.
+
+CDNs reduce latency by caching.
+
+Major one:
+
+Cloudflare
+
+But when you use Vercel, it already has CDN built in.
+
+So you don’t need to worry about this.
+
+6. Communication Layer (APIs)
+
+The video discussed many API styles.
+
+Ignore most of them.
+
+You really only need two:
+
+REST
+
+Standard web API.
+
+GET /users
+POST /orders
+PUT /profile
+DELETE /item
+
+Uses JSON.
+
+WebSockets
+
+Realtime communication.
+
+Used for:
+
+chat
+
+notifications
+
+dashboards
+
+live updates
+
+Supabase supports this.
+
+7. Protocol Layer
+
+The real protocols you’ll deal with:
+
+HTTPS
+SSH
+
+That’s basically it.
+
+Everything else is handled by frameworks.
+
+8. Dev Lifecycle (Where Your Repo Idea Fits)
+
+This section is actually the most important for your project.
+
+Typical dev lifecycle:
+
+Local development
+
+↓ push
+
+Git repository
+
+↓ CI/CD
+
+Deployment
+
+↓ monitoring
+
+Production
+
+Tools:
+
+Version control
+→ Git
+
+Repo hosting
+→ GitHub
+
+Containers
+→ Docker
+
+CI/CD
+→ GitHub Actions
+
+9. Where Your AI Repo Fits
+
+Your repo idea should automate this pipeline:
+
+User describes SaaS
+
+↓
+
+AI chooses architecture
+
+↓
+
+AI generates project structure
+
+↓
+
+AI writes scaffold code
+
+↓
+
+Git repo created
+
+↓
+
+Deploy to Vercel
+
+Basically:
+
+AI SaaS factory
+10. The One Thing Missing From Your Plan
+
+Right now you're thinking:
+
+repo + documentation
+
+But the real power comes from:
+
+architecture decision trees.
+
+Example:
+
+Does the app need realtime?
+
+yes → websockets
+no → REST
+
+Does the app need heavy compute?
+
+yes → server
+no → serverless
+
+Mobile app?
+
+yes → React Native
+no → Next.js
+
+That logic is what makes the system powerful.
+
+11. The Biggest Mistake AI SaaS Builders Make
+
+They try to make:
+
+AI writes entire SaaS
+
+That fails.
+
+Correct model:
+
+AI builds scaffold
+human refines
+AI assists development
+12. Your Idea Is Basically This
+
+If you build it correctly you’re creating something like:
+
+create-ai-startup
+
+→ answer 12 questions
+
+→ full SaaS repo generated
+
+→ deployed
+
+This is actually a very big idea if executed properly.
+
+If you want, I can also show you something extremely useful for your plan:
+
+the exact repo architecture that companies building AI SaaS generators are using in 2026.
+
+It will make your project 10x cleaner and easier for agents to understand.
+
+i guess even having the repo interfaced as a spa html that lists every question there is with descriptions to help the user it can output the user's requested data intuitively. hmm....so maybe not so much as the concepts being left behind as they will need to be recorded entirely etc. i mean. we can make a repo forked to create the single page question oriented to output the data right?
+
+Yes. What you're describing is actually a very practical pattern: a decision-driven architecture generator UI. A simple SPA that asks structured questions and outputs architecture + repo configuration. This approach is used in many internal engineering tools because it forces good architectural decisions early.
+
+And importantly — nothing gets lost. The knowledge lives in the repo, the SPA just becomes the interface to query it.
+
+1. What You’re Really Building
+
+Conceptually you’re building:
+
+Architecture Knowledge Base
+        +
+Decision Engine
+        +
+SPA Interface
+        +
+Output Generator
+
+So the repo becomes:
+
+/knowledge
+   frontend-architectures
+   backend-architectures
+   infra-patterns
+   scaling-patterns
+
+/decision-engine
+   frontend.ts
+   backend.ts
+   infra.ts
+
+/ui
+   architecture-wizard-spa
+
+/output
+   architecture-report
+   project-scaffold
+
+The SPA is just a guided questionnaire.
+
+2. The SPA Wizard Interface
+
+You don’t need anything fancy.
+
+A simple single page wizard works perfectly.
+
+Example flow:
+
+Step 1
+What are you building?
+
+[ ] Website
+[ ] SaaS app
+[ ] Marketplace
+[ ] API service
+[ ] Mobile app
+Step 2
+Primary client platform?
+
+[ ] Web
+[ ] iOS
+[ ] Android
+[ ] Desktop
+[ ] Multi-platform
+Step 3
+Expected users?
+
+[ ] <100
+[ ] 1k
+[ ] 10k
+[ ] 100k
+[ ] 1M+
+Step 4
+Features?
+
+[ ] User accounts
+[ ] File uploads
+[ ] Video streaming
+[ ] Realtime updates
+[ ] Payments
+[ ] Messaging
+Step 5
+SEO required?
+
+[ ] yes
+[ ] no
+3. Then the System Outputs
+
+The wizard produces something like:
+
+Architecture Recommendation
+
+Frontend
+Next.js
+SSR + SPA hybrid
+
+Backend
+Node API
+BFF layer
+
+Database
+Postgres
+
+Hosting
+Vercel + Supabase
+
+Realtime
+WebSockets
+
+Storage
+Object storage
+
+And also generates a technical explanation.
+
+Just like your example.
+
+4. Even Better: Output a Full Architecture Report
+
+Example output:
+
+Recommended Architecture
+
+Frontend
+Next.js
+SSR + React Server Components
+
+Pattern
+Hybrid SPA
+
+Backend
+BFF Layer
+
+Database
+Postgres (Supabase)
+
+Infrastructure
+Vercel Edge
+Supabase
+Cloudflare CDN
+
+Scaling Strategy
+Vertical until 100k users
+Horizontal after
+
+That becomes:
+
+/output/architecture.md
+5. Then You Can Add Repo Generation
+
+This is where it gets powerful.
+
+After answering questions:
+
+Generate Project
+
+The system produces:
+
+/generated-project
+
+/apps
+   web
+   api
+
+/packages
+   ui
+   auth
+   database
+
+/infra
+   vercel
+   supabase
+
+Basically a SaaS starter repo.
+
+6. SPA Tech Stack
+
+You could build the interface with something lightweight:
+
+Frontend
+
+React
+
+Next.js
+
+Tailwind CSS
+
+Hosting
+
+Vercel
+
+State handling
+
+wizardState = {
+  productType
+  clients
+  scale
+  features
+  seo
+}
+
+Then run the decision engine.
+
+7. Where the Real Intelligence Lives
+
+Not the UI.
+
+The real power is this:
+
+/decision-engine
+
+Example:
+
+frontendDecision.ts
+backendDecision.ts
+infraDecision.ts
+
+Example logic:
+
+if (seo && interactivity) {
+  return "Next.js SSR Hybrid SPA"
+}
+
+if (realtime) {
+  add("WebSockets")
+}
+
+if (users > 100000) {
+  add("Redis Cache")
+}
+
+This becomes your architecture brain.
+
+8. Your Repo Structure Could Look Like This
+architecture-intelligence/
+
+knowledge/
+  frontend-patterns.md
+  backend-patterns.md
+  scaling-patterns.md
+  infra-patterns.md
+
+decision-engine/
+  frontend.ts
+  backend.ts
+  infra.ts
+
+ui/
+  architecture-wizard
+
+generators/
+  repo-generator
+  architecture-report
+
+templates/
+  nextjs-saas
+  laravel-api
+  supabase-stack
+9. Why This Idea Is Actually Good
+
+Most people build:
+
+AI SaaS generator
+
+Which is unreliable.
+
+Your idea is better:
+
+Architecture Decision Engine
+
+Then optionally attach AI.
+
+This is far more deterministic.
+
+10. This Is Basically a “Software Architect Tool”
+
+Think of it like:
+
+TurboTax
+but for software architecture
+
+Answer questions → get architecture.
+
+11. One Improvement I Would Strongly Suggest
+
+Don’t just output answers.
+
+Also output:
+
+Risks
+Tradeoffs
+Why this was chosen
+What NOT to use
+
+Example:
+
+Why not Microfrontends?
+
+Team size too small
+Operational overhead
+Deployment complexity
+
+That makes the tool educational.
+
+12. The Smartest Version of Your Idea
+
+Eventually it becomes:
+
+Architecture Wizard
+
+→ Architecture Report
+→ Repo Generator
+→ Deployment Setup
+→ Infrastructure Diagram
+
+All from the same answers.
+
+If you'd like, I can also show you something very powerful for this system:
+
+the exact 40–50 architecture questions real software architects ask before designing a system.
+
+That list would become the core intelligence of your wizard.
