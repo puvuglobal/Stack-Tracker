@@ -563,8 +563,20 @@ function loadIdea(id) {
   currentIdeaId = id;
   projectName = idea.name;
   answers = idea.answers || {};
-  currentQIndex = 0;
-  $('projectTitle').textContent = projectName;
+  // Resume from last position or find first unanswered question
+  currentQIndex = idea.lastQIndex || 0;
+  if (currentQIndex === 0 && Object.keys(answers).length > 0) {
+    // Find first unanswered question
+    const filtered = getFilteredQuestions();
+    for (let i = 0; i < filtered.length; i++) {
+      const q = filtered[i];
+      if (!answers[q.id] || (Array.isArray(answers[q.id]) && answers[q.id].length === 0)) {
+        currentQIndex = i;
+        break;
+      }
+    }
+  }
+  $('projectTitle').textContent = projectName + ' (Resume)';
   $('projectName').value = projectName;
   renderIdeasList();
   showScreen('question');
@@ -592,7 +604,13 @@ function deleteSelectedIdeas() {
 }
 
 function saveCurrentIdea() {
-  const data = { id: currentIdeaId || Date.now(), name: projectName, answers: {...answers}, updated: new Date().toISOString() };
+  const data = { 
+    id: currentIdeaId || Date.now(), 
+    name: projectName, 
+    answers: {...answers}, 
+    lastQIndex: currentQIndex,
+    updated: new Date().toISOString() 
+  };
   if (currentIdeaId) {
     const idx = ideas.findIndex(i => i.id === currentIdeaId);
     if (idx >= 0) ideas[idx] = data;
@@ -614,14 +632,22 @@ function toggleIdeaSelection(id, e) {
 function renderIdeasList() {
   const list = $('ideasList');
   list.innerHTML = '';
+  const allQuestions = questions;
   ideas.slice().reverse().forEach(idea => {
+    const answeredCount = Object.keys(idea.answers || {}).filter(k => {
+      const v = idea.answers[k];
+      return v && (Array.isArray(v) ? v.length > 0 : true);
+    }).length;
+    const totalQuestions = getFilteredQuestions().length;
+    const progress = answeredCount > 0 ? ` (${answeredCount}/${totalQuestions})` : '';
+    
     const item = document.createElement('div');
     item.className = 'idea-item' + (idea.id === currentIdeaId ? ' active' : '');
     item.innerHTML = `
       <input type="checkbox" class="idea-checkbox" ${selectedIdeas.has(idea.id) ? 'checked' : ''} onclick="toggleIdeaSelection(${idea.id}, event)">
       <div style="flex:1;overflow:hidden">
         <div class="idea-name">${idea.name}</div>
-        <div class="idea-date">${new Date(idea.updated).toLocaleDateString()}</div>
+        <div class="idea-date">${progress} • ${new Date(idea.updated).toLocaleDateString()}</div>
       </div>
     `;
     item.addEventListener('click', () => loadIdea(idea.id));
@@ -769,6 +795,7 @@ function generateBlueprint() {
   const contents = $('tabContents');
   tabs.innerHTML = '';
   contents.innerHTML = '';
+  $('projectTitle').textContent = projectName; // Clean title without (Resume)
 
   const docs = [
     { id: 'architecture', name: 'Architecture', content: generateDoc('architecture') },
