@@ -2,6 +2,8 @@
 
 A question-oriented wizard that helps entrepreneurs and developers define their business software idea. Answer questions about product type, clients, tech stack preferences, and get generated architecture blueprints with supportive context.
 
+I really wanna just say that if we tackle this project as a community we can gift a opensource tool that'd help tons of young devs succeed in the wilderness of the corporate establishment. With new and exciting tools like agentic skills and swarms building has never been easier with the right people. Schema builds, security compliance and principle of system architecture is almost a after thought. Most builds today are insecure shipped productions that hit the marketplace where your 8 year old kid can purchase a silly banana treat from a game. Then your most intimate details are on the web, no rls, no backend sometimes, no real thought for stack design entirely. This wizard should help create a checklist, tree and schema to help keep young shippers intact with compliancy standards while they ship new and exciting things. As we develop this new and fun repo, planning your tech stack will become easier when shipping SaaS related productions. Please enjoy. If you have an idea or a comment....let me know I might be thinking it but haven't had the time to build this. It is open so, feel free to make a edit. Just don't delete anything. Be responsible. 
+
 ## 🌟 Features
 
 ### Question Wizard
