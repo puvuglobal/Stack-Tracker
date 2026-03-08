@@ -1,0 +1,854 @@
+# StackTracker Knowledge Schema
+# Extracted from Data supporting repo.txt
+# Every variable, technology, concept with descriptions and decision logic
+
+{
+  "metadata": {
+    "version": "1.0",
+    "source": "StackTracker Decision Engine",
+    "purpose": "Comprehensive tech stack knowledge base for SaaS architecture decisions"
+  },
+
+  # ============================================================================
+  # 1. PRODUCT TYPE - Defines core interaction patterns and required modules
+  # ============================================================================
+  "productTypes": {
+    "marketplace": {
+      "description": "Platform connecting buyers and sellers, enabling transactions",
+      "requires": ["payments", "search", "inventory", "orders", "user_profiles", "analytics", "messaging", "reviews"],
+      "modules": ["auth", "billing", "orders", "inventory", "search", "messaging", "analytics", "notifications"],
+      "archImplications": "SSR + SPA hybrid for SEO + dashboards, BFF pattern for multiple clients"
+    },
+    "saas": {
+      "description": "Software as a service - subscription-based application",
+      "requires": ["auth", "billing", "dashboard", "settings", "multi_tenant"],
+      "modules": ["auth", "billing", "dashboard", "settings", "teams", "webhooks", "analytics"],
+      "archImplications": "SPA for rich dashboards, modular monolith for team scale"
+    },
+    "social": {
+      "description": "Social platform with user-generated content and interactions",
+      "requires": ["feeds", "notifications", "realtime", "content_moderation", "media"],
+      "modules": ["auth", "posts", "comments", "likes", "follows", "messages", "notifications", "media"],
+      "archImplications": "Realtime essential, CDNs for media, BFF for multiple clients"
+    },
+    "ecommerce": {
+      "description": "Online store for products/services sales",
+      "requires": ["products", "cart", "checkout", "payments", "inventory", "shipping"],
+      "modules": ["auth", "products", "cart", "checkout", "payments", "inventory", "shipping", "orders", "analytics"],
+      "archImplications": "SSR for product pages (SEO), SPA for checkout, caching critical"
+    },
+    "internal": {
+      "description": "Internal business tool/enterprise application",
+      "requires": ["auth", "admin", "reporting", "workflows"],
+      "modules": ["auth", "admin", "dashboard", "reports", "workflows", "audit"],
+      "archImplications": "SPA acceptable (no SEO), focus on data density, can use heavier frameworks"
+    },
+    "content": {
+      "description": "Content-focused site - blogs, docs, portfolios",
+      "requires": ["cms", "seo", "media"],
+      "modules": ["auth", "content", "media", "comments", "seo"],
+      "archImplications": "SSG/ISR ideal for performance, minimal JavaScript"
+    },
+    "mobile_first": {
+      "description": "Mobile-dominant application",
+      "requires": ["mobile_responsive", "offline", "push_notifications"],
+      "modules": ["auth", "core_features", "offline_sync", "push"],
+      "archImplications": "PWA or native, API-first design, offline support"
+    }
+  },
+
+  # ============================================================================
+  # 2. CLIENT ARCHITECTURE - Defines frontend needs and API patterns
+  # ============================================================================
+  "clients": {
+    "web": {
+      "description": "Web browser application",
+      "tech": "Next.js/React/Vue/Svelte",
+      "implies": ["responsive", "cross_browser"],
+      "conditionalQuestions": ["platform_mobile", "desktop_apps"]
+    },
+    "ios": {
+      "description": "Apple iOS native app",
+      "tech": "Swift/SwiftUI, React Native, Expo",
+      "implies": ["apple_developer", "push_notifications"],
+      "conditionalQuestions": ["xcode_required"]
+    },
+    "android": {
+      "description": "Google Android native app",
+      "tech": "Kotlin, React Native, Expo",
+      "implies": ["google_play", "push_notifications"],
+      "conditionalQuestions": ["android_studio"]
+    },
+    "desktop_windows": {
+      "description": "Windows desktop application",
+      "tech": "Electron, Tauri, .NET/WPF",
+      "implies": ["native_features"],
+      "conditionalQuestions": ["win32_or_uwp"]
+    },
+    "desktop_mac": {
+      "description": "macOS desktop application",
+      "tech": "Electron, SwiftUI, Tauri",
+      "implies": ["apple_developer"],
+      "conditionalQuestions": ["xcode_required"]
+    },
+    "desktop_linux": {
+      "description": "Linux desktop application",
+      "tech": "Electron, Tauri, GTK",
+      "implies": ["cross_distro"],
+      "conditionalQuestions": []
+    },
+    "public_api": {
+      "description": "Public API for third-party developers",
+      "tech": "REST, GraphQL",
+      "implies": ["api_documentation", "rate_limiting", "api_versioning", "developer_portal"],
+      "conditionalQuestions": ["api_auth_method", "webhooks_needed"]
+    }
+  },
+
+  # ============================================================================
+  # 3. FRONTEND ARCHITECTURE - Rendering strategies and patterns
+  # ============================================================================
+  "frontendArchitecture": {
+    "static_pages": {
+      "description": "Pure HTML/CSS - no dynamic logic",
+      "pros": ["extremely fast", "cheap", "simple"],
+      "cons": ["no interaction", "no dynamic data"],
+      "useCases": ["landing pages", "documentation", "blogs"],
+      "stack": ["HTML", "CSS", "CDN"],
+      "when": "Site is mostly static with no interactivity"
+    },
+    "mvc": {
+      "description": "Server renders HTML - backend combines data and template",
+      "pros": ["simple", "easy backend control"],
+      "cons": ["tight coupling", "page reloads", "poor scalability"],
+      "useCases": ["Traditional web apps"],
+      "stack": ["Django", "Ruby on Rails", "Laravel", "ASP.NET"],
+      "when": "Simple app, tight team, server-rendered pages OK"
+    },
+    "spa": {
+      "description": "Frontend is full application, backend only serves APIs",
+      "pros": ["very interactive", "scalable UI", "rich dashboards"],
+      "cons": ["heavy JS", "slow first load", "poor SEO"],
+      "useCases": ["SaaS dashboards", "internal tools", "admin panels"],
+      "stack": ["React", "Vue", "Angular", "Svelte"],
+      "when": "High interactivity, dashboards, no SEO needed"
+    },
+    "ssr": {
+      "description": "Server-side rendering - pages generated on request",
+      "pros": ["fast initial load", "good SEO"],
+      "cons": ["server load", "more infrastructure"],
+      "useCases": ["Marketplaces", "eCommerce", "SaaS with SEO"],
+      "stack": ["Next.js", "Nuxt.js", "SvelteKit"],
+      "when": "SEO required + interactive"
+    },
+    "ssg": {
+      "description": "Static site generation - pages built at compile time",
+      "pros": ["fastest"],
+      "cons": ["content updates require rebuild"],
+      "useCases": ["blogs", "marketing pages"],
+      "stack": ["Next.js", "Astro", "Hugo", "Gatsby"],
+      "when": "Content rarely changes, max performance needed"
+    },
+    "isr": {
+      "description": "Incremental static regeneration - static + periodic rebuilds",
+      "pros": ["dynamic updates", "fast CDN"],
+      "useCases": ["product catalogs"],
+      "stack": ["Next.js ISR"],
+      "when": "Content updates occasionally, want CDN speed"
+    },
+    "bff": {
+      "description": "Backend for Frontend - dedicated API layer per client",
+      "benefits": ["optimized responses", "frontend independence", "easier auth"],
+      "downsides": ["more infrastructure", "single failure point"],
+      "useCases": ["mobile app + web app + admin"],
+      "when": "Multiple client types (web + mobile + etc)"
+    },
+    "modular_monolith": {
+      "description": "Large SPA organized into domains",
+      "benefits": ["maintainable", "scalable", "clear boundaries"],
+      "drawbacks": ["build times grow", "boundaries hard to enforce"],
+      "useCases": ["10-100 developers"],
+      "structure": "src/domains/, src/shared/",
+      "when": "Medium team, need organization without microservices complexity"
+    },
+    "microfrontends": {
+      "description": "Multiple independent frontends assembled together",
+      "benefits": ["huge scaling", "independent deploys"],
+      "drawbacks": ["heavy complexity", "performance overhead"],
+      "usedBy": ["Amazon", "Spotify", "enterprise SaaS"],
+      "when": "200+ developers, separate teams owning separate features"
+    }
+  },
+
+  # ============================================================================
+  # 4. DATA TYPES - Defines infrastructure requirements
+  # ============================================================================
+  "dataTypes": {
+    "images": {
+      "description": "User-uploaded images",
+      "requires": ["object_storage", "cdn", "image_processing"],
+      "services": ["S3", "Cloudflare R2", "Supabase Storage", "Cloudinary"]
+    },
+    "video": {
+      "description": "User-uploaded video",
+      "requires": ["object_storage", "transcoding", "chunk_uploads", "streaming"],
+      "services": ["Mux", "Cloudflare Stream", "AWS MediaConvert"]
+    },
+    "audio": {
+      "description": "User-uploaded audio/podcasts",
+      "requires": ["object_storage", "transcoding", "streaming"],
+      "services": ["Mux", "AWS MediaConvert"]
+    },
+    "documents": {
+      "description": "PDFs, text files, etc",
+      "requires": ["object_storage"],
+      "services": ["S3", "Supabase Storage"]
+    },
+    "realtime": {
+      "description": "Live updates, chat, notifications",
+      "requires": ["websockets", "pub_sub", "event_queues"],
+      "services": ["Supabase Realtime", "Pusher", "Socket.io", "Ably"]
+    },
+    "structured": {
+      "description": "Relational data with schemas",
+      "requires": ["sql_database"],
+      "services": ["PostgreSQL", "MySQL"]
+    },
+    "flexible": {
+      "description": "Flexible schemas, document storage",
+      "requires": ["nosql_database"],
+      "services": ["MongoDB", "DynamoDB", "Firestore"]
+    },
+    "search": {
+      "description": "Full-text search capabilities",
+      "requires": ["search_engine"],
+      "services": ["Elasticsearch", "Algolia", "Meilisearch", "Postgres Full-Text"]
+    },
+    "analytics": {
+      "description": "Event tracking and analytics",
+      "requires": ["analytics_db", "data_warehouse"],
+      "services": ["PostHog", "Mixpanel", "Amplitude", "BigQuery"]
+    },
+    "cache": {
+      "description": "Caching layer for performance",
+      "requires": ["in_memory_cache"],
+      "services": ["Redis", "Memcached"]
+    }
+  },
+
+  # ============================================================================
+  # 5. SCALE - Database and infrastructure strategy
+  # ============================================================================
+  "scale": {
+    "tier_1": {
+      "label": "Under 10K users",
+      "database": "single database instance",
+      "infrastructure": "basic",
+      "caching": "optional",
+      "rateLimiting": "basic"
+    },
+    "tier_2": {
+      "label": "10K - 100K users",
+      "database": "read replicas",
+      "infrastructure": "load balancing",
+      "caching": "recommended",
+      "rateLimiting": "required"
+    },
+    "tier_3": {
+      "label": "100K - 1M users",
+      "database": "caching layer",
+      "infrastructure": "horizontal scaling",
+      "caching": "essential",
+      "rateLimiting": "strict"
+    },
+    "tier_4": {
+      "label": "1M+ users",
+      "database": "horizontal scaling",
+      "infrastructure": "microservices ready",
+      "caching": "distributed",
+      "rateLimiting": "very strict"
+    }
+  },
+
+  # ============================================================================
+  # 6. FEATURES - Backend modules and capabilities
+  # ============================================================================
+  "features": {
+    "authentication": {
+      "description": "User accounts and access control",
+      "options": {
+        "email_password": "Traditional email + password",
+        "social": "Google, GitHub, Facebook login",
+        "sso": "Single sign-on (SAML, OAuth)",
+        "magic_link": "Passwordless email links",
+        "phone_otp": "SMS one-time passwords"
+      },
+      "services": ["Supabase Auth", "Clerk", "Auth0", "Firebase Auth", "NextAuth"]
+    },
+    "payments": {
+      "description": "Payment processing and subscriptions",
+      "options": {
+        "stripe": "Full payments + subscriptions + invoicing",
+        "paddle": "EU-focused with VAT handling",
+        "paypal": "Consumer payment option",
+        "razorpay": "Asia-focused"
+      },
+      "services": ["Stripe", "Paddle", "R", "PayPalazorpay"]
+    },
+    "file_uploads": {
+      "description": "User file/media uploads",
+      "options": {
+        "images_only": "Profile pics, thumbnails",
+        "documents": "PDFs, docs",
+        "video_audio": "Media uploads",
+        "large_files": "Large file handling"
+      },
+      "services": ["Supabase Storage", "AWS S3", "Cloudinary", "UploadThing"]
+    },
+    "realtime": {
+      "description": "Live updates, chat, notifications",
+      "services": ["Supabase Realtime", "Pusher", "Socket.io", "Ably"]
+    },
+    "search": {
+      "description": "Search functionality",
+      "options": {
+        "basic": "Database LIKE queries",
+        "full_text": "Postgres full-text search",
+        "dedicated": "Elasticsearch, Algolia"
+      },
+      "services": ["Algolia", "Meilisearch", "Elasticsearch", "Postgres TSVECTOR"]
+    },
+    "email": {
+      "description": "Transactional and marketing email",
+      "services": ["Resend", "SendGrid", "Mailgun", "Postmark", "AWS SES"]
+    },
+    "background_jobs": {
+      "description": "Async processing for heavy tasks",
+      "services": ["Inngest", "Trigger.dev", "AWS SQS", "BullMQ", "Redis"]
+    },
+    "analytics": {
+      "description": "User behavior analytics",
+      "services": ["PostHog", "Mixpanel", "Amplitude", "Google Analytics"]
+    },
+    "logging": {
+      "description": "Application logging",
+      "services": ["Datadog", "Sentry", "LogRocket", "Pino"]
+    },
+    "api": {
+      "description": "API for third-party developers",
+      "options": {
+        "rest": "RESTful API",
+        "graphql": "GraphQL API",
+        "both": "Both"
+      }
+    },
+    "webhooks": {
+      "description": "HTTP callbacks for events",
+      "services": ["Svix", "Webhook.site"]
+    }
+  },
+
+  # ============================================================================
+  # 7. BACKEND FRAMEWORKS
+  # ============================================================================
+  "backendFrameworks": {
+    "node": {
+      "category": "JavaScript runtime",
+      "description": "Build backend with JavaScript/TypeScript",
+      "frameworks": {
+        "express": {
+          "description": "Minimal, flexible Node.js web framework",
+          "bestFor": "APIs, simple to medium apps",
+          "pros": ["simple", "flexible", "huge ecosystem"],
+          "cons": ["requires setup for structure"]
+        },
+        "nestjs": {
+          "description": "Progressive Node.js framework (like Angular for backend)",
+          "bestFor": "Enterprise, large apps",
+          "pros": ["structured", "TypeScript first", "DI"],
+          "cons": ["learning curve", "verbose"]
+        },
+        "fastify": {
+          "description": "Fast, low-overhead web framework",
+          "bestFor": "High performance APIs",
+          "pros": ["fast", "schema validation"],
+          "cons": ["smaller ecosystem"]
+        },
+        "nextjs": {
+          "description": "Full-stack React framework",
+          "bestFor": "Full-stack apps, SSR",
+          "pros": ["SSR/SSG", "API routes", "React"],
+          "cons": ["complexity"]
+        }
+      }
+    },
+    "python": {
+      "category": "Python",
+      "description": "Build backend with Python",
+      "frameworks": {
+        "django": {
+          "description": "High-level Python web framework",
+          "bestFor": "Django apps, rapid dev",
+          "pros": ["batteries included", "admin panel", "ORM"],
+          "cons": ["heavy", "complex"]
+        },
+        "fastapi": {
+          "description": "Modern Python API framework",
+          "bestFor": "APIs, async",
+          "pros": ["fast", "auto docs", "Pydantic"],
+          "cons": ["newer"]
+        },
+        "flask": {
+          "description": "Lightweight Python WSGI web framework",
+          "bestFor": "Small apps, microservices",
+          "pros": ["simple", "flexible"],
+          "cons": ["requires more setup"]
+        }
+      }
+    },
+    "php": {
+      "category": "PHP",
+      "description": "Build backend with PHP",
+      "frameworks": {
+        "laravel": {
+          "description": "Elegant PHP web framework",
+          "bestFor": "Full-stack apps, SaaS",
+          "pros": ["beautiful syntax", "ecosystem", "Blade"],
+          "cons": ["can be slow", "hosting"]
+        },
+        "symfony": {
+          "description": "PHP framework and set of reusable components",
+          "bestFor": "Enterprise",
+          "pros": ["components", "enterprise ready"],
+          "cons": ["complex"]
+        }
+      }
+    },
+    "go": {
+      "category": "Go",
+      "description": "Build backend with Go (Golang)",
+      "frameworks": {
+        "gin": {
+          "description": "HTTP web framework",
+          "bestFor": "High performance APIs",
+          "pros": ["fast", "minimal"],
+          "cons": ["less features"]
+        },
+        "fiber": {
+          "description": "Express-like Go framework",
+          "bestFor": "High performance",
+          "pros": ["fast", "familiar syntax"]
+        }
+      }
+    },
+    "java": {
+      "category": "Java/JVM",
+      "description": "Build backend with Java",
+      "frameworks": {
+        "spring": {
+          "description": "Java application framework",
+          "bestFor": "Enterprise apps",
+          "pros": ["enterprise ready", "mature"],
+          "cons": ["complex"]
+        }
+      }
+    },
+    "supabase": {
+      "category": "Backend-as-a-Service",
+      "description": "Open-source Firebase alternative built on Postgres",
+      "includes": ["PostgreSQL", "Auth", "Storage", "Edge Functions", "Realtime", "API auto-generation"],
+      "bestFor": "Quick MVP, startups, SaaS"
+    },
+    "firebase": {
+      "category": "Backend-as-a-Service",
+      "description": "Google's mobile and web application development platform",
+      "includes": ["Firestore", "Auth", "Storage", "Cloud Functions", "Realtime"],
+      "bestFor": "Mobile apps, rapid prototyping"
+    }
+  },
+
+  # ============================================================================
+  # 8. DATABASES
+  # ============================================================================
+  "databases": {
+    "sql": {
+      "postgresql": {
+        "description": "Advanced open-source relational database",
+        "bestFor": "Most web apps, SaaS, marketplaces",
+        "pros": ["powerful", "reliable", "JSON support"],
+        "services": ["Supabase", "Neon", "Railway", "AWS RDS", "Cloud SQL"]
+      },
+      "mysql": {
+        "description": "Popular open-source relational database",
+        "bestFor": "Web apps, WordPress",
+        "pros": ["popular", "easy"],
+        "cons": ["less advanced than Postgres"],
+        "services": ["AWS RDS", "Cloud SQL", "PlanetScale"]
+      },
+      "sqlite": {
+        "description": "Embedded database - file-based",
+        "bestFor": "Local apps, mobile, edge cases",
+        "pros": ["simple", "no setup", "fast"],
+        "cons": ["not for production web"]
+      },
+      "mariadb": {
+        "description": "MySQL fork - enhanced",
+        "bestFor": "Drop-in MySQL replacement",
+        "pros": ["compatible", "better performance"]
+      }
+    },
+    "nosql": {
+      "mongodb": {
+        "description": "Document database - flexible JSON-like",
+        "bestFor": "Flexible schemas, rapid prototyping",
+        "pros": ["flexible", "JSON native"],
+        "cons": ["not relational"],
+        "services": ["MongoDB Atlas"]
+      },
+      "dynamodb": {
+        "description": "AWS serverless NoSQL database",
+        "bestFor": "AWS-heavy apps, serverless",
+        "pros": ["serverless", "fast", "scales"],
+        "cons": ["vendor lock-in", "expensive"]
+      },
+      "firestore": {
+        "description": "Google's NoSQL document database",
+        "bestFor": "Firebase apps, mobile",
+        "pros": ["real-time", "offline"],
+        "cons": ["pricing", "limited queries"]
+      },
+      "redis": {
+        "description": "In-memory data store",
+        "bestFor": "Caching, sessions, real-time",
+        "pros": ["blazing fast", "versatile"],
+        "cons": ["memory-based", "not primary DB"],
+        "services": ["Redis Cloud", "Upstash", "AWS ElastiCache"]
+      },
+      "elasticsearch": {
+        "description": "Search and analytics engine",
+        "bestFor": "Full-text search, logs",
+        "pros": ["powerful search", "analytics"],
+        "cons": ["complex", "resource heavy"]
+      },
+      "neon": {
+        "description": "Serverless Postgres",
+        "bestFor": "Serverless architectures",
+        "pros": ["serverless", "branching", "free tier"]
+      }
+    }
+  },
+
+  # ============================================================================
+  # 9. HOSTING & DEPLOYMENT
+  # ============================================================================
+  "hosting": {
+    "paas": {
+      "vercel": {
+        "description": "Frontend + serverless platform",
+        "bestFor": "Next.js, frontend, serverless functions",
+        "features": ["CDN", "Edge Functions", "Deploy Previews", "Analytics"],
+        "free": "Generous free tier"
+      },
+      "netlify": {
+        "description": "Frontend + serverless platform",
+        "bestFor": "Static sites, JAMstack",
+        "features": ["CDN", "Functions", "Forms", "Identity"]
+      },
+      "heroku": {
+        "description": "Platform as a service",
+        "bestFor": "Full-stack apps, prototypes",
+        "features": ["Dynos", "Add-ons", "Deploy"],
+        "cons": ["expensive", "sleeps on free tier"]
+      },
+      "railway": {
+        "description": "Modern PaaS",
+        "bestFor": "Full-stack, quick deploy",
+        "features": ["Templates", "Database", "Edge Functions"]
+      },
+      "fly": {
+        "description": "Distributed app platform",
+        "bestFor": "Global apps, containers",
+        "features": ["Edge", "Postgres", "Redis"]
+      }
+    },
+    "iaas": {
+      "aws": {
+        "description": "Amazon Web Services",
+        "services": ["EC2", "RDS", "S3", "Lambda", "ECS/EKS", "CloudFront"]
+      },
+      "gcp": {
+        "description": "Google Cloud Platform",
+        "services": ["Compute Engine", "Cloud SQL", "Cloud Storage", "Cloud Functions", "GKE"]
+      },
+      "azure": {
+        "description": "Microsoft Azure",
+        "services": ["VM", "Azure SQL", "Blob Storage", "Functions", "AKS"]
+      },
+      "digitalocean": {
+        "description": "Developer-friendly cloud",
+        "services": ["Droplets", "Managed DB", "Spaces", "Kubernetes"]
+      }
+    }
+  },
+
+  # ============================================================================
+  # 10. DEVELOPMENT TOOLS
+  # ============================================================================
+  "devTools": {
+    "containerization": {
+      "docker": {
+        "description": "Container platform for packaging apps",
+        "bestFor": "Consistent environments, deployment"
+      },
+      "kubernetes": {
+        "description": "Container orchestration",
+        "bestFor": "Production at scale, multiple services",
+        "managed": ["GKE", "EKS", "AKS", "DOKS"]
+      }
+    },
+    "cicd": {
+      "github_actions": {
+        "description": "GitHub's CI/CD platform",
+        "bestFor": "GitHub repos"
+      },
+      "gitlab_ci": {
+        "description": "GitLab's CI/CD",
+        "bestFor": "GitLab repos"
+      },
+      "vercel": {
+        "description": "Automatic deployments",
+        "bestFor": "Vercel-hosted apps"
+      },
+      "circleci": {
+        "description": "Cloud CI/CD",
+        "bestFor": "Flexible pipelines"
+      }
+    },
+    "monitoring": {
+      "datadog": {
+        "description": "Full-stack monitoring",
+        "bestFor": "Enterprise monitoring"
+      },
+      "sentry": {
+        "description": "Error tracking",
+        "bestFor": "Application errors"
+      },
+      "pagerduty": {
+        "description": "Incident response",
+        "bestFor": "On-call, alerts"
+      }
+    },
+    "version_control": {
+      "github": {
+        "description": "Git hosting and collaboration"
+      },
+      "gitlab": {
+        "description": "Git with CI/CD built-in"
+      },
+      "bitbucket": {
+        "description": "Atlassian's Git solution"
+      }
+    }
+  },
+
+  # ============================================================================
+  # 11. API STYLES & PROTOCOLS
+  # ============================================================================
+  "apiStyles": {
+    "rest": {
+      "description": "RESTful API - standard web API",
+      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"],
+      "format": "JSON",
+      "when": "Default choice for most APIs"
+    },
+    "graphql": {
+      "description": "Query language for APIs",
+      "benefits": ["precise data fetching", "single endpoint"],
+      "when": "Multiple clients, complex data requirements"
+    },
+    "websockets": {
+      "description": "Bidirectional real-time communication",
+      "useCases": ["chat", "notifications", "live updates", "gaming"],
+      "services": ["Socket.io", "ws", "Supabase Realtime"]
+    },
+    "webhooks": {
+      "description": "Server-initiated HTTP callbacks",
+      "useCases": ["Integrations", "notifications", "event-driven"],
+      "services": ["Svix", "Webhook.site"]
+    },
+    "grpc": {
+      "description": "High-performance RPC",
+      "format": "Protocol Buffers",
+      "useCases": ["Microservices", "mobile", "low latency"],
+      "when": "Internal services, performance critical"
+    }
+  },
+
+  # ============================================================================
+  # 12. TEAM SIZE DECISIONS
+  # ============================================================================
+  "teamScale": {
+    "solo": {
+      "maxDevs": 1,
+      "recommended": {
+        "frontend": "Next.js or SPA",
+        "backend": "Supabase or BaaS",
+        "structure": "Simple, minimal complexity"
+      },
+      "avoid": ["microservices", "complex orchestration"]
+    },
+    "small": {
+      "maxDevs": 5,
+      "recommended": {
+        "frontend": "Modular monolith",
+        "backend": "Monolith or BFF",
+        "structure": "Domain-based folders"
+      },
+      "avoid": ["microfrontends"]
+    },
+    "medium": {
+      "maxDevs": 20,
+      "recommended": {
+        "frontend": "Modular monolith with clear boundaries",
+        "backend": "Modular monolith or split services",
+        "structure": "Clear domain separation"
+      },
+      "avoid": ["microfrontends"]
+    },
+    "large": {
+      "maxDevs": 50,
+      "recommended": {
+        "frontend": "Modular or microfrontends if needed",
+        "backend": "Service-oriented",
+        "structure": "Team autonomy per domain"
+      }
+    },
+    "enterprise": {
+      "maxDevs": 100,
+      "recommended": {
+        "frontend": "Microfrontends",
+        "backend": "Microservices",
+        "structure": "Full separation, platform team"
+      }
+    }
+  },
+
+  # ============================================================================
+  # DECISION TREES
+  # ============================================================================
+  "decisionTree": {
+    "frontend": [
+      {
+        "question": "Is the site mostly static?",
+        "yes": "static_pages",
+        "no": "Continue"
+      },
+      {
+        "question": "Does the product require high interactivity?",
+        "yes": "spa",
+        "no": "ssr"
+      },
+      {
+        "question": "Does SEO matter?",
+        "yes": "ssr",
+        "no": "spa"
+      },
+      {
+        "question": "Do you support multiple client apps?",
+        "yes": "bff",
+        "no": "Continue"
+      },
+      {
+        "question": "How many engineers?",
+        "lessThan20": "modular_monolith",
+        "20to200": "strong_modular",
+        "moreThan200": "microfrontends"
+      }
+    ],
+    "backend": [
+      {
+        "question": "Do you need full backend control?",
+        "yes": "Continue",
+        "no": "supabase_or_firebase"
+      },
+      {
+        "question": "What language preference?",
+        "javascript": ["express", "nestjs", "nextjs"],
+        "python": ["django", "fastapi"],
+        "php": ["laravel"],
+        "go": ["gin", "fiber"]
+      },
+      {
+        "question": "Scale requirements?",
+        "small": "monolith",
+        "large": "services"
+      }
+    ],
+    "database": [
+      {
+        "question": "Is data relational?",
+        "yes": "postgres",
+        "no": "Continue"
+      },
+      {
+        "question": "Need flexible schemas?",
+        "yes": "mongodb",
+        "no": "Continue"
+      },
+      {
+        "question": "Need caching?",
+        "yes": "redis"
+      },
+      {
+        "question": "Need search?",
+        "yes": "elasticsearch_or_algolia"
+      }
+    ]
+  },
+
+  # ============================================================================
+  # MODULE GENERATION RULES
+  # ============================================================================
+  "moduleRules": {
+    "auth": {
+      "trigger": "feature_authentication",
+      "generate": ["login", "register", "logout", "password_reset", "session_management"]
+    },
+    "billing": {
+      "trigger": "feature_payments",
+      "generate": ["checkout", "subscriptions", "invoices", "webhooks_handler", "usage_tracking"]
+    },
+    "orders": {
+      "trigger": "productType_marketplace OR productType_ecommerce",
+      "generate": ["create", "read", "update", "cancel", "status_tracking"]
+    },
+    "inventory": {
+      "trigger": "productType_marketplace OR productType_ecommerce",
+      "generate": ["stock_management", "reservations", "low_stock_alerts"]
+    },
+    "messaging": {
+      "trigger": "feature_realtime OR productType_social",
+      "generate": ["send", "receive", "threads", "read_status"]
+    },
+    "notifications": {
+      "trigger": "feature_realtime OR productType_social",
+      "generate": ["push", "email", "in_app", "preferences"]
+    },
+    "search": {
+      "trigger": "feature_search",
+      "generate": ["query", "filters", "sorting", "autocomplete"]
+    },
+    "media": {
+      "trigger": "dataType_images OR dataType_video OR dataType_audio",
+      "generate": ["upload", "process", "transform", "cdn_delivery"]
+    },
+    "analytics": {
+      "trigger": "feature_analytics OR productType_saas",
+      "generate": ["track_event", "dashboard", "export", "cohorts"]
+    },
+    "admin": {
+      "trigger": "productType_internal",
+      "generate": ["user_management", "settings", "audit_log", "reports"]
+    }
+  }
+}
