@@ -4,7 +4,7 @@ A question-oriented wizard that helps entrepreneurs and developers define their 
 
 I really wanna just say that if we tackle this project as a community we can gift a opensource tool that'd help tons of young devs succeed in the wilderness of the corporate establishment. With new and exciting tools like agentic skills and swarms building has never been easier with the right people. Schema builds, security compliance and principle of system architecture is almost a after thought. Most builds today are insecure shipped productions that hit the marketplace where your 8 year old kid can purchase a silly banana treat from a game. Then your most intimate details are on the web, no rls, no backend sometimes, no real thought for stack design entirely. This wizard should help create a checklist, tree and schema to help keep young shippers intact with compliancy standards while they ship new and exciting things. As we develop this new and fun repo, planning your tech stack will become easier when shipping SaaS related productions. Please enjoy. If you have an idea or a comment....let me know I might be thinking it but haven't had the time to build this. It is open so, feel free to make a edit. Just don't delete anything. Be responsible. 
 
-## 🌟 Features
+##  Features
 
 ### Question Wizard
 - **29+ intelligent questions** covering product type, client architecture, frontend/backend, scale, deployment
@@ -30,7 +30,7 @@ I really wanna just say that if we tackle this project as a community we can gif
 - **Implementation Checklist** - phase-by-phase task list with required modules
 - **Deployment Guide** - step-by-step Vercel + Supabase setup
 
-## 🚀 Quick Start
+##  Quick Start
 
 1. Open `index.html` in any modern browser
 2. Enter your project name
@@ -38,7 +38,7 @@ I really wanna just say that if we tackle this project as a community we can gif
 4. Generate your blueprint
 5. View/download the architecture documents
 
-## 📖 How It Works
+##  How It Works
 
 ### Question Flow
 1. **Product Type** → Defines core modules needed
@@ -66,7 +66,7 @@ Scale: 100K users
   → Redis caching essential
 ```
 
-## 🎯 What's Generated
+##  What's Generated
 
 ### Architecture Blueprint
 - Overview (frontend, backend, database, scale)
@@ -94,7 +94,7 @@ Scale: 100K users
 - Environment variables reference
 - Production checklist
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 - **Single HTML file** - No build step required
 - **Vanilla JavaScript** - No frameworks
@@ -102,7 +102,7 @@ Scale: 100K users
 - **CSS Variables** - Easy theming
 - **Google Fonts** - Outfit + DM Sans
 
-## 📁 Files
+##  Files
 
 ```
 StackTracker/
@@ -113,7 +113,7 @@ StackTracker/
 └── README.md              # This file
 ```
 
-## 🔧 Customization
+##  Customization
 
 ### Adding Questions
 Edit the `questions` array in `index.html`:
@@ -144,17 +144,17 @@ const knowledgeSchema = {
 };
 ```
 
-## 📋 To Do
+##  To Do
 
 - [ ] CRUD Matrix generator tab
 - [ ] Enhanced deployment guide
 - [ ] Responsive mobile/tablet design
 - [ ] File export/download feature
 
-## 📄 License
+##  License
 
 MIT
 
-## 🤝 Contributing
+##  Contributing
 
 Issues and PRs welcome at https://github.com/puvuglobal/Stack-Tracker
