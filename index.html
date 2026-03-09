@@ -105,14 +105,116 @@
     .screen { display: none; }
     .screen.active { display: block; }
     
-    @media(max-width:700px){ .sidebar{display:none} .main{margin-left:0} .review-grid{grid-template-columns:1fr} }
+    /* Mobile menu toggle */
+    .mobile-menu-btn { display: none; position: fixed; top: 12px; left: 12px; z-index: 1000; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px; cursor: pointer; }
+    .mobile-menu-btn span { display: block; width: 20px; height: 2px; background: var(--text); margin: 4px 0; }
+    .mobile-close-btn { display: block; }
+    
+    /* Responsive styles */
+    @media(max-width:768px){
+      .mobile-menu-btn { display: block; }
+      .mobile-close-btn { display: block !important; }
+      
+      /* Sidebar as overlay */
+      .sidebar { 
+        position: fixed; 
+        left: -280px; 
+        z-index: 999; 
+        transition: left 0.3s ease;
+        width: 260px;
+      }
+      .sidebar.open { left: 0; }
+      .sidebar-overlay { 
+        display: none; 
+        position: fixed; 
+        inset: 0; 
+        background: rgba(0,0,0,0.5); 
+        z-index: 998;
+      }
+      .sidebar-overlay.open { display: block; }
+      
+      /* Main content */
+      .main { margin-left: 0; padding: 16px; padding-top: 60px; }
+      
+      /* Header */
+      .header-row { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .header-row h1 { font-size: 20px; }
+      .progress { width: 100%; }
+      .progress-bar { flex: 1; }
+      
+      /* Question card */
+      .card { padding: 16px; }
+      .q-title { font-size: 18px; }
+      .q-desc { font-size: 13px; }
+      
+      /* Options - touch friendly */
+      .option { padding: 12px; min-height: 44px; }
+      .option-title { font-size: 14px; }
+      .option-desc { font-size: 12px; }
+      .option-stack { font-size: 10px; }
+      .option-radio { width: 20px; height: 20px; }
+      
+      /* Knowledge panel */
+      .knowledge { padding: 12px; }
+      .knowledge h3 { font-size: 12px; }
+      .knowledge p { font-size: 12px; }
+      
+      /* Navigation */
+      .nav { flex-direction: column; gap: 8px; }
+      .nav-left, .nav-right { width: 100%; }
+      .nav button { width: 100%; padding: 14px; font-size: 14px; }
+      .btn { min-height: 44px; }
+      
+      /* Review grid */
+      .review-grid { grid-template-columns: 1fr; }
+      
+      /* Welcome */
+      .welcome { padding: 40px 16px; }
+      .welcome h1 { font-size: 28px; }
+      .welcome p { font-size: 14px; }
+      
+      /* Results */
+      .tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .tab { white-space: nowrap; padding: 10px 14px; font-size: 13px; }
+      .results-actions { flex-direction: column; }
+      .results-actions .btn { width: 100%; }
+      .doc-body { max-height: 300px; }
+      .doc-body pre { font-size: 11px; }
+      
+      /* Sidebar in mobile */
+      .idea-btn { padding: 14px; }
+      .idea-item { padding: 12px; min-height: 44px; }
+      .idea-checkbox { width: 20px; height: 20px; }
+    }
+    
+    @media(max-width:480px){
+      .main { padding: 12px; padding-top: 60px; }
+      .card { padding: 12px; border-radius: 8px; }
+      .q-category { font-size: 11px; padding: 3px 8px; }
+      .q-title { font-size: 16px; }
+      .q-desc { font-size: 12px; }
+      .option { padding: 10px; gap: 10px; }
+      .option-icon { width: 24px; height: 24px; }
+      .option-icon svg { width: 12px; height: 12px; }
+      .progress-text { font-size: 11px; }
+      .welcome h1 { font-size: 24px; }
+    }
   </style>
 </head>
 <body>
 <div class="app">
-  <aside class="sidebar">
+  <!-- Mobile menu button -->
+  <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </button>
+  
+  <!-- Sidebar overlay for mobile -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileMenu()"></div>
+  
+  <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <h2><span class="logo-box">ST</span> StackTracker</h2>
+      <button class="mobile-close-btn" onclick="toggleMobileMenu()" style="display:none;background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;">✕</button>
     </div>
     <div class="sidebar-actions">
       <button class="sidebar-btn" onclick="resetCurrentIdea()">↺ Reset</button>
@@ -257,6 +359,118 @@ const knowledgeSchema = {
     { q: 'Need caching?', yes: 'redis', no: 'Continue' }
   ],
   
+  // DATABASE ENTITIES BY PRODUCT TYPE
+  entities: {
+    marketplace: [
+      { name: 'users', create: '✓', read: '✓ (all)', update: '✓ (self)', delete: '✓ (admin)', rls: 'auth.uid() = user_id', api: 'GET/POST /users' },
+      { name: 'products', create: '✓ (seller)', read: '✓ (all)', update: '✓ (owner)', delete: '✓ (owner)', rls: 'seller_id = auth.uid()', api: 'GET/POST /products' },
+      { name: 'categories', create: '✓ (admin)', read: '✓ (all)', update: '✓ (admin)', delete: '✓ (admin)', rls: 'admin only', api: 'GET/POST /categories' },
+      { name: 'orders', create: '✓ (buyer)', read: '✓ (buyer+seller)', update: '✓ (buyer)', delete: '✗', rls: 'buyer_id = auth.uid() OR seller_id = auth.uid()', api: 'GET/POST /orders' },
+      { name: 'order_items', create: '✓ (system)', read: '✓ (buyer+seller)', update: '✗', delete: '✗', rls: 'order.buyer_id = auth.uid()', api: 'GET /orders/:id/items' },
+      { name: 'payments', create: '✓ (system)', read: '✓ (buyer+admin)', update: '✗', delete: '✗', rls: 'user_id = auth.uid()', api: 'GET /payments' },
+      { name: 'reviews', create: '✓ (buyer)', read: '✓ (all)', update: '✓ (self)', delete: '✓ (self)', rls: 'user_id = auth.uid()', api: 'GET/POST /reviews' },
+      { name: 'messages', create: '✓ (user)', read: '✓ (sender+receiver)', update: '✓ (self)', delete: '✓ (self)', rls: 'sender_id = auth.uid() OR receiver_id = auth.uid()', api: 'GET/POST /messages' }
+    ],
+    saas: [
+      { name: 'users', create: '✓ (admin)', read: '✓ (all)', update: '✓ (self)', delete: '✓ (admin)', rls: 'auth.uid() = user_id', api: 'GET/POST /users' },
+      { name: 'organizations', create: '✓ (user)', read: '✓ (member)', update: '✓ (admin)', delete: '✓ (owner)', rls: 'org_id IN (SELECT org_id FROM team_members WHERE user_id = auth.uid())', api: 'GET/POST /orgs' },
+      { name: 'subscriptions', create: '✓ (system)', read: '✓ (org admin)', update: '✓ (admin)', delete: '✗', rls: 'org_id IN (SELECT org_id FROM team_members WHERE user_id = auth.uid() AND role = admin)', api: 'GET /subscriptions' },
+      { name: 'teams', create: '✓ (org admin)', read: '✓ (member)', update: '✓ (admin)', delete: '✓ (owner)', rls: 'org_id IN (SELECT org_id FROM team_members WHERE user_id = auth.uid())', api: 'GET/POST /teams' },
+      { name: 'team_members', create: '✓ (org admin)', read: '✓ (member)', update: '✓ (admin)', delete: '✓ (admin)', rls: 'org_id IN (SELECT org_id FROM team_members WHERE user_id = auth.uid())', api: 'GET/POST /team-members' },
+      { name: 'settings', create: '✓ (admin)', read: '✓ (member)', update: '✓ (admin)', delete: '✗', rls: 'org_id IN (SELECT org_id FROM team_members WHERE user_id = auth.uid() AND role = admin)', api: 'GET/PUT /settings' },
+      { name: 'api_keys', create: '✓ (admin)', read: '✓ (owner)', update: '✗', delete: '✓ (owner)', rls: 'created_by = auth.uid()', api: 'GET/POST /api-keys' }
+    ],
+    social: [
+      { name: 'users', create: '✓', read: '✓ (all)', update: '✓ (self)', delete: '✓ (self)', rls: 'auth.uid() = user_id', api: 'GET/POST /users' },
+      { name: 'posts', create: '✓ (user)', read: '✓ (followers)', update: '✓ (self)', delete: '✓ (self)', rls: 'user_id = auth.uid() OR user_id IN (SELECT following_id FROM follows WHERE follower_id = auth.uid())', api: 'GET/POST /posts' },
+      { name: 'comments', create: '✓ (user)', read: '✓ (all)', update: '✓ (self)', delete: '✓ (self)', rls: 'user_id = auth.uid()', api: 'GET/POST /comments' },
+      { name: 'likes', create: '✓ (user)', read: '✓ (all)', update: '✗', delete: '✓ (self)', rls: 'user_id = auth.uid()', api: 'POST /posts/:id/like' },
+      { name: 'follows', create: '✓ (user)', read: '✓ (self)', update: '✗', delete: '✓ (self)', rls: 'follower_id = auth.uid() OR following_id = auth.uid()', api: 'POST /users/:id/follow' },
+      { name: 'messages', create: '✓ (user)', read: '✓ (sender+receiver)', update: '✗', delete: '✓ (sender)', rls: 'sender_id = auth.uid() OR receiver_id = auth.uid()', api: 'GET/POST /messages' },
+      { name: 'notifications', create: '✓ (system)', read: '✓ (recipient)', update: '✗', delete: '✓ (self)', rls: 'user_id = auth.uid()', api: 'GET /notifications' }
+    ],
+    ecommerce: [
+      { name: 'users', create: '✓', read: '✓ (all)', update: '✓ (self)', delete: '✓ (admin)', rls: 'auth.uid() = user_id', api: 'GET/POST /users' },
+      { name: 'products', create: '✓ (admin)', read: '✓ (all)', update: '✓ (admin)', delete: '✓ (admin)', rls: 'active = true', api: 'GET/POST /products' },
+      { name: 'categories', create: '✓ (admin)', read: '✓ (all)', update: '✓ (admin)', delete: '✓ (admin)', rls: 'admin only', api: 'GET/POST /categories' },
+      { name: 'cart_items', create: '✓ (user)', read: '✓ (self)', update: '✓ (self)', delete: '✓ (self)', rls: 'user_id = auth.uid()', api: 'GET/POST /cart' },
+      { name: 'orders', create: '✓ (user)', read: '✓ (self)', update: '✓ (self)', delete: '✗', rls: 'user_id = auth.uid()', api: 'GET/POST /orders' },
+      { name: 'payments', create: '✓ (system)', read: '✓ (self)', update: '✗', delete: '✗', rls: 'user_id = auth.uid()', api: 'GET /payments' },
+      { name: 'inventory', create: '✓ (admin)', read: '✓ (all)', update: '✓ (admin)', delete: '✗', rls: 'admin only', api: 'GET /inventory' }
+    ],
+    internal: [
+      { name: 'users', create: '✓ (admin)', read: '✓ (all)', update: '✓ (self)', delete: '✓ (admin)', rls: 'auth.uid() = user_id', api: 'GET/POST /users' },
+      { name: 'audit_logs', create: '✓ (system)', read: '✓ (admin)', update: '✗', delete: '✗', rls: 'admin only', api: 'GET /audit-logs' },
+      { name: 'reports', create: '✓ (user)', read: '✓ (self)', update: '✗', delete: '✓ (self)', rls: 'user_id = auth.uid()', api: 'GET /reports' }
+    ],
+    content: [
+      { name: 'users', create: '✓ (admin)', read: '✓ (all)', update: '✓ (self)', delete: '✓ (admin)', rls: 'auth.uid() = user_id', api: 'GET/POST /users' },
+      { name: 'posts', create: '✓ (author)', read: '✓ (published)', update: '✓ (author)', delete: '✓ (author)', rls: 'status = published OR author_id = auth.uid()', api: 'GET/POST /posts' },
+      { name: 'comments', create: '✓ (user)', read: '✓ (all)', update: '✓ (self)', delete: '✓ (self)', rls: 'approved = true', api: 'GET/POST /comments' }
+    ]
+  },
+  
+  // GENERATE CRUD MATRIX
+  generateCrudMatrix: function(answers) {
+    const productType = answers.p001 || 'saas';
+    const entities = this.entities[productType] || this.entities.saas;
+    
+    let matrix = `## CRUD Matrix for ${projectName}
+
+### Database Entities
+Based on product type: **${productType}**
+
+| Entity | Create | Read | Update | Delete | RLS Policy |
+|--------|--------|------|--------|--------|------------|
+`;
+    
+    entities.forEach(entity => {
+      matrix += `| ${entity.name} | ${entity.create} | ${entity.read} | ${entity.update} | ${entity.delete} | ${entity.rls} |
+`;
+    });
+    
+    matrix += `
+### API Endpoints
+
+| Entity | List | Get | Create | Update | Delete |
+|--------|------|-----|--------|--------|--------|
+`;
+    
+    entities.forEach(entity => {
+      const parts = entity.api.split(' ');
+      const getEndpoint = parts[0] === 'GET' ? `GET /${entity.name}` : 'GET ...';
+      const postEndpoint = parts.includes('POST') ? `POST /${entity.name}` : '-';
+      matrix += `| ${entity.name} | ${getEndpoint} | GET /${entity.name}/:id | ${postEndpoint} | PUT /${entity.name}/:id | DELETE /${entity.name}/:id |
+`;
+    });
+    
+    matrix += `
+### Row Level Security (RLS)
+
+All tables should have RLS enabled. Example policies:
+
+\`\`\`sql
+-- Enable RLS
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+
+-- Create policy
+CREATE POLICY "Users can view own data" ON users
+  FOR SELECT USING (auth.uid() = user_id);
+\`\`\`
+
+### Suggested Indexes
+`;
+    
+    entities.forEach(entity => {
+      matrix += `- \`${entity.name}\`: id, created_at`;
+      if (entity.name === 'orders' || entity.name === 'posts') matrix += ', user_id';
+      if (entity.name === 'order_items') matrix += ', order_id';
+      matrix += '\n';
+    });
+    
+    return matrix;
+  },
+   
   // MODULE GENERATION RULES
   generateModules: function(answers) {
     const modules = new Set(['auth', 'users']); // Always needed
@@ -545,6 +759,13 @@ function startQuiz() {
   updateProgress();
 }
 
+function toggleMobileMenu() {
+  const sidebar = $('sidebar');
+  const overlay = $('sidebarOverlay');
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('open');
+}
+
 function newIdea() {
   $('projectName').value = '';
   $('startBtn').disabled = true;
@@ -621,6 +842,14 @@ function saveCurrentIdea() {
   localStorage.setItem('stacktracker_ideas', JSON.stringify(ideas));
   renderIdeasList();
 }
+
+// Add "I Don't Know" option to all questions dynamically
+const idkOption = { v: 'idk', t: "I Don't Know", d: 'Skip this for now', i: '🤷', stack: 'Will use default recommendation' };
+questions.forEach(q => {
+  if (!q.options.find(o => o.v === 'idk')) {
+    q.options.push(idkOption);
+  }
+});
 
 function toggleIdeaSelection(id, e) {
   e.stopPropagation();
@@ -1058,7 +1287,25 @@ ${a.s001 === '100000' || a.s001 === '1000000' ? `- [ ] Set up read replicas
 }
 
 function saveToFile() {
-  const content = generateDoc('checklist');
+  const content = `# ${projectName} - Tech Stack Blueprint
+Generated by StackTracker
+
+${'='.repeat(50)}
+
+${generateDoc('architecture')}
+
+${'='.repeat(50)}
+
+${generateDoc('stack')}
+
+${'='.repeat(50)}
+
+${generateDoc('checklist')}
+
+${'='.repeat(50)}
+
+${generateDoc('deployment')}
+`;
   const blob = new Blob([content], { type: 'text/markdown' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -1069,8 +1316,19 @@ function saveToFile() {
 }
 
 function copyToClipboard() {
-  navigator.clipboard.writeText(generateDoc('checklist')).then(() => {
-    alert('Blueprint copied!');
+  const content = `# ${projectName} - Tech Stack Blueprint
+
+${generateDoc('architecture')}
+
+${generateDoc('stack')}
+
+${generateDoc('checklist')}
+
+${generateDoc('deployment')}`;
+  navigator.clipboard.writeText(content).then(() => {
+    alert('Full blueprint copied to clipboard!');
+  }).catch(() => {
+    alert('Failed to copy. Try downloading instead.');
   });
 }
 </script>
