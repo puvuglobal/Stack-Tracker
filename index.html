@@ -1050,7 +1050,8 @@ function generateBlueprint() {
     { id: 'architecture', name: 'Architecture', content: generateDoc('architecture') },
     { id: 'stack', name: 'Tech Stack', content: generateDoc('stack') },
     { id: 'checklist', name: 'Checklist', content: generateDoc('checklist') },
-    { id: 'deployment', name: 'Deployment', content: generateDoc('deployment') }
+    { id: 'deployment', name: 'Deployment', content: generateDoc('deployment') },
+    { id: 'variables', name: 'Variables', content: generateDoc('variables') }
   ];
 
   docs.forEach((doc, idx) => {
@@ -1599,6 +1600,15 @@ supabase db push
 supabase db reset
 \`\`\`
 `;
+  }
+  if (type === 'variables') {
+    // Simple sample of variable definitions for review; will be expanded via extractor
+    return `# Variables (Sample)
+- product_type: {Marketplace, SaaS, Social, Ecommerce, Internal, Content, Mobile First}
+- client_architecture: web, ios, android, desktop, public_api
+- data_types: images, video, audio, documents, realtime
+\nMore variables will be populated from the extraction pipeline in knowledge-schema.json`;
+  }
   return '';
 }
 

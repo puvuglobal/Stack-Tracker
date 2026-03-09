@@ -850,5 +850,34 @@
       "trigger": "productType_internal",
       "generate": ["user_management", "settings", "audit_log", "reports"]
     }
-  }
+  ,
+  "variables": [
+    {
+      "id": "v001",
+      "name": "product_type",
+      "category": "Product",
+      "description": "Type of product to build (marketplace, saas, social, ecommerce, internal, content, mobile_first)",
+      "type": "enum",
+      "options": ["marketplace", "saas", "social", "ecommerce", "internal", "content", "mobile_first"],
+      "dependencies": []
+    },
+    {
+      "id": "v002",
+      "name": "client_architecture",
+      "category": "Client",
+      "description": "Primary client architecture (web/ios/android/desktop/public_api)",
+      "type": "enum",
+      "options": ["web", "ios", "android", "desktop", "public_api"],
+      "dependencies": ["v001"]
+    },
+    {
+      "id": "v003",
+      "name": "data_types",
+      "category": "Data",
+      "description": "Data types involved (images, video, audio, documents, realtime)",
+      "type": "enum",
+      "options": ["images", "video", "audio", "documents", "realtime"],
+      "dependencies": ["v001"]
+    }
+  ]
 }
