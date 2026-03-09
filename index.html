@@ -219,6 +219,11 @@
       .progress-text { font-size: 11px; }
       .welcome h1 { font-size: 24px; }
     }
+  /* Light styling for Variables panel (loaded dynamically) */
+  .variables-list { padding: 8px 0; list-style: none; margin: 0; }
+  .variables-list li { padding: 6px 0; border-bottom: 1px solid #eee; font-size: 14px; }
+  .variables-header { font-weight: 700; margin-bottom: 6px; }
+  .variables-sub { font-size: 12px; color: var(--text2); }
   </style>
 </head>
 <body>
@@ -1074,6 +1079,47 @@ function generateBlueprint() {
   });
 
   showScreen('results');
+  // Load dynamic variables from knowledge-schema.json for the new 'variables' tab
+  try {
+    loadVariablesFromSchema();
+  } catch (e) {
+    console.warn('Variables loader failed', e);
+  }
+}
+
+function loadVariablesFromSchema() {
+  // fetch the knowledge schema and render the first 5 variables (or more if available)
+  fetch('knowledge-schema.json')
+    .then(r => r.json())
+    .then(data => {
+      const vars = data.variables || [];
+      const container = document.getElementById('variablesTab');
+      if (!container) return;
+      const header = document.createElement('div');
+      header.className = 'doc-header';
+      header.textContent = 'Variables (auto-loaded)';
+      const body = document.createElement('div');
+      body.className = 'doc-body';
+      const ul = document.createElement('ul');
+      ul.className = 'variables-list';
+      vars.slice(0, Math.min(20, vars.length)).forEach(v => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${v.name || v.id}</strong> <span class="variables-sub">(${v.category || 'Unknown'})</span> — ${v.description || ''}`;
+        ul.appendChild(li);
+      });
+      body.appendChild(ul);
+      // Replace the existing content of the variables tab (id + 'Tab')
+      const tabEl = document.getElementById('variablesTab');
+      if (tabEl) {
+        tabEl.innerHTML = '';
+        const card = document.createElement('div');
+        card.className = 'doc-card';
+        card.appendChild(header);
+        card.appendChild(body);
+        tabEl.appendChild(card);
+      }
+    })
+    .catch(err => console.warn('Failed to load knowledge variables', err));
 }
 
 function generateDoc(type) {
