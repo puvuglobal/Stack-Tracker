@@ -6,28 +6,44 @@
   <title>StackTracker - SaaS Architecture Decision Engine</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root { --primary: #1e3a5f; --secondary: #2d5a87; --accent: #00d4aa; --accent-dim: rgba(0,212,170,0.15); --bg: #0a1628; --surface: #12243d; --text: #e8f1f8; --text2: #8ba3bc; --border: #1e4976; }
+    :root { 
+      --primary: #1877F2;          /* Facebook Blue */
+      --primary-dark: #145DBF;      /* Darker blue for hover */
+      --primary-light: #E7F3FF;     /* Light blue background */
+      --secondary: #65676B;         /* Gray for secondary text */
+      --accent: #1877F2;            /* Facebook Blue as accent */
+      --bg: #FFFFFF;                /* White background */
+      --bg-alt: #F0F2F5;            /* Light gray alt background */
+      --surface: #FFFFFF;           /* White surface */
+      --text: #050505;              /* Near black text */
+      --text2: #65676B;             /* Gray text */
+      --text3: #8A8D91;             /* Lighter gray */
+      --border: #DD E0E4;           /* Light border */
+      --border-dark: #CED0D4;       /* Darker border */
+      --success: #42B72A;            /* Green for success */
+      --danger: #FA383E;             /* Red for danger */
+    }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    body { font-family: 'DM Sans', sans-serif background: var(--bg-alt); color: var(--text); min-height: 100vh; }
     h1, h2, h3 { font-family: 'Outfit', sans-serif; font-weight: 600; }
-    .app { display: flex; min-height: 100vh; }
+    .app { display: flex; min-height: 100vh; background: var(--bg-alt); }
     
     /* Sidebar */
-    .sidebar { width: 260px; background: var(--surface); border-right: 1px solid var(--border); padding: 16px; position: fixed; height: 100vh; display: flex; flex-direction: column; }
+    .sidebar { width: 260px; background: var(--surface); border-right: 1px solid var(--border); padding: 16px; position: fixed; height: 100vh; display: flex; flex-direction: column; box-shadow: 2px 0 8px rgba(0,0,0,0.05); }
     .sidebar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
     .sidebar-header h2 { font-size: 18px; display: flex; align-items: center; gap: 8px; }
-    .logo-box { width: 28px; height: 28px; background: linear-gradient(135deg, var(--accent), var(--secondary)); border-radius: 6px; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .logo-box { width: 28px; height: 28px; background: linear-gradient(135deg, var(--primary), #0D5DC7); border-radius: 8px; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; color: white; }
     .sidebar-actions { display: flex; gap: 6px; margin-bottom: 12px; }
     .sidebar-btn { flex: 1; padding: 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text2); font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
-    .sidebar-btn:hover { border-color: var(--accent); color: var(--text); }
-    .sidebar-btn.danger:hover { border-color: #ef4444; color: #ef4444; }
-    .idea-btn { width: 100%; padding: 10px; background: var(--accent); border: none; border-radius: 6px; color: var(--bg); font-weight: 600; cursor: pointer; margin-bottom: 12px; }
-    .idea-btn:hover { opacity: 0.9; }
+    .sidebar-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+    .sidebar-btn.danger:hover { border-color: var(--danger); color: var(--danger); background: #FFF0F0; }
+    .idea-btn { width: 100%; padding: 10px; background: var(--primary); border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer; margin-bottom: 12px; font-size: 14px; }
+    .idea-btn:hover { background: var(--primary-dark); }
     .ideas-list { overflow-y: auto; flex: 1; }
-    .idea-item { padding: 10px; border-radius: 6px; margin-bottom: 6px; cursor: pointer; border: 1px solid transparent; display: flex; align-items: center; gap: 8px; }
-    .idea-item:hover { background: rgba(255,255,255,0.05); }
-    .idea-item.active { background: var(--accent-dim); border-color: var(--accent); }
-    .idea-checkbox { width: 16px; height: 16px; accent-color: var(--accent); }
+    .idea-item { padding: 10px; border-radius: 8px; margin-bottom: 6px; cursor: pointer; border: 1px solid transparent; display: flex; align-items: center; gap: 8px; background: var(--bg-alt); }
+    .idea-item:hover { background: var(--primary-light); }
+    .idea-item.active { background: var(--primary-light); border-color: var(--primary); }
+    .idea-checkbox { width: 16px; height: 16px; accent-color: var(--primary); }
     .idea-name { flex: 1; font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .idea-date { font-size: 11px; color: var(--text2); }
     
@@ -37,35 +53,35 @@
     .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .header-row h1 { font-size: 24px; }
     .progress { display: flex; align-items: center; gap: 12px; }
-    .progress-bar { width: 120px; height: 6px; background: var(--surface); border-radius: 3px; overflow: hidden; }
-    .progress-fill { height: 100%; background: var(--accent); transition: width 0.3s; }
+    .progress-bar { width: 120px; height: 6px; background: var(--bg-alt); border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--primary); transition: width 0.3s; }
     .progress-text { font-size: 13px; color: var(--text2); }
     
     /* Cards */
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
-    .q-category { display: inline-block; padding: 4px 10px; background: var(--accent-dim); color: var(--accent); border-radius: 20px; font-size: 12px; margin-bottom: 12px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .q-category { display: inline-block; padding: 4px 10px; background: var(--primary-light); color: var(--primary); border-radius: 20px; font-size: 12px; margin-bottom: 12px; font-weight: 600; }
     .q-title { font-size: 22px; margin-bottom: 8px; }
     .q-desc { color: var(--text2); font-size: 14px; margin-bottom: 20px; }
-    .q-desc strong { color: var(--accent); }
+    .q-desc strong { color: var(--primary); }
     
     /* Options */
     .options { display: flex; flex-direction: column; gap: 8px; }
-    .option { padding: 14px 16px; background: var(--bg); border: 2px solid var(--border); border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all 0.2s; }
-    .option:hover { border-color: var(--accent); }
-    .option.selected { border-color: var(--accent); background: var(--accent-dim); }
-    .option-radio { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-    .option.selected .option-radio { border-color: var(--accent); background: var(--accent); }
-    .option.selected .option-radio::after { content: ''; width: 6px; height: 6px; background: var(--bg); border-radius: 50%; }
-    .option-icon { width: 28px; height: 28px; background: var(--primary); border-radius: 6px; display: flex; align-items: center; justify-content: center; }
-    .option-icon svg { width: 14px; height: 14px; stroke: var(--accent); }
+    .option { padding: 14px 16px; background: var(--surface); border: 2px solid var(--border); border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all 0.2s; }
+    .option:hover { border-color: var(--primary); background: var(--primary-light); }
+    .option.selected { border-color: var(--primary); background: var(--primary-light); }
+    .option-radio { width: 18px; height: 18px; border: 2px solid var(--border-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .option.selected .option-radio { border-color: var(--primary); background: var(--primary); }
+    .option.selected .option-radio::after { content: ''; width: 6px; height: 6px; background: white; border-radius: 50%; }
+    .option-icon { width: 28px; height: 28px; background: var(--primary-light); border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+    .option-icon svg { width: 14px; height: 14px; stroke: var(--primary); }
     .option-text { flex: 1; }
     .option-title { font-weight: 600; font-size: 14px; }
     .option-desc { font-size: 12px; color: var(--text2); }
-    .option-stack { font-size: 11px; color: var(--accent); margin-top: 4px; }
+    .option-stack { font-size: 11px; color: var(--primary); margin-top: 4px; font-weight: 500; }
     
     /* Knowledge */
-    .knowledge { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-top: 20px; }
-    .knowledge h3 { font-size: 13px; color: var(--accent); margin-bottom: 12px; }
+    .knowledge { background: var(--primary-light); border: 1px solid var(--primary); border-radius: 12px; padding: 16px; margin-top: 20px; }
+    .knowledge h3 { font-size: 13px; color: var(--primary); margin-bottom: 12px; }
     .knowledge p { font-size: 13px; color: var(--text2); line-height: 1.6; }
     .knowledge strong { color: var(--text); }
     
@@ -73,17 +89,19 @@
     .nav { display: flex; justify-content: space-between; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 8px; }
     .nav-left, .nav-right { display: flex; gap: 8px; }
     .btn { padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; font-size: 14px; }
-    .btn-primary { background: var(--accent); color: var(--bg); }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); }
     .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
     .btn:disabled { opacity: 0.5; cursor: not-allowed; }
     
     /* Welcome */
     .welcome { text-align: center; padding: 60px 20px; }
-    .welcome h1 { font-size: 36px; margin-bottom: 12px; }
+    .welcome h1 { font-size: 36px; margin-bottom: 12px; color: var(--primary); }
     .welcome p { color: var(--text2); max-width: 400px; margin: 0 auto 32px; }
     .input-box { margin-bottom: 20px; }
     .input-box input { width: 100%; max-width: 360px; padding: 14px; background: var(--surface); border: 2px solid var(--border); border-radius: 8px; color: var(--text); font-size: 16px; }
-    .input-box input:focus { outline: none; border-color: var(--accent); }
+    .input-box input:focus { outline: none; border-color: var(--primary); }
     .input-box label { display: block; text-align: left; font-size: 13px; color: var(--text2); margin-bottom: 6px; }
     
     /* Review */
@@ -93,13 +111,14 @@
     .review-item-value { font-size: 14px; font-weight: 600; }
     
     /* Results */
-    .tabs { display: flex; gap: 4px; background: var(--surface); padding: 4px; border-radius: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-    .tab { padding: 8px 16px; background: transparent; border: none; color: var(--text2); cursor: pointer; border-radius: 6px; font-size: 14px; }
-    .tab.active { background: var(--primary); color: var(--text); }
-    .doc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-    .doc-header { padding: 12px 16px; background: rgba(0,0,0,0.2); }
-    .doc-body { padding: 16px; max-height: 400px; overflow-y: auto; }
-    .doc-body pre { font-size: 12px; white-space: pre-wrap; line-height: 1.6; }
+    .tabs { display: flex; gap: 4px; background: var(--bg-alt); padding: 4px; border-radius: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .tab { padding: 8px 16px; background: transparent; border: none; color: var(--text2); cursor: pointer; border-radius: 6px; font-size: 14px; font-weight: 500; }
+    .tab:hover { background: var(--surface); }
+    .tab.active { background: var(--surface); color: var(--primary); box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+    .doc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .doc-header { padding: 12px 16px; background: var(--bg-alt); border-bottom: 1px solid var(--border); }
+    .doc-body { padding: 16px; max-height: 400px; overflow-y: auto; background: var(--surface); }
+    .doc-body pre { font-size: 12px; white-space: pre-wrap; line-height: 1.6; font-family: 'JetBrains Mono', monospace; }
     .results-actions { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
     
     .screen { display: none; }
@@ -122,6 +141,7 @@
         z-index: 999; 
         transition: left 0.3s ease;
         width: 260px;
+        box-shadow: 4px 0 20px rgba(0,0,0,0.15);
       }
       .sidebar.open { left: 0; }
       .sidebar-overlay { 
@@ -1231,57 +1251,353 @@ ${a.b006 && a.b006.length > 0 ? `### File Handling
 ## Architecture Overview
 ${archRecs.map(r => `- ${r}`).join('\n')}
 
+---
+
 ## Prerequisites
-- [ ] ${a.d001 || 'Vercel'} account (or Netlify/Cloudflare)
-- [ ] ${a.b001 || 'Supabase'} account
-- [ ] GitHub repository
-${a.b007 && a.b007 !== 'none' ? `- [ ] ${a.b007 === 'stripe' ? 'Stripe' : 'Paddle'} account` : ''}
+${a.b001 === 'supabase' || !a.b001 ? `- [ ] Supabase account (https://supabase.com)` : ''}
+${a.b001 === 'firebase' ? `- [ ] Firebase project (https://console.firebase.google.com)` : ''}
+- [ ] GitHub account
+- [ ] Node.js 18+ installed
+${a.d001 === 'vercel' ? `- [ ] Vercel account (https://vercel.com)` : ''}
+${a.d001 === 'netlify' ? `- [ ] Netlify account (https://netlify.com)` : ''}
+${a.b007 === 'stripe' ? `- [ ] Stripe account (https://stripe.com)` : ''}
+${a.b007 === 'paddle' ? `- [ ] Paddle account (https://paddle.com)` : ''}
 
-## Step 1: Backend (${a.b001 || 'Supabase'})
-1. Create ${a.b001 || 'Supabase'} project
-2. Run SQL migrations:
-   - Users table
-   - RLS (Row Level Security) policies
-   ${generatedModules.filter(m => m.includes('billing') || m.includes('order')).length > 0 ? '- Orders/Transactions tables' : ''}
-3. Configure auth providers${a.b004?.includes('google') ? '\n   - Google OAuth' : ''}${a.b004?.includes('github') ? '\n   - GitHub OAuth' : ''}
-${a.b006?.length > 0 ? '4. Set up Storage buckets' : ''}
-5. Configure environment variables in dashboard
+---
 
-## Step 2: Frontend
-1. Clone repository
-2. Install dependencies: \`npm install\`
-3. Create .env.local:
+## Step 1: Backend Setup
+
+### Option A: Supabase (Recommended)
+1. Create project at https://supabase.com
+2. Go to SQL Editor and run:
+
+\`\`\`sql
+-- Create profiles table (extends auth.users)
+CREATE TABLE profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  email TEXT,
+  full_name TEXT,
+  avatar_url TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable RLS
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+
+-- RLS Policies
+CREATE POLICY "Users can view own profile" ON profiles
+  FOR SELECT USING (auth.uid() = id);
+  
+CREATE POLICY "Users can update own profile" ON profiles
+  FOR UPDATE USING (auth.uid() = id);
+
+-- Auto-create profile on signup
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.profiles (id, email)
+  VALUES (NEW.id, NEW.email);
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 \`\`\`
-NEXT_PUBLIC_SUPABASE_URL=your_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
-${a.b007 && a.b007 !== 'none' ? `${a.b007.toUpperCase()}_SECRET_KEY=sk_${a.b007 === 'stripe' ? 'test_xxx' : 'xxx'}` : ''}
-${a.a001 === 'resend' ? 'RESEND_API_KEY=re_xxx' : ''}
+
+${a.p001 === 'marketplace' || a.p001 === 'ecommerce' ? `
+### Product Tables
+\`\`\`sql
+-- Products table
+CREATE TABLE products (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  seller_id UUID REFERENCES profiles(id),
+  title TEXT NOT NULL,
+  description TEXT,
+  price DECIMAL(10,2) NOT NULL,
+  category TEXT,
+  images TEXT[],
+  active BOOLEAN DEFAULT true,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Orders table
+CREATE TABLE orders (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  buyer_id UUID REFERENCES profiles(id),
+  status TEXT DEFAULT 'pending',
+  total DECIMAL(10,2),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable RLS
+ALTER TABLE products ENABLE ROW LEVEL SECURITY;
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+
+-- Product policies
+CREATE POLICY "Anyone can view active products" ON products
+  FOR SELECT USING (active = true);
+  
+CREATE POLICY "Sellers can manage own products" ON products
+  FOR ALL USING (seller_id = auth.uid());
 \`\`\`
-4. Test locally: \`npm run dev\`
-5. Deploy: \`vercel --prod\`
+` : ''}
 
-## Step 3: Environment Variables Reference
-| Variable | Description | Required |
-|----------|-------------|----------|
-| NEXT_PUBLIC_SUPABASE_URL | Supabase project URL | Yes |
-| NEXT_PUBLIC_SUPABASE_ANON_KEY | Supabase anon key | Yes |
-${a.b007 && a.b007 !== 'none' ? `| ${a.b007.toUpperCase()}_SECMIT_KEY | ${a.b007} secret key | Yes |` : ''}
-${a.a001 === 'resend' ? '| RESEND_API_KEY | Resend API key | Conditional |' : ''}
+${a.p001 === 'saas' ? `
+### SaaS Tables
+\`\`\`sql
+-- Organizations
+CREATE TABLE organizations (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  owner_id UUID REFERENCES profiles(id),
+  plan TEXT DEFAULT 'free',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
 
-## Step 4: Production Checklist
-- [ ] Custom domain connected
-- [ ] SSL certificate active
-- [ ] Environment variables set in Vercel
-- [ ] Webhook endpoints tested
-- [ ] Database backups configured
-- [ ] Monitoring alerts set up
+-- Team members
+CREATE TABLE team_members (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  org_id UUID REFERENCES organizations(id),
+  user_id UUID REFERENCES profiles(id),
+  role TEXT DEFAULT 'member',
+  joined_at TIMESTAMPTZ DEFAULT NOW()
+);
 
-## Scale Considerations (${a.s001 || 'Startup'} users)
-${a.s001 === '100000' || a.s001 === '1000000' ? `- [ ] Set up read replicas
-- [ ] Configure Redis caching
-- [ ] Set up CDN
-- [ ] Implement rate limiting
-- [ ] Configure horizontal scaling` : '- [ ] Basic tier sufficient for <100K users'}
+-- Enable RLS
+ALTER TABLE organizations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE team_members ENABLE ROW LEVEL SECURITY;
+\`\`\`
+` : ''}
+
+### Option B: Firebase
+1. Create project at Firebase Console
+2. Install SDK: \`npm install firebase\`
+3. Initialize in your app:
+
+\`\`\`javascript
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  // ... other config
+};
+
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
+export const auth = getAuth(app);
+\`\`\`
+
+---
+
+## Step 2: Frontend Setup
+
+### Clone & Install
+\`\`\`bash
+git clone https://github.com/yourusername/${projectName.toLowerCase().replace(/\s+/g, '-')}
+cd ${projectName.toLowerCase().replace(/\s+/g, '-')}
+npm install
+\`\`\`
+
+### Environment Variables
+Create \`.env.local\`:
+
+${a.b001 === 'supabase' || !a.b001 ? `\`\`\`
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+\`\`\`
+` : ''}
+${a.b001 === 'firebase' ? `\`\`\`
+# Firebase
+NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+\`\`\`
+` : ''}
+${a.b007 === 'stripe' ? `\`\`\`
+# Stripe
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_xxx
+STRIPE_SECRET_KEY=sk_test_xxx
+STRIPE_WEBHOOK_SECRET=whsec_xxx
+\`\`\`
+` : ''}
+${a.b007 === 'paddle' ? `\`\`\`
+# Paddle
+NEXT_PUBLIC_PADDLE_CLIENT_TOKEN=xxx
+PADDLE_API_KEY=xxx
+PADDLE_WEBHOOK_SECRET=xxx
+\`\`\`
+` : ''}
+${a.a001 === 'resend' ? `\`\`\`
+# Resend
+RESEND_API_KEY=re_xxx
+\`\`\`
+` : ''}
+
+### Test Locally
+\`\`\`bash
+npm run dev
+\`\`\`
+Open http://localhost:3000
+
+---
+
+## Step 3: Deploy
+
+${a.d001 === 'vercel' ? `### Vercel (Recommended)
+1. Push code to GitHub
+2. Import at https://vercel.com/new
+3. Add environment variables in Vercel dashboard
+4. Deploy!
+
+Or via CLI:
+\`\`\`bash
+npm i -g vercel
+vercel --prod
+\`\`\`
+` : ''}
+${a.d001 === 'netlify' ? `### Netlify
+1. Push code to GitHub
+2. Import at https://app.netlify.com
+3. Build settings:
+   - Build command: \`npm run build\`
+   - Publish directory: \`.next\` or \`out\`
+4. Add env vars and deploy
+` : ''}
+
+### Custom Domain
+1. Go to ${a.d001 || 'hosting'} dashboard
+2. Add your domain
+3. Update DNS records as instructed
+4. SSL auto-provisioned (usually 5-15 min)
+
+---
+
+## Step 4: Environment Variables Reference
+
+| Variable | Description | Required | Example |
+|----------|-------------|----------|---------|
+| NEXT_PUBLIC_SUPABASE_URL | Supabase project URL | Yes | https://xxx.supabase.co |
+| NEXT_PUBLIC_SUPABASE_ANON_KEY | Supabase anon key | Yes | eyJhbGciOiJIUzI1NiIs... |
+| SUPABASE_SERVICE_ROLE_KEY | Admin access (backend only) | Backend | eyJhbGciOiJIUzI1NiIs... |
+${a.b007 === 'stripe' ? `| STRIPE_SECRET_KEY | Stripe secret | Yes | sk_test_xxx |
+| NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY | Stripe public | Yes | pk_test_xxx |
+| STRIPE_WEBHOOK_SECRET | Stripe webhook | Yes | whsec_xxx |` : ''}
+${a.b007 === 'paddle' ? `| PADDLE_API_KEY | Paddle API key | Yes | xxx |
+| NEXT_PUBLIC_PADDLE_CLIENT_TOKEN | Paddle client | Yes | xxx |` : ''}
+${a.a001 === 'resend' ? `| RESEND_API_KEY | Resend API | Conditional | re_xxx |` : ''}
+${a.a001 === 'sendgrid' ? `| SENDGRID_API_KEY | SendGrid API | Conditional | SG.xxx |` : ''}
+
+---
+
+## Step 5: Scale Configuration
+
+${a.s001 === '100' || !a.s001 ? `### Scale: < 100 users
+- Supabase Free tier sufficient
+- No special configuration needed
+- Monitor usage in dashboard
+` : ''}
+${a.s001 === '1000' ? `### Scale: ~1,000 users
+- Supabase Pro tier recommended ($25/mo)
+- Add database indexes:
+\`\`\`sql
+CREATE INDEX idx_products_seller ON products(seller_id);
+CREATE INDEX idx_orders_buyer ON orders(buyer_id);
+\`\`\`
+` : ''}
+${a.s001 === '10000' ? `### Scale: ~10,000 users
+- Supabase Pro tier
+- Consider read replicas
+- Add Redis cache for frequently accessed data:
+\`\`\`
+Upstash Redis - $5/mo
+\`\`\`
+` : ''}
+${a.s001 === '100000' ? `### Scale: ~100,000 users
+- Supabase Team/Enterprise tier
+- Required:
+  - [ ] Redis caching (Upstash - $25/mo)
+  - [ ] CDN for static assets (Cloudflare - free)
+  - [ ] Read replicas
+  - [ ] Rate limiting
+- Optimize queries, add pagination
+` : ''}
+${a.s001 === '1000000' ? `### Scale: 1M+ users
+- Enterprise tier required
+- Full infrastructure needed:
+  - [ ] Multi-region database
+  - [ ] Distributed Redis
+  - [ ] CDN with edge caching
+  - [ ] API rate limiting
+  - [ ] Load balancers
+  - [ ] Microservices architecture
+- Contact Supabase for enterprise
+` : ''}
+
+---
+
+## Step 6: Troubleshooting
+
+### Common Issues
+
+**RLS Blocking Access**
+\`\`\`sql
+-- Check RLS status
+SELECT relname, relrowsecurity FROM pg_class 
+WHERE relname IN ('profiles', 'products', 'orders');
+\`\`\`
+
+**Environment Variables Not Loading**
+- Restart dev server: \`npm run dev\`
+- Check .env.local format (no quotes)
+- Verify Vercel dashboard has correct vars
+
+**CORS Errors**
+Add to Supabase API settings > API > URL Configuration:
+- Add your domain to allowed origins
+
+**Payment Webhooks Not Working**
+\`\`\`bash
+# Test locally
+stripe listen --forward-to localhost:3000/api/webhooks
+\`\`\`
+
+**Build Failures**
+- Clear .next cache: \`rm -rf .next\`
+- Check Node version: \`node -v\` (need 18+)
+
+### Useful Links
+- Supabase Docs: https://supabase.com/docs
+- Vercel Docs: https://vercel.com/docs
+- Stripe Docs: https://stripe.com/docs
+
+---
+
+## Quick Commands
+
+\`\`\`bash
+# Start dev server
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production
+npm start
+
+# Database migrations
+supabase db push
+
+# Reset local database
+supabase db reset
+\`\`\`
 `;
   return '';
 }
