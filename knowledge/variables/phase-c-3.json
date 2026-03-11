@@ -1,0 +1,14 @@
+{
+  "variables": [
+    {"id": "v061", "name": "timeout_config_patch2", "category": "Deployment", "description": "Extended timeouts for requests", "type": "enum", "options": ["default","short","long","custom"], "dependencies": []},
+    {"id": "v062", "name": "retry_policy_patch2", "category": "Network", "description": "Retry policy variation", "type": "enum", "options": ["no_retry","exponential_backoff"], "dependencies": []},
+    {"id": "v063", "name": "backup_retention_patch2", "category": "Operations", "description": "Backup retention patch", "type": "enum", "options": ["7d","14d","30d","90d","365d"], "dependencies": []},
+    {"id": "v064", "name": "logging_format_patch2", "category": "Logging", "description": "Log format patch", "type": "enum", "options": ["json","text"], "dependencies": []},
+    {"id": "v065", "name": "default_language_patch2", "category": "UX", "description": "Default language patch", "type": "enum", "options": ["en","es","fr","de"], "dependencies": []},
+    {"id": "v066", "name": "feature_flags_patch2", "category": "DevOps", "description": "Feature flags patch", "type": "enum", "options": ["LaunchDarkly","Unleash","Flagsmith","none"], "dependencies": []},
+    {"id": "v067", "name": "cache_invalidation_patch2", "category": "Performance", "description": "Cache invalidation patch", "type": "enum", "options": ["time-based","event-based"], "dependencies": ["v003"]},
+    {"id": "v068", "name": "edge_cache_patch2", "category": "Deployment", "description": "Edge cache patch", "type": "enum", "options": ["enabled","disabled"], "dependencies": []},
+    {"id": "v069", "name": "encryption_in_flight_patch2", "category": "Security", "description": "In-flight encryption patch", "type": "enum", "options": ["TLS1.3","TLS1.2"], "dependencies": []},
+    {"id": "v070", "name": "compliance_map_patch2", "category": "Compliance", "description": "Regional compliance patch", "type": "enum", "options": ["global","regional"], "dependencies": []}
+  ]
+}
