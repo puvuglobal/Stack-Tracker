@@ -878,6 +878,159 @@
       "type": "enum",
       "options": ["images", "video", "audio", "documents", "realtime"],
       "dependencies": ["v001"]
+    },
+    {
+      "id": "v004",
+      "name": "frontend_rendering_style",
+      "category": "Frontend",
+      "description": "Preferred frontend rendering style",
+      "type": "enum",
+      "options": ["SSR", "SPA", "SSG", "ISR", "Hybrid (SSR+SPA)"] ,
+      "dependencies": ["v001"]
+    },
+    {
+      "id": "v005",
+      "name": "scale_pattern",
+      "category": "Performance/Scale",
+      "description": "Scale pattern selection",
+      "type": "enum",
+      "options": ["read-heavy", "write-heavy", "balanced", "high concurrency"],
+      "dependencies": ["v003"]
+    },
+    {
+      "id": "v006",
+      "name": "auth_method",
+      "category": "Authentication",
+      "description": "Preferred authentication strategy",
+      "type": "enum",
+      "options": ["email_password", "magic_link", "social", "sso", "passwordless"],
+      "dependencies": []
+    },
+    {
+      "id": "v007",
+      "name": "payments_provider",
+      "category": "Payments",
+      "description": "Preferred payments provider",
+      "type": "enum",
+      "options": ["Stripe", "Paddle", "PayPal", "Razorpay"],
+      "dependencies": ["v001"]
+    },
+    {
+      "id": "v008",
+      "name": "storage_provider",
+      "category": "Storage",
+      "description": "Preferred storage backend",
+      "type": "enum",
+      "options": ["S3", "Cloudflare R2", "Supabase Storage", "Firebase Storage", "Cloudinary"],
+      "dependencies": []
+    },
+    {
+      "id": "v009",
+      "name": "realtime_technology",
+      "category": "Real-time",
+      "description": "Realtime/Push technology",
+      "type": "enum",
+      "options": ["WebSockets", "Pusher", "Ably", "Firebase Realtime", "Socket.IO"],
+      "dependencies": ["v003"]
+    },
+    {
+      "id": "v010",
+      "name": "api_style_preference",
+      "category": "API",
+      "description": "API style preference",
+      "type": "enum",
+      "options": ["REST", "GraphQL", "gRPC", "WebHooks"],
+      "dependencies": ["v001"]
+    },
+    {
+      "id": "v011",
+      "name": "cache_strategy",
+      "category": "Performance",
+      "description": "Cache eviction strategy",
+      "type": "enum",
+      "options": ["LRU", "LFU", "FIFO", "None"],
+      "dependencies": ["v003"]
+    },
+    {
+      "id": "v012",
+      "name": "rate_limiting",
+      "category": "Security",
+      "description": "API rate limiting level",
+      "type": "enum",
+      "options": ["none","basic","moderate","strict"],
+      "dependencies": []
+    },
+    {
+      "id": "v013",
+      "name": "policy_rls",
+      "category": "Security",
+      "description": "Enable Row-Level Security policies",
+      "type": "enum",
+      "options": ["enabled","disabled"],
+      "dependencies": ["v001"]
+    },
+    {
+      "id": "v014",
+      "name": "data_backup_strategy",
+      "category": "Operations",
+      "description": "Backup frequency and retention",
+      "type": "enum",
+      "options": ["daily","hourly","weekly","none"],
+      "dependencies": []
+    },
+    {
+      "id": "v015",
+      "name": "audit_trails",
+      "category": "Compliance",
+      "description": "Auditing enabled for critical tables",
+      "type": "enum",
+      "options": ["enabled","disabled"],
+      "dependencies": []
+    },
+    {
+      "id": "v016",
+      "name": "security_compliance",
+      "category": "Security",
+      "description": "Compliance standards to target",
+      "type": "enum",
+      "options": ["HIPAA","GDPR","PCI-DSS","None"],
+      "dependencies": []
+    },
+    {
+      "id": "v017",
+      "name": "deployment_target",
+      "category": "Deployment",
+      "description": "Hosting target environment",
+      "type": "enum",
+      "options": ["Vercel","Netlify","AWS","GCP","Azure"],
+      "dependencies": []
+    },
+    {
+      "id": "v018",
+      "name": "monitoring_tool",
+      "category": "Monitoring",
+      "description": "Preferred monitoring/observability tool",
+      "type": "enum",
+      "options": ["Datadog","Sentry","Prometheus","Grafana","NewRelic"],
+      "dependencies": []
+    },
+    {
+      "id": "v019",
+      "name": "logging_level",
+      "category": "Logging",
+      "description": "Default log level",
+      "type": "enum",
+      "options": ["debug","info","warn","error"],
+      "dependencies": []
+    },
+    {
+      "id": "v020",
+      "name": "queue_system",
+      "category": "Backend",
+      "description": "Preferred asynchronous queue system",
+      "type": "enum",
+      "options": ["Bull","BeeQueue","RabbitMQ","SQS"],
+      "dependencies": []
     }
   ]
 }
