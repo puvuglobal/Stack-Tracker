@@ -1,0 +1,14 @@
+{
+  "variables": [
+    {"id": "v051", "name": "cache_coherence_2", "category": "Performance", "description": "Secondary cache coherence strategy", "type": "enum", "options": ["strict","relaxed","none"], "dependencies": ["v003"]},
+    {"id": "v052", "name": "encryption_in_flight_2", "category": "Security", "description": "Data-in-transit encryption policy (secondary)", "type": "enum", "options": ["TLS1.2","TLS1.3","none"], "dependencies": []},
+    {"id": "v053", "name": "cors_policy_2", "category": "Security", "description": "Cross-origin policy variant", "type": "enum", "options": ["allow_all","restrict","none"], "dependencies": []},
+    {"id": "v054", "name": "localization_2", "category": "UX", "description": "Localization support (i18n) variant", "type": "enum", "options": ["en","es","fr","de","zh","multi"], "dependencies": []},
+    {"id": "v055", "name": "telemetry_2", "category": "Monitoring", "description": "Telemetry collection variant", "type": "enum", "options": ["enabled","disabled","partial"], "dependencies": []},
+    {"id": "v056", "name": "compliance_region_2", "category": "Compliance", "description": "Secondary compliance region", "type": "enum", "options": ["us","eu","apac","other"], "dependencies": []},
+    {"id": "v057", "name": "seo_config_2", "category": "Frontend", "description": "SEO config presence (secondary)", "type": "enum", "options": ["enabled","disabled"], "dependencies": ["v037"]},
+    {"id": "v058", "name": "index_strategy_2", "category": "Frontend", "description": "Indexing strategy for search (secondary)", "type": "enum", "options": ["inverted","forward","none"], "dependencies": ["v038"]},
+    {"id": "v059", "name": "latency_target_2", "category": "Performance", "description": "Latency target (ms) variant", "type": "enum", "options": ["<50","50-100","100-200",">200"], "dependencies": []},
+    {"id": "v060", "name": "failover_strategy_2", "category": "Reliability", "description": "Failover strategy variant", "type": "enum", "options": ["active-active","active-passive","none"], "dependencies": []}
+  ]
+}

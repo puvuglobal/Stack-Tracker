@@ -1042,5 +1042,107 @@
     { "id": "v028", "name": "edge_functions", "category":"Deployment","description":"Use edge functions","type":"enum","options":["yes","no"],"dependencies":[]},
     { "id": "v029", "name": "storage_encryption", "category":"Security","description":"At-rest encryption for storage","type":"enum","options":["AES256","KMS","None"],"dependencies":[]},
     { "id": "v030", "name": "compliance_map", "category":"Compliance","description":"Compliance mapping per region","type":"enum","options":["global","regional","none"],"dependencies":[]}
+  ,
+  "variables": [
+    {
+      "id": "v031",
+      "name": "cache_coherence",
+      "category": "Performance",
+      "description": "Cache coherence strategy",
+      "type": "enum",
+      "options": ["strict","eventual","none"],
+      "dependencies": ["v003"]
+    },
+    {
+      "id": "v032",
+      "name": "encryption_in_flight",
+      "category": "Security",
+      "description": "Data-in-transit encryption policy",
+      "type": "enum",
+      "options": ["TLS1.2","TLS1.3","none"],
+      "dependencies": []
+    },
+    {
+      "id": "v033",
+      "name": "cors_policy",
+      "category": "Security",
+      "description": "Cross-origin resource sharing policy",
+      "type": "enum",
+      "options": ["allow_all","restrict","none"],
+      "dependencies": []
+    },
+    {
+      "id": "v034",
+      "name": "localization",
+      "category": "UX",
+      "description": "Localization support (i18n)",
+      "type": "enum",
+      "options": ["en","es","fr","de","zh","multi"],
+      "dependencies": []
+    },
+    {
+      "id": "v035",
+      "name": "telemetry",
+      "category": "Monitoring",
+      "description": "Telemetry collection (enabled/disabled)",
+      "type": "enum",
+      "options": ["enabled","disabled","partial"],
+      "dependencies": []
+    },
+    {
+      "id": "v036",
+      "name": "compliance_region",
+      "category": "Compliance",
+      "description": "Primary compliance region",
+      "type": "enum",
+      "options": ["us","eu","apac","other"],
+      "dependencies": []
+    },
+    {
+      "id": "v037",
+      "name": "seo_config",
+      "category": "Frontend",
+      "description": "SEO config presence",
+      "type": "enum",
+      "options": ["enabled","disabled"],
+      "dependencies": ["v004"]
+    },
+    {
+      "id": "v038",
+      "name": "index_strategy",
+      "category": "Frontend",
+      "description": "Indexing strategy for search",
+      "type": "enum",
+      "options": ["inverted","forward","none"],
+      "dependencies": ["v003"]
+    },
+    {
+      "id": "v039",
+      "name": "latency_target",
+      "category": "Performance",
+      "description": "Latency target (ms)",
+      "type": "enum",
+      "options": ["<50","50-100","100-200",">200"],
+      "dependencies": []
+    },
+    {
+      "id": "v040",
+      "name": "failover_strategy",
+      "category": "Reliability",
+      "description": "Failover strategy",
+      "type": "enum",
+      "options": ["active-active","active-passive","none"],
+      "dependencies": []
+    },
+    {"id": "v041", "name": "timeout_config", "category": "Deployment", "description": "Default timeouts for requests", "type": "enum", "options": ["default","short","long","custom"], "dependencies": []},
+    {"id": "v042", "name": "retry_policy", "category": "Network", "description": "HTTP retry policy", "type": "enum", "options": ["no_retry","exponential_backoff","fixed_backoff"], "dependencies": []},
+    {"id": "v043", "name": "backup_retention", "category": "Operations", "description": "Data backup retention period", "type": "enum", "options": ["7d","14d","30d","90d","365d"], "dependencies": []},
+    {"id": "v044", "name": "logging_format", "category": "Logging", "description": "Log format", "type": "enum", "options": ["json","text","cloudwatch_json"], "dependencies": []},
+    {"id": "v045", "name": "default_language", "category": "UX", "description": "Default UI language", "type": "enum", "options": ["en","es","fr","de","zh","ja"], "dependencies": []},
+    {"id": "v046", "name": "feature_flags", "category": "DevOps", "description": "Feature flag system integration", "type": "enum", "options": ["LaunchDarkly","Unleash","Flagsmith","none"], "dependencies": []},
+    {"id": "v047", "name": "cache_invalidation_strategy", "category": "Performance", "description": "Cache invalidation strategy", "type": "enum", "options": ["time-based","event-based","manual"], "dependencies": ["v003"]},
+    {"id": "v048", "name": "edge_function_timeout", "category": "Deployment", "description": "Edge function timeout (ms)", "type": "enum", "options": ["1000","3000","5000","10000"], "dependencies": []},
+    {"id": "v049", "name": "document_versioning", "category": "Data", "description": "Document versioning strategy", "type": "enum", "options": ["immutable","versioned","none"], "dependencies": []},
+    {"id": "v050", "name": "storage_encryption_key_source", "category": "Security", "description": "Key management source", "type": "enum", "options": ["KMS","AWS KMS","GCP KMS","Customer managed"], "dependencies": []}
   ]
 }

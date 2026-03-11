@@ -1,0 +1,14 @@
+{
+  "variables": [
+    {"id": "v051", "name": "cache_coherence", "category": "Performance", "description": "Cache coherence strategy", "type": "enum", "options": ["strict","eventual","none"], "dependencies": ["v003"]},
+    {"id": "v052", "name": "encryption_in_flight", "category": "Security", "description": "Data-in-transit encryption policy", "type": "enum", "options": ["TLS1.2","TLS1.3","none"], "dependencies": []},
+    {"id": "v053", "name": "cors_policy", "category": "Security", "description": "Cross-origin resource sharing policy", "type": "enum", "options": ["allow_all","restrict","none"], "dependencies": []},
+    {"id": "v054", "name": "localization", "category": "UX", "description": "Localization support (i18n)", "type": "enum", "options": ["en","es","fr","de","zh","multi"], "dependencies": []},
+    {"id": "v055", "name": "telemetry", "category": "Monitoring", "description": "Telemetry collection (enabled/disabled)", "type": "enum", "options": ["enabled","disabled","partial"], "dependencies": []},
+    {"id": "v056", "name": "compliance_region", "category": "Compliance", "description": "Primary compliance region", "type": "enum", "options": ["us","eu","apac","other"], "dependencies": []},
+    {"id": "v057", "name": "seo_config", "category": "Frontend", "description": "SEO config presence", "type": "enum", "options": ["enabled","disabled"], "dependencies": ["v004"]},
+    {"id": "v058", "name": "index_strategy", "category": "Frontend", "description": "Indexing strategy for search", "type": "enum", "options": ["inverted","forward","none"], "dependencies": ["v003"]},
+    {"id": "v059", "name": "latency_target", "category": "Performance", "description": "Latency target (ms)", "type": "enum", "options": ["<50","50-100","100-200",">200"], "dependencies": []},
+    {"id": "v060", "name": "failover_strategy", "category": "Reliability", "description": "Failover strategy", "type": "enum", "options": ["active-active","active-passive","none"], "dependencies": []}
+  ]
+}
