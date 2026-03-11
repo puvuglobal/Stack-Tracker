@@ -1031,6 +1031,16 @@
       "type": "enum",
       "options": ["Bull","BeeQueue","RabbitMQ","SQS"],
       "dependencies": []
-    }
+    },
+    { "id": "v021", "name": "logging_to_monitoring", "category":"Monitoring","description":"Enable centralized logging to monitoring","type":"enum","options":["enabled","disabled","auto"],"dependencies":[]},
+    { "id": "v022", "name": "security_scans", "category":"Security","description":"SAST/DAST scanning enabled","type":"enum","options":["enabled","disabled"],"dependencies":[]},
+    { "id": "v023", "name": "ci_cd_pipeline", "category":"DevOps","description":"CI/CD pipeline type","type":"enum","options":["GitHub Actions","GitLab CI","CircleCI","none"],"dependencies":[]},
+    { "id": "v024", "name": "data_retention_policy", "category":"Operations","description":"Data retention window","type":"enum","options":["30d","90d","1y","5y","forever"],"dependencies":[]},
+    { "id": "v025", "name": "multi_tenant_model", "category":"Architecture","description":"Tenant isolation strategy","type":"enum","options":["single_schema","shared_schema_isolated_tenants","separate_schema_per_tenant"],"dependencies":["v001"]},
+    { "id": "v026", "name": "feature_flags", "category":"Operations","description":"Feature flag strategy","type":"enum","options":["LaunchDarkly","Unleash","Flagsmith","none"],"dependencies":[]},
+    { "id": "v027", "name": "cdn_strategy", "category":"Deployment","description":"CDN strategy","type":"enum","options":["edge_cdn","origin_shield","none"],"dependencies":[]},
+    { "id": "v028", "name": "edge_functions", "category":"Deployment","description":"Use edge functions","type":"enum","options":["yes","no"],"dependencies":[]},
+    { "id": "v029", "name": "storage_encryption", "category":"Security","description":"At-rest encryption for storage","type":"enum","options":["AES256","KMS","None"],"dependencies":[]},
+    { "id": "v030", "name": "compliance_map", "category":"Compliance","description":"Compliance mapping per region","type":"enum","options":["global","regional","none"],"dependencies":[]}
   ]
 }
