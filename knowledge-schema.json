@@ -1144,5 +1144,17 @@
     {"id": "v048", "name": "edge_function_timeout", "category": "Deployment", "description": "Edge function timeout (ms)", "type": "enum", "options": ["1000","3000","5000","10000"], "dependencies": []},
     {"id": "v049", "name": "document_versioning", "category": "Data", "description": "Document versioning strategy", "type": "enum", "options": ["immutable","versioned","none"], "dependencies": []},
     {"id": "v050", "name": "storage_encryption_key_source", "category": "Security", "description": "Key management source", "type": "enum", "options": ["KMS","AWS KMS","GCP KMS","Customer managed"], "dependencies": []}
+  ,
+  "variables": [
+    {"id": "v061", "name": "timeout_config_patch", "category": "Deployment", "description": "Extended timeouts for requests", "type": "enum", "options": ["default","short","long"], "dependencies": []},
+    {"id": "v062", "name": "retry_policy_patch", "category": "Network", "description": "Retry policy variation", "type": "enum", "options": ["none","exponential_backoff"], "dependencies": []},
+    {"id": "v063", "name": "backup_retention_patch", "category": "Operations", "description": "Backup retention patch", "type": "enum", "options": ["7d","30d","90d","1y"], "dependencies": []},
+    {"id": "v064", "name": "logging_format_patch", "category": "Logging", "description": "Log format patch", "type": "enum", "options": ["json","text"], "dependencies": []},
+    {"id": "v065", "name": "default_language_patch", "category": "UX", "description": "Default language patch", "type": "enum", "options": ["en","es","fr","de"], "dependencies": []},
+    {"id": "v066", "name": "feature_flags_patch", "category": "DevOps", "description": "Feature flags patch", "type": "enum", "options": ["LaunchDarkly","Unleash","Flagsmith","none"], "dependencies": []},
+    {"id": "v067", "name": "cache_invalidation_patch", "category": "Performance", "description": "Cache invalidation patch", "type": "enum", "options": ["time-based","event-based"], "dependencies": ["v003"]},
+    {"id": "v068", "name": "edge_cache_patch", "category": "Deployment", "description": "Edge cache patch", "type": "enum", "options": ["enabled","disabled"], "dependencies": []},
+    {"id": "v069", "name": "encryption_in_flight_patch", "category": "Security", "description": "In-flight encryption patch", "type": "enum", "options": ["TLS1.3","TLS1.2"], "dependencies": []},
+    {"id": "v070", "name": "compliance_map_patch", "category": "Compliance", "description": "Regional compliance patch", "type": "enum", "options": ["global","regional"], "dependencies": []}
   ]
 }
