@@ -1,1160 +1,275 @@
-# StackTracker Knowledge Schema
-# Extracted from Data supporting repo.txt
-# Every variable, technology, concept with descriptions and decision logic
-
 {
-  "metadata": {
-    "version": "1.0",
-    "source": "StackTracker Decision Engine",
-    "purpose": "Comprehensive tech stack knowledge base for SaaS architecture decisions"
-  },
-
-  # ============================================================================
-  # 1. PRODUCT TYPE - Defines core interaction patterns and required modules
-  # ============================================================================
-  "productTypes": {
-    "marketplace": {
-      "description": "Platform connecting buyers and sellers, enabling transactions",
-      "requires": ["payments", "search", "inventory", "orders", "user_profiles", "analytics", "messaging", "reviews"],
-      "modules": ["auth", "billing", "orders", "inventory", "search", "messaging", "analytics", "notifications"],
-      "archImplications": "SSR + SPA hybrid for SEO + dashboards, BFF pattern for multiple clients"
-    },
-    "saas": {
-      "description": "Software as a service - subscription-based application",
-      "requires": ["auth", "billing", "dashboard", "settings", "multi_tenant"],
-      "modules": ["auth", "billing", "dashboard", "settings", "teams", "webhooks", "analytics"],
-      "archImplications": "SPA for rich dashboards, modular monolith for team scale"
-    },
-    "social": {
-      "description": "Social platform with user-generated content and interactions",
-      "requires": ["feeds", "notifications", "realtime", "content_moderation", "media"],
-      "modules": ["auth", "posts", "comments", "likes", "follows", "messages", "notifications", "media"],
-      "archImplications": "Realtime essential, CDNs for media, BFF for multiple clients"
-    },
-    "ecommerce": {
-      "description": "Online store for products/services sales",
-      "requires": ["products", "cart", "checkout", "payments", "inventory", "shipping"],
-      "modules": ["auth", "products", "cart", "checkout", "payments", "inventory", "shipping", "orders", "analytics"],
-      "archImplications": "SSR for product pages (SEO), SPA for checkout, caching critical"
-    },
-    "internal": {
-      "description": "Internal business tool/enterprise application",
-      "requires": ["auth", "admin", "reporting", "workflows"],
-      "modules": ["auth", "admin", "dashboard", "reports", "workflows", "audit"],
-      "archImplications": "SPA acceptable (no SEO), focus on data density, can use heavier frameworks"
-    },
-    "content": {
-      "description": "Content-focused site - blogs, docs, portfolios",
-      "requires": ["cms", "seo", "media"],
-      "modules": ["auth", "content", "media", "comments", "seo"],
-      "archImplications": "SSG/ISR ideal for performance, minimal JavaScript"
-    },
-    "mobile_first": {
-      "description": "Mobile-dominant application",
-      "requires": ["mobile_responsive", "offline", "push_notifications"],
-      "modules": ["auth", "core_features", "offline_sync", "push"],
-      "archImplications": "PWA or native, API-first design, offline support"
-    }
-  },
-
-  # ============================================================================
-  # 2. CLIENT ARCHITECTURE - Defines frontend needs and API patterns
-  # ============================================================================
-  "clients": {
-    "web": {
-      "description": "Web browser application",
-      "tech": "Next.js/React/Vue/Svelte",
-      "implies": ["responsive", "cross_browser"],
-      "conditionalQuestions": ["platform_mobile", "desktop_apps"]
-    },
-    "ios": {
-      "description": "Apple iOS native app",
-      "tech": "Swift/SwiftUI, React Native, Expo",
-      "implies": ["apple_developer", "push_notifications"],
-      "conditionalQuestions": ["xcode_required"]
-    },
-    "android": {
-      "description": "Google Android native app",
-      "tech": "Kotlin, React Native, Expo",
-      "implies": ["google_play", "push_notifications"],
-      "conditionalQuestions": ["android_studio"]
-    },
-    "desktop_windows": {
-      "description": "Windows desktop application",
-      "tech": "Electron, Tauri, .NET/WPF",
-      "implies": ["native_features"],
-      "conditionalQuestions": ["win32_or_uwp"]
-    },
-    "desktop_mac": {
-      "description": "macOS desktop application",
-      "tech": "Electron, SwiftUI, Tauri",
-      "implies": ["apple_developer"],
-      "conditionalQuestions": ["xcode_required"]
-    },
-    "desktop_linux": {
-      "description": "Linux desktop application",
-      "tech": "Electron, Tauri, GTK",
-      "implies": ["cross_distro"],
-      "conditionalQuestions": []
-    },
-    "public_api": {
-      "description": "Public API for third-party developers",
-      "tech": "REST, GraphQL",
-      "implies": ["api_documentation", "rate_limiting", "api_versioning", "developer_portal"],
-      "conditionalQuestions": ["api_auth_method", "webhooks_needed"]
-    }
-  },
-
-  # ============================================================================
-  # 3. FRONTEND ARCHITECTURE - Rendering strategies and patterns
-  # ============================================================================
-  "frontendArchitecture": {
-    "static_pages": {
-      "description": "Pure HTML/CSS - no dynamic logic",
-      "pros": ["extremely fast", "cheap", "simple"],
-      "cons": ["no interaction", "no dynamic data"],
-      "useCases": ["landing pages", "documentation", "blogs"],
-      "stack": ["HTML", "CSS", "CDN"],
-      "when": "Site is mostly static with no interactivity"
-    },
-    "mvc": {
-      "description": "Server renders HTML - backend combines data and template",
-      "pros": ["simple", "easy backend control"],
-      "cons": ["tight coupling", "page reloads", "poor scalability"],
-      "useCases": ["Traditional web apps"],
-      "stack": ["Django", "Ruby on Rails", "Laravel", "ASP.NET"],
-      "when": "Simple app, tight team, server-rendered pages OK"
-    },
-    "spa": {
-      "description": "Frontend is full application, backend only serves APIs",
-      "pros": ["very interactive", "scalable UI", "rich dashboards"],
-      "cons": ["heavy JS", "slow first load", "poor SEO"],
-      "useCases": ["SaaS dashboards", "internal tools", "admin panels"],
-      "stack": ["React", "Vue", "Angular", "Svelte"],
-      "when": "High interactivity, dashboards, no SEO needed"
-    },
-    "ssr": {
-      "description": "Server-side rendering - pages generated on request",
-      "pros": ["fast initial load", "good SEO"],
-      "cons": ["server load", "more infrastructure"],
-      "useCases": ["Marketplaces", "eCommerce", "SaaS with SEO"],
-      "stack": ["Next.js", "Nuxt.js", "SvelteKit"],
-      "when": "SEO required + interactive"
-    },
-    "ssg": {
-      "description": "Static site generation - pages built at compile time",
-      "pros": ["fastest"],
-      "cons": ["content updates require rebuild"],
-      "useCases": ["blogs", "marketing pages"],
-      "stack": ["Next.js", "Astro", "Hugo", "Gatsby"],
-      "when": "Content rarely changes, max performance needed"
-    },
-    "isr": {
-      "description": "Incremental static regeneration - static + periodic rebuilds",
-      "pros": ["dynamic updates", "fast CDN"],
-      "useCases": ["product catalogs"],
-      "stack": ["Next.js ISR"],
-      "when": "Content updates occasionally, want CDN speed"
-    },
-    "bff": {
-      "description": "Backend for Frontend - dedicated API layer per client",
-      "benefits": ["optimized responses", "frontend independence", "easier auth"],
-      "downsides": ["more infrastructure", "single failure point"],
-      "useCases": ["mobile app + web app + admin"],
-      "when": "Multiple client types (web + mobile + etc)"
-    },
-    "modular_monolith": {
-      "description": "Large SPA organized into domains",
-      "benefits": ["maintainable", "scalable", "clear boundaries"],
-      "drawbacks": ["build times grow", "boundaries hard to enforce"],
-      "useCases": ["10-100 developers"],
-      "structure": "src/domains/, src/shared/",
-      "when": "Medium team, need organization without microservices complexity"
-    },
-    "microfrontends": {
-      "description": "Multiple independent frontends assembled together",
-      "benefits": ["huge scaling", "independent deploys"],
-      "drawbacks": ["heavy complexity", "performance overhead"],
-      "usedBy": ["Amazon", "Spotify", "enterprise SaaS"],
-      "when": "200+ developers, separate teams owning separate features"
-    }
-  },
-
-  # ============================================================================
-  # 4. DATA TYPES - Defines infrastructure requirements
-  # ============================================================================
-  "dataTypes": {
-    "images": {
-      "description": "User-uploaded images",
-      "requires": ["object_storage", "cdn", "image_processing"],
-      "services": ["S3", "Cloudflare R2", "Supabase Storage", "Cloudinary"]
-    },
-    "video": {
-      "description": "User-uploaded video",
-      "requires": ["object_storage", "transcoding", "chunk_uploads", "streaming"],
-      "services": ["Mux", "Cloudflare Stream", "AWS MediaConvert"]
-    },
-    "audio": {
-      "description": "User-uploaded audio/podcasts",
-      "requires": ["object_storage", "transcoding", "streaming"],
-      "services": ["Mux", "AWS MediaConvert"]
-    },
-    "documents": {
-      "description": "PDFs, text files, etc",
-      "requires": ["object_storage"],
-      "services": ["S3", "Supabase Storage"]
-    },
-    "realtime": {
-      "description": "Live updates, chat, notifications",
-      "requires": ["websockets", "pub_sub", "event_queues"],
-      "services": ["Supabase Realtime", "Pusher", "Socket.io", "Ably"]
-    },
-    "structured": {
-      "description": "Relational data with schemas",
-      "requires": ["sql_database"],
-      "services": ["PostgreSQL", "MySQL"]
-    },
-    "flexible": {
-      "description": "Flexible schemas, document storage",
-      "requires": ["nosql_database"],
-      "services": ["MongoDB", "DynamoDB", "Firestore"]
-    },
-    "search": {
-      "description": "Full-text search capabilities",
-      "requires": ["search_engine"],
-      "services": ["Elasticsearch", "Algolia", "Meilisearch", "Postgres Full-Text"]
-    },
-    "analytics": {
-      "description": "Event tracking and analytics",
-      "requires": ["analytics_db", "data_warehouse"],
-      "services": ["PostHog", "Mixpanel", "Amplitude", "BigQuery"]
-    },
-    "cache": {
-      "description": "Caching layer for performance",
-      "requires": ["in_memory_cache"],
-      "services": ["Redis", "Memcached"]
-    }
-  },
-
-  # ============================================================================
-  # 5. SCALE - Database and infrastructure strategy
-  # ============================================================================
-  "scale": {
-    "tier_1": {
-      "label": "Under 10K users",
-      "database": "single database instance",
-      "infrastructure": "basic",
-      "caching": "optional",
-      "rateLimiting": "basic"
-    },
-    "tier_2": {
-      "label": "10K - 100K users",
-      "database": "read replicas",
-      "infrastructure": "load balancing",
-      "caching": "recommended",
-      "rateLimiting": "required"
-    },
-    "tier_3": {
-      "label": "100K - 1M users",
-      "database": "caching layer",
-      "infrastructure": "horizontal scaling",
-      "caching": "essential",
-      "rateLimiting": "strict"
-    },
-    "tier_4": {
-      "label": "1M+ users",
-      "database": "horizontal scaling",
-      "infrastructure": "microservices ready",
-      "caching": "distributed",
-      "rateLimiting": "very strict"
-    }
-  },
-
-  # ============================================================================
-  # 6. FEATURES - Backend modules and capabilities
-  # ============================================================================
-  "features": {
-    "authentication": {
-      "description": "User accounts and access control",
-      "options": {
-        "email_password": "Traditional email + password",
-        "social": "Google, GitHub, Facebook login",
-        "sso": "Single sign-on (SAML, OAuth)",
-        "magic_link": "Passwordless email links",
-        "phone_otp": "SMS one-time passwords"
-      },
-      "services": ["Supabase Auth", "Clerk", "Auth0", "Firebase Auth", "NextAuth"]
-    },
-    "payments": {
-      "description": "Payment processing and subscriptions",
-      "options": {
-        "stripe": "Full payments + subscriptions + invoicing",
-        "paddle": "EU-focused with VAT handling",
-        "paypal": "Consumer payment option",
-        "razorpay": "Asia-focused"
-      },
-      "services": ["Stripe", "Paddle", "R", "PayPalazorpay"]
-    },
-    "file_uploads": {
-      "description": "User file/media uploads",
-      "options": {
-        "images_only": "Profile pics, thumbnails",
-        "documents": "PDFs, docs",
-        "video_audio": "Media uploads",
-        "large_files": "Large file handling"
-      },
-      "services": ["Supabase Storage", "AWS S3", "Cloudinary", "UploadThing"]
-    },
-    "realtime": {
-      "description": "Live updates, chat, notifications",
-      "services": ["Supabase Realtime", "Pusher", "Socket.io", "Ably"]
-    },
-    "search": {
-      "description": "Search functionality",
-      "options": {
-        "basic": "Database LIKE queries",
-        "full_text": "Postgres full-text search",
-        "dedicated": "Elasticsearch, Algolia"
-      },
-      "services": ["Algolia", "Meilisearch", "Elasticsearch", "Postgres TSVECTOR"]
-    },
-    "email": {
-      "description": "Transactional and marketing email",
-      "services": ["Resend", "SendGrid", "Mailgun", "Postmark", "AWS SES"]
-    },
-    "background_jobs": {
-      "description": "Async processing for heavy tasks",
-      "services": ["Inngest", "Trigger.dev", "AWS SQS", "BullMQ", "Redis"]
-    },
-    "analytics": {
-      "description": "User behavior analytics",
-      "services": ["PostHog", "Mixpanel", "Amplitude", "Google Analytics"]
-    },
-    "logging": {
-      "description": "Application logging",
-      "services": ["Datadog", "Sentry", "LogRocket", "Pino"]
-    },
-    "api": {
-      "description": "API for third-party developers",
-      "options": {
-        "rest": "RESTful API",
-        "graphql": "GraphQL API",
-        "both": "Both"
-      }
-    },
-    "webhooks": {
-      "description": "HTTP callbacks for events",
-      "services": ["Svix", "Webhook.site"]
-    }
-  },
-
-  # ============================================================================
-  # 7. BACKEND FRAMEWORKS
-  # ============================================================================
-  "backendFrameworks": {
-    "node": {
-      "category": "JavaScript runtime",
-      "description": "Build backend with JavaScript/TypeScript",
-      "frameworks": {
-        "express": {
-          "description": "Minimal, flexible Node.js web framework",
-          "bestFor": "APIs, simple to medium apps",
-          "pros": ["simple", "flexible", "huge ecosystem"],
-          "cons": ["requires setup for structure"]
-        },
-        "nestjs": {
-          "description": "Progressive Node.js framework (like Angular for backend)",
-          "bestFor": "Enterprise, large apps",
-          "pros": ["structured", "TypeScript first", "DI"],
-          "cons": ["learning curve", "verbose"]
-        },
-        "fastify": {
-          "description": "Fast, low-overhead web framework",
-          "bestFor": "High performance APIs",
-          "pros": ["fast", "schema validation"],
-          "cons": ["smaller ecosystem"]
-        },
-        "nextjs": {
-          "description": "Full-stack React framework",
-          "bestFor": "Full-stack apps, SSR",
-          "pros": ["SSR/SSG", "API routes", "React"],
-          "cons": ["complexity"]
-        }
-      }
-    },
-    "python": {
-      "category": "Python",
-      "description": "Build backend with Python",
-      "frameworks": {
-        "django": {
-          "description": "High-level Python web framework",
-          "bestFor": "Django apps, rapid dev",
-          "pros": ["batteries included", "admin panel", "ORM"],
-          "cons": ["heavy", "complex"]
-        },
-        "fastapi": {
-          "description": "Modern Python API framework",
-          "bestFor": "APIs, async",
-          "pros": ["fast", "auto docs", "Pydantic"],
-          "cons": ["newer"]
-        },
-        "flask": {
-          "description": "Lightweight Python WSGI web framework",
-          "bestFor": "Small apps, microservices",
-          "pros": ["simple", "flexible"],
-          "cons": ["requires more setup"]
-        }
-      }
-    },
-    "php": {
-      "category": "PHP",
-      "description": "Build backend with PHP",
-      "frameworks": {
-        "laravel": {
-          "description": "Elegant PHP web framework",
-          "bestFor": "Full-stack apps, SaaS",
-          "pros": ["beautiful syntax", "ecosystem", "Blade"],
-          "cons": ["can be slow", "hosting"]
-        },
-        "symfony": {
-          "description": "PHP framework and set of reusable components",
-          "bestFor": "Enterprise",
-          "pros": ["components", "enterprise ready"],
-          "cons": ["complex"]
-        }
-      }
-    },
-    "go": {
-      "category": "Go",
-      "description": "Build backend with Go (Golang)",
-      "frameworks": {
-        "gin": {
-          "description": "HTTP web framework",
-          "bestFor": "High performance APIs",
-          "pros": ["fast", "minimal"],
-          "cons": ["less features"]
-        },
-        "fiber": {
-          "description": "Express-like Go framework",
-          "bestFor": "High performance",
-          "pros": ["fast", "familiar syntax"]
-        }
-      }
-    },
-    "java": {
-      "category": "Java/JVM",
-      "description": "Build backend with Java",
-      "frameworks": {
-        "spring": {
-          "description": "Java application framework",
-          "bestFor": "Enterprise apps",
-          "pros": ["enterprise ready", "mature"],
-          "cons": ["complex"]
-        }
-      }
-    },
-    "supabase": {
-      "category": "Backend-as-a-Service",
-      "description": "Open-source Firebase alternative built on Postgres",
-      "includes": ["PostgreSQL", "Auth", "Storage", "Edge Functions", "Realtime", "API auto-generation"],
-      "bestFor": "Quick MVP, startups, SaaS"
-    },
-    "firebase": {
-      "category": "Backend-as-a-Service",
-      "description": "Google's mobile and web application development platform",
-      "includes": ["Firestore", "Auth", "Storage", "Cloud Functions", "Realtime"],
-      "bestFor": "Mobile apps, rapid prototyping"
-    }
-  },
-
-  # ============================================================================
-  # 8. DATABASES
-  # ============================================================================
-  "databases": {
-    "sql": {
-      "postgresql": {
-        "description": "Advanced open-source relational database",
-        "bestFor": "Most web apps, SaaS, marketplaces",
-        "pros": ["powerful", "reliable", "JSON support"],
-        "services": ["Supabase", "Neon", "Railway", "AWS RDS", "Cloud SQL"]
-      },
-      "mysql": {
-        "description": "Popular open-source relational database",
-        "bestFor": "Web apps, WordPress",
-        "pros": ["popular", "easy"],
-        "cons": ["less advanced than Postgres"],
-        "services": ["AWS RDS", "Cloud SQL", "PlanetScale"]
-      },
-      "sqlite": {
-        "description": "Embedded database - file-based",
-        "bestFor": "Local apps, mobile, edge cases",
-        "pros": ["simple", "no setup", "fast"],
-        "cons": ["not for production web"]
-      },
-      "mariadb": {
-        "description": "MySQL fork - enhanced",
-        "bestFor": "Drop-in MySQL replacement",
-        "pros": ["compatible", "better performance"]
-      }
-    },
-    "nosql": {
-      "mongodb": {
-        "description": "Document database - flexible JSON-like",
-        "bestFor": "Flexible schemas, rapid prototyping",
-        "pros": ["flexible", "JSON native"],
-        "cons": ["not relational"],
-        "services": ["MongoDB Atlas"]
-      },
-      "dynamodb": {
-        "description": "AWS serverless NoSQL database",
-        "bestFor": "AWS-heavy apps, serverless",
-        "pros": ["serverless", "fast", "scales"],
-        "cons": ["vendor lock-in", "expensive"]
-      },
-      "firestore": {
-        "description": "Google's NoSQL document database",
-        "bestFor": "Firebase apps, mobile",
-        "pros": ["real-time", "offline"],
-        "cons": ["pricing", "limited queries"]
-      },
-      "redis": {
-        "description": "In-memory data store",
-        "bestFor": "Caching, sessions, real-time",
-        "pros": ["blazing fast", "versatile"],
-        "cons": ["memory-based", "not primary DB"],
-        "services": ["Redis Cloud", "Upstash", "AWS ElastiCache"]
-      },
-      "elasticsearch": {
-        "description": "Search and analytics engine",
-        "bestFor": "Full-text search, logs",
-        "pros": ["powerful search", "analytics"],
-        "cons": ["complex", "resource heavy"]
-      },
-      "neon": {
-        "description": "Serverless Postgres",
-        "bestFor": "Serverless architectures",
-        "pros": ["serverless", "branching", "free tier"]
-      }
-    }
-  },
-
-  # ============================================================================
-  # 9. HOSTING & DEPLOYMENT
-  # ============================================================================
-  "hosting": {
-    "paas": {
-      "vercel": {
-        "description": "Frontend + serverless platform",
-        "bestFor": "Next.js, frontend, serverless functions",
-        "features": ["CDN", "Edge Functions", "Deploy Previews", "Analytics"],
-        "free": "Generous free tier"
-      },
-      "netlify": {
-        "description": "Frontend + serverless platform",
-        "bestFor": "Static sites, JAMstack",
-        "features": ["CDN", "Functions", "Forms", "Identity"]
-      },
-      "heroku": {
-        "description": "Platform as a service",
-        "bestFor": "Full-stack apps, prototypes",
-        "features": ["Dynos", "Add-ons", "Deploy"],
-        "cons": ["expensive", "sleeps on free tier"]
-      },
-      "railway": {
-        "description": "Modern PaaS",
-        "bestFor": "Full-stack, quick deploy",
-        "features": ["Templates", "Database", "Edge Functions"]
-      },
-      "fly": {
-        "description": "Distributed app platform",
-        "bestFor": "Global apps, containers",
-        "features": ["Edge", "Postgres", "Redis"]
-      }
-    },
-    "iaas": {
-      "aws": {
-        "description": "Amazon Web Services",
-        "services": ["EC2", "RDS", "S3", "Lambda", "ECS/EKS", "CloudFront"]
-      },
-      "gcp": {
-        "description": "Google Cloud Platform",
-        "services": ["Compute Engine", "Cloud SQL", "Cloud Storage", "Cloud Functions", "GKE"]
-      },
-      "azure": {
-        "description": "Microsoft Azure",
-        "services": ["VM", "Azure SQL", "Blob Storage", "Functions", "AKS"]
-      },
-      "digitalocean": {
-        "description": "Developer-friendly cloud",
-        "services": ["Droplets", "Managed DB", "Spaces", "Kubernetes"]
-      }
-    }
-  },
-
-  # ============================================================================
-  # 10. DEVELOPMENT TOOLS
-  # ============================================================================
-  "devTools": {
-    "containerization": {
-      "docker": {
-        "description": "Container platform for packaging apps",
-        "bestFor": "Consistent environments, deployment"
-      },
-      "kubernetes": {
-        "description": "Container orchestration",
-        "bestFor": "Production at scale, multiple services",
-        "managed": ["GKE", "EKS", "AKS", "DOKS"]
-      }
-    },
-    "cicd": {
-      "github_actions": {
-        "description": "GitHub's CI/CD platform",
-        "bestFor": "GitHub repos"
-      },
-      "gitlab_ci": {
-        "description": "GitLab's CI/CD",
-        "bestFor": "GitLab repos"
-      },
-      "vercel": {
-        "description": "Automatic deployments",
-        "bestFor": "Vercel-hosted apps"
-      },
-      "circleci": {
-        "description": "Cloud CI/CD",
-        "bestFor": "Flexible pipelines"
-      }
-    },
-    "monitoring": {
-      "datadog": {
-        "description": "Full-stack monitoring",
-        "bestFor": "Enterprise monitoring"
-      },
-      "sentry": {
-        "description": "Error tracking",
-        "bestFor": "Application errors"
-      },
-      "pagerduty": {
-        "description": "Incident response",
-        "bestFor": "On-call, alerts"
-      }
-    },
-    "version_control": {
-      "github": {
-        "description": "Git hosting and collaboration"
-      },
-      "gitlab": {
-        "description": "Git with CI/CD built-in"
-      },
-      "bitbucket": {
-        "description": "Atlassian's Git solution"
-      }
-    }
-  },
-
-  # ============================================================================
-  # 11. API STYLES & PROTOCOLS
-  # ============================================================================
-  "apiStyles": {
-    "rest": {
-      "description": "RESTful API - standard web API",
-      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"],
-      "format": "JSON",
-      "when": "Default choice for most APIs"
-    },
-    "graphql": {
-      "description": "Query language for APIs",
-      "benefits": ["precise data fetching", "single endpoint"],
-      "when": "Multiple clients, complex data requirements"
-    },
-    "websockets": {
-      "description": "Bidirectional real-time communication",
-      "useCases": ["chat", "notifications", "live updates", "gaming"],
-      "services": ["Socket.io", "ws", "Supabase Realtime"]
-    },
-    "webhooks": {
-      "description": "Server-initiated HTTP callbacks",
-      "useCases": ["Integrations", "notifications", "event-driven"],
-      "services": ["Svix", "Webhook.site"]
-    },
-    "grpc": {
-      "description": "High-performance RPC",
-      "format": "Protocol Buffers",
-      "useCases": ["Microservices", "mobile", "low latency"],
-      "when": "Internal services, performance critical"
-    }
-  },
-
-  # ============================================================================
-  # 12. TEAM SIZE DECISIONS
-  # ============================================================================
-  "teamScale": {
-    "solo": {
-      "maxDevs": 1,
-      "recommended": {
-        "frontend": "Next.js or SPA",
-        "backend": "Supabase or BaaS",
-        "structure": "Simple, minimal complexity"
-      },
-      "avoid": ["microservices", "complex orchestration"]
-    },
-    "small": {
-      "maxDevs": 5,
-      "recommended": {
-        "frontend": "Modular monolith",
-        "backend": "Monolith or BFF",
-        "structure": "Domain-based folders"
-      },
-      "avoid": ["microfrontends"]
-    },
-    "medium": {
-      "maxDevs": 20,
-      "recommended": {
-        "frontend": "Modular monolith with clear boundaries",
-        "backend": "Modular monolith or split services",
-        "structure": "Clear domain separation"
-      },
-      "avoid": ["microfrontends"]
-    },
-    "large": {
-      "maxDevs": 50,
-      "recommended": {
-        "frontend": "Modular or microfrontends if needed",
-        "backend": "Service-oriented",
-        "structure": "Team autonomy per domain"
-      }
-    },
-    "enterprise": {
-      "maxDevs": 100,
-      "recommended": {
-        "frontend": "Microfrontends",
-        "backend": "Microservices",
-        "structure": "Full separation, platform team"
-      }
-    }
-  },
-
-  # ============================================================================
-  # DECISION TREES
-  # ============================================================================
-  "decisionTree": {
-    "frontend": [
-      {
-        "question": "Is the site mostly static?",
-        "yes": "static_pages",
-        "no": "Continue"
-      },
-      {
-        "question": "Does the product require high interactivity?",
-        "yes": "spa",
-        "no": "ssr"
-      },
-      {
-        "question": "Does SEO matter?",
-        "yes": "ssr",
-        "no": "spa"
-      },
-      {
-        "question": "Do you support multiple client apps?",
-        "yes": "bff",
-        "no": "Continue"
-      },
-      {
-        "question": "How many engineers?",
-        "lessThan20": "modular_monolith",
-        "20to200": "strong_modular",
-        "moreThan200": "microfrontends"
-      }
-    ],
-    "backend": [
-      {
-        "question": "Do you need full backend control?",
-        "yes": "Continue",
-        "no": "supabase_or_firebase"
-      },
-      {
-        "question": "What language preference?",
-        "javascript": ["express", "nestjs", "nextjs"],
-        "python": ["django", "fastapi"],
-        "php": ["laravel"],
-        "go": ["gin", "fiber"]
-      },
-      {
-        "question": "Scale requirements?",
-        "small": "monolith",
-        "large": "services"
-      }
-    ],
-    "database": [
-      {
-        "question": "Is data relational?",
-        "yes": "postgres",
-        "no": "Continue"
-      },
-      {
-        "question": "Need flexible schemas?",
-        "yes": "mongodb",
-        "no": "Continue"
-      },
-      {
-        "question": "Need caching?",
-        "yes": "redis"
-      },
-      {
-        "question": "Need search?",
-        "yes": "elasticsearch_or_algolia"
-      }
-    ]
-  },
-
-  # ============================================================================
-  # MODULE GENERATION RULES
-  # ============================================================================
-  "moduleRules": {
-    "auth": {
-      "trigger": "feature_authentication",
-      "generate": ["login", "register", "logout", "password_reset", "session_management"]
-    },
-    "billing": {
-      "trigger": "feature_payments",
-      "generate": ["checkout", "subscriptions", "invoices", "webhooks_handler", "usage_tracking"]
-    },
-    "orders": {
-      "trigger": "productType_marketplace OR productType_ecommerce",
-      "generate": ["create", "read", "update", "cancel", "status_tracking"]
-    },
-    "inventory": {
-      "trigger": "productType_marketplace OR productType_ecommerce",
-      "generate": ["stock_management", "reservations", "low_stock_alerts"]
-    },
-    "messaging": {
-      "trigger": "feature_realtime OR productType_social",
-      "generate": ["send", "receive", "threads", "read_status"]
-    },
-    "notifications": {
-      "trigger": "feature_realtime OR productType_social",
-      "generate": ["push", "email", "in_app", "preferences"]
-    },
-    "search": {
-      "trigger": "feature_search",
-      "generate": ["query", "filters", "sorting", "autocomplete"]
-    },
-    "media": {
-      "trigger": "dataType_images OR dataType_video OR dataType_audio",
-      "generate": ["upload", "process", "transform", "cdn_delivery"]
-    },
-    "analytics": {
-      "trigger": "feature_analytics OR productType_saas",
-      "generate": ["track_event", "dashboard", "export", "cohorts"]
-    },
-    "admin": {
-      "trigger": "productType_internal",
-      "generate": ["user_management", "settings", "audit_log", "reports"]
-    }
-  ,
   "variables": [
     {
-      "id": "v001",
-      "name": "product_type",
-      "category": "Product",
-      "description": "Type of product to build (marketplace, saas, social, ecommerce, internal, content, mobile_first)",
-      "type": "enum",
-      "options": ["marketplace", "saas", "social", "ecommerce", "internal", "content", "mobile_first"],
-      "dependencies": []
-    },
-    {
-      "id": "v002",
-      "name": "client_architecture",
-      "category": "Client",
-      "description": "Primary client architecture (web/ios/android/desktop/public_api)",
-      "type": "enum",
-      "options": ["web", "ios", "android", "desktop", "public_api"],
-      "dependencies": ["v001"]
-    },
-    {
-      "id": "v003",
-      "name": "data_types",
-      "category": "Data",
-      "description": "Data types involved (images, video, audio, documents, realtime)",
-      "type": "enum",
-      "options": ["images", "video", "audio", "documents", "realtime"],
-      "dependencies": ["v001"]
-    },
-    {
-      "id": "v004",
-      "name": "frontend_rendering_style",
-      "category": "Frontend",
-      "description": "Preferred frontend rendering style",
-      "type": "enum",
-      "options": ["SSR", "SPA", "SSG", "ISR", "Hybrid (SSR+SPA)"] ,
-      "dependencies": ["v001"]
-    },
-    {
-      "id": "v005",
-      "name": "scale_pattern",
-      "category": "Performance/Scale",
-      "description": "Scale pattern selection",
-      "type": "enum",
-      "options": ["read-heavy", "write-heavy", "balanced", "high concurrency"],
-      "dependencies": ["v003"]
-    },
-    {
-      "id": "v006",
-      "name": "auth_method",
-      "category": "Authentication",
-      "description": "Preferred authentication strategy",
-      "type": "enum",
-      "options": ["email_password", "magic_link", "social", "sso", "passwordless"],
-      "dependencies": []
-    },
-    {
-      "id": "v007",
-      "name": "payments_provider",
-      "category": "Payments",
-      "description": "Preferred payments provider",
-      "type": "enum",
-      "options": ["Stripe", "Paddle", "PayPal", "Razorpay"],
-      "dependencies": ["v001"]
-    },
-    {
-      "id": "v008",
-      "name": "storage_provider",
-      "category": "Storage",
-      "description": "Preferred storage backend",
-      "type": "enum",
-      "options": ["S3", "Cloudflare R2", "Supabase Storage", "Firebase Storage", "Cloudinary"],
-      "dependencies": []
-    },
-    {
-      "id": "v009",
-      "name": "realtime_technology",
-      "category": "Real-time",
-      "description": "Realtime/Push technology",
-      "type": "enum",
-      "options": ["WebSockets", "Pusher", "Ably", "Firebase Realtime", "Socket.IO"],
-      "dependencies": ["v003"]
-    },
-    {
-      "id": "v010",
-      "name": "api_style_preference",
-      "category": "API",
-      "description": "API style preference",
-      "type": "enum",
-      "options": ["REST", "GraphQL", "gRPC", "WebHooks"],
-      "dependencies": ["v001"]
-    },
-    {
-      "id": "v011",
-      "name": "cache_strategy",
-      "category": "Performance",
-      "description": "Cache eviction strategy",
-      "type": "enum",
-      "options": ["LRU", "LFU", "FIFO", "None"],
-      "dependencies": ["v003"]
-    },
-    {
-      "id": "v012",
-      "name": "rate_limiting",
-      "category": "Security",
-      "description": "API rate limiting level",
-      "type": "enum",
-      "options": ["none","basic","moderate","strict"],
-      "dependencies": []
-    },
-    {
-      "id": "v013",
-      "name": "policy_rls",
-      "category": "Security",
-      "description": "Enable Row-Level Security policies",
-      "type": "enum",
-      "options": ["enabled","disabled"],
-      "dependencies": ["v001"]
-    },
-    {
-      "id": "v014",
-      "name": "data_backup_strategy",
-      "category": "Operations",
-      "description": "Backup frequency and retention",
-      "type": "enum",
-      "options": ["daily","hourly","weekly","none"],
-      "dependencies": []
-    },
-    {
-      "id": "v015",
-      "name": "audit_trails",
-      "category": "Compliance",
-      "description": "Auditing enabled for critical tables",
-      "type": "enum",
-      "options": ["enabled","disabled"],
-      "dependencies": []
-    },
-    {
-      "id": "v016",
-      "name": "security_compliance",
-      "category": "Security",
-      "description": "Compliance standards to target",
-      "type": "enum",
-      "options": ["HIPAA","GDPR","PCI-DSS","None"],
-      "dependencies": []
-    },
-    {
-      "id": "v017",
-      "name": "deployment_target",
-      "category": "Deployment",
-      "description": "Hosting target environment",
-      "type": "enum",
-      "options": ["Vercel","Netlify","AWS","GCP","Azure"],
-      "dependencies": []
-    },
-    {
-      "id": "v018",
-      "name": "monitoring_tool",
-      "category": "Monitoring",
-      "description": "Preferred monitoring/observability tool",
-      "type": "enum",
-      "options": ["Datadog","Sentry","Prometheus","Grafana","NewRelic"],
-      "dependencies": []
-    },
-    {
-      "id": "v019",
-      "name": "logging_level",
-      "category": "Logging",
-      "description": "Default log level",
-      "type": "enum",
-      "options": ["debug","info","warn","error"],
-      "dependencies": []
-    },
-    {
-      "id": "v020",
-      "name": "queue_system",
-      "category": "Backend",
-      "description": "Preferred asynchronous queue system",
-      "type": "enum",
-      "options": ["Bull","BeeQueue","RabbitMQ","SQS"],
-      "dependencies": []
-    },
-    { "id": "v021", "name": "logging_to_monitoring", "category":"Monitoring","description":"Enable centralized logging to monitoring","type":"enum","options":["enabled","disabled","auto"],"dependencies":[]},
-    { "id": "v022", "name": "security_scans", "category":"Security","description":"SAST/DAST scanning enabled","type":"enum","options":["enabled","disabled"],"dependencies":[]},
-    { "id": "v023", "name": "ci_cd_pipeline", "category":"DevOps","description":"CI/CD pipeline type","type":"enum","options":["GitHub Actions","GitLab CI","CircleCI","none"],"dependencies":[]},
-    { "id": "v024", "name": "data_retention_policy", "category":"Operations","description":"Data retention window","type":"enum","options":["30d","90d","1y","5y","forever"],"dependencies":[]},
-    { "id": "v025", "name": "multi_tenant_model", "category":"Architecture","description":"Tenant isolation strategy","type":"enum","options":["single_schema","shared_schema_isolated_tenants","separate_schema_per_tenant"],"dependencies":["v001"]},
-    { "id": "v026", "name": "feature_flags", "category":"Operations","description":"Feature flag strategy","type":"enum","options":["LaunchDarkly","Unleash","Flagsmith","none"],"dependencies":[]},
-    { "id": "v027", "name": "cdn_strategy", "category":"Deployment","description":"CDN strategy","type":"enum","options":["edge_cdn","origin_shield","none"],"dependencies":[]},
-    { "id": "v028", "name": "edge_functions", "category":"Deployment","description":"Use edge functions","type":"enum","options":["yes","no"],"dependencies":[]},
-    { "id": "v029", "name": "storage_encryption", "category":"Security","description":"At-rest encryption for storage","type":"enum","options":["AES256","KMS","None"],"dependencies":[]},
-    { "id": "v030", "name": "compliance_map", "category":"Compliance","description":"Compliance mapping per region","type":"enum","options":["global","regional","none"],"dependencies":[]}
-  ,
-  "variables": [
-    {
-      "id": "v031",
+      "id": "v051",
       "name": "cache_coherence",
       "category": "Performance",
       "description": "Cache coherence strategy",
       "type": "enum",
-      "options": ["strict","eventual","none"],
-      "dependencies": ["v003"]
+      "options": [
+        "strict",
+        "eventual",
+        "none"
+      ],
+      "dependencies": [
+        "v003"
+      ]
     },
     {
-      "id": "v032",
+      "id": "v052",
       "name": "encryption_in_flight",
       "category": "Security",
       "description": "Data-in-transit encryption policy",
       "type": "enum",
-      "options": ["TLS1.2","TLS1.3","none"],
+      "options": [
+        "TLS1.2",
+        "TLS1.3",
+        "none"
+      ],
       "dependencies": []
     },
     {
-      "id": "v033",
+      "id": "v053",
       "name": "cors_policy",
       "category": "Security",
       "description": "Cross-origin resource sharing policy",
       "type": "enum",
-      "options": ["allow_all","restrict","none"],
+      "options": [
+        "allow_all",
+        "restrict",
+        "none"
+      ],
       "dependencies": []
     },
     {
-      "id": "v034",
+      "id": "v054",
       "name": "localization",
       "category": "UX",
       "description": "Localization support (i18n)",
       "type": "enum",
-      "options": ["en","es","fr","de","zh","multi"],
+      "options": [
+        "en",
+        "es",
+        "fr",
+        "de",
+        "zh",
+        "multi"
+      ],
       "dependencies": []
     },
     {
-      "id": "v035",
+      "id": "v055",
       "name": "telemetry",
       "category": "Monitoring",
       "description": "Telemetry collection (enabled/disabled)",
       "type": "enum",
-      "options": ["enabled","disabled","partial"],
+      "options": [
+        "enabled",
+        "disabled",
+        "partial"
+      ],
       "dependencies": []
     },
     {
-      "id": "v036",
+      "id": "v056",
       "name": "compliance_region",
       "category": "Compliance",
       "description": "Primary compliance region",
       "type": "enum",
-      "options": ["us","eu","apac","other"],
+      "options": [
+        "us",
+        "eu",
+        "apac",
+        "other"
+      ],
       "dependencies": []
     },
     {
-      "id": "v037",
+      "id": "v057",
       "name": "seo_config",
       "category": "Frontend",
       "description": "SEO config presence",
       "type": "enum",
-      "options": ["enabled","disabled"],
-      "dependencies": ["v004"]
+      "options": [
+        "enabled",
+        "disabled"
+      ],
+      "dependencies": [
+        "v004"
+      ]
     },
     {
-      "id": "v038",
+      "id": "v058",
       "name": "index_strategy",
       "category": "Frontend",
       "description": "Indexing strategy for search",
       "type": "enum",
-      "options": ["inverted","forward","none"],
-      "dependencies": ["v003"]
+      "options": [
+        "inverted",
+        "forward",
+        "none"
+      ],
+      "dependencies": [
+        "v003"
+      ]
     },
     {
-      "id": "v039",
+      "id": "v059",
       "name": "latency_target",
       "category": "Performance",
       "description": "Latency target (ms)",
       "type": "enum",
-      "options": ["<50","50-100","100-200",">200"],
+      "options": [
+        "<50",
+        "50-100",
+        "100-200",
+        ">200"
+      ],
       "dependencies": []
     },
     {
-      "id": "v040",
+      "id": "v060",
       "name": "failover_strategy",
       "category": "Reliability",
       "description": "Failover strategy",
       "type": "enum",
-      "options": ["active-active","active-passive","none"],
+      "options": [
+        "active-active",
+        "active-passive",
+        "none"
+      ],
       "dependencies": []
     },
-    {"id": "v041", "name": "timeout_config", "category": "Deployment", "description": "Default timeouts for requests", "type": "enum", "options": ["default","short","long","custom"], "dependencies": []},
-    {"id": "v042", "name": "retry_policy", "category": "Network", "description": "HTTP retry policy", "type": "enum", "options": ["no_retry","exponential_backoff","fixed_backoff"], "dependencies": []},
-    {"id": "v043", "name": "backup_retention", "category": "Operations", "description": "Data backup retention period", "type": "enum", "options": ["7d","14d","30d","90d","365d"], "dependencies": []},
-    {"id": "v044", "name": "logging_format", "category": "Logging", "description": "Log format", "type": "enum", "options": ["json","text","cloudwatch_json"], "dependencies": []},
-    {"id": "v045", "name": "default_language", "category": "UX", "description": "Default UI language", "type": "enum", "options": ["en","es","fr","de","zh","ja"], "dependencies": []},
-    {"id": "v046", "name": "feature_flags", "category": "DevOps", "description": "Feature flag system integration", "type": "enum", "options": ["LaunchDarkly","Unleash","Flagsmith","none"], "dependencies": []},
-    {"id": "v047", "name": "cache_invalidation_strategy", "category": "Performance", "description": "Cache invalidation strategy", "type": "enum", "options": ["time-based","event-based","manual"], "dependencies": ["v003"]},
-    {"id": "v048", "name": "edge_function_timeout", "category": "Deployment", "description": "Edge function timeout (ms)", "type": "enum", "options": ["1000","3000","5000","10000"], "dependencies": []},
-    {"id": "v049", "name": "document_versioning", "category": "Data", "description": "Document versioning strategy", "type": "enum", "options": ["immutable","versioned","none"], "dependencies": []},
-    {"id": "v050", "name": "storage_encryption_key_source", "category": "Security", "description": "Key management source", "type": "enum", "options": ["KMS","AWS KMS","GCP KMS","Customer managed"], "dependencies": []}
-  ,
-  "variables": [
-    {"id": "v061", "name": "timeout_config_patch", "category": "Deployment", "description": "Extended timeouts for requests", "type": "enum", "options": ["default","short","long"], "dependencies": []},
-    {"id": "v062", "name": "retry_policy_patch", "category": "Network", "description": "Retry policy variation", "type": "enum", "options": ["none","exponential_backoff"], "dependencies": []},
-    {"id": "v063", "name": "backup_retention_patch", "category": "Operations", "description": "Backup retention patch", "type": "enum", "options": ["7d","30d","90d","1y"], "dependencies": []},
-    {"id": "v064", "name": "logging_format_patch", "category": "Logging", "description": "Log format patch", "type": "enum", "options": ["json","text"], "dependencies": []},
-    {"id": "v065", "name": "default_language_patch", "category": "UX", "description": "Default language patch", "type": "enum", "options": ["en","es","fr","de"], "dependencies": []},
-    {"id": "v066", "name": "feature_flags_patch", "category": "DevOps", "description": "Feature flags patch", "type": "enum", "options": ["LaunchDarkly","Unleash","Flagsmith","none"], "dependencies": []},
-    {"id": "v067", "name": "cache_invalidation_patch", "category": "Performance", "description": "Cache invalidation patch", "type": "enum", "options": ["time-based","event-based"], "dependencies": ["v003"]},
-    {"id": "v068", "name": "edge_cache_patch", "category": "Deployment", "description": "Edge cache patch", "type": "enum", "options": ["enabled","disabled"], "dependencies": []},
-    {"id": "v069", "name": "encryption_in_flight_patch", "category": "Security", "description": "In-flight encryption patch", "type": "enum", "options": ["TLS1.3","TLS1.2"], "dependencies": []},
-    {"id": "v070", "name": "compliance_map_patch", "category": "Compliance", "description": "Regional compliance patch", "type": "enum", "options": ["global","regional"], "dependencies": []}
+    {
+      "id": "v061",
+      "name": "timeout_config_patch2",
+      "category": "Deployment",
+      "description": "Extended timeouts for requests",
+      "type": "enum",
+      "options": [
+        "default",
+        "short",
+        "long",
+        "custom"
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "v062",
+      "name": "retry_policy_patch2",
+      "category": "Network",
+      "description": "Retry policy variation",
+      "type": "enum",
+      "options": [
+        "no_retry",
+        "exponential_backoff"
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "v063",
+      "name": "backup_retention_patch2",
+      "category": "Operations",
+      "description": "Backup retention patch",
+      "type": "enum",
+      "options": [
+        "7d",
+        "14d",
+        "30d",
+        "90d",
+        "365d"
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "v064",
+      "name": "logging_format_patch2",
+      "category": "Logging",
+      "description": "Log format patch",
+      "type": "enum",
+      "options": [
+        "json",
+        "text"
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "v065",
+      "name": "default_language_patch2",
+      "category": "UX",
+      "description": "Default language patch",
+      "type": "enum",
+      "options": [
+        "en",
+        "es",
+        "fr",
+        "de"
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "v066",
+      "name": "feature_flags_patch2",
+      "category": "DevOps",
+      "description": "Feature flags patch",
+      "type": "enum",
+      "options": [
+        "LaunchDarkly",
+        "Unleash",
+        "Flagsmith",
+        "none"
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "v067",
+      "name": "cache_invalidation_patch2",
+      "category": "Performance",
+      "description": "Cache invalidation patch",
+      "type": "enum",
+      "options": [
+        "time-based",
+        "event-based"
+      ],
+      "dependencies": [
+        "v003"
+      ]
+    },
+    {
+      "id": "v068",
+      "name": "edge_cache_patch2",
+      "category": "Deployment",
+      "description": "Edge cache patch",
+      "type": "enum",
+      "options": [
+        "enabled",
+        "disabled"
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "v069",
+      "name": "encryption_in_flight_patch2",
+      "category": "Security",
+      "description": "In-flight encryption patch",
+      "type": "enum",
+      "options": [
+        "TLS1.3",
+        "TLS1.2"
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "v070",
+      "name": "compliance_map_patch2",
+      "category": "Compliance",
+      "description": "Regional compliance patch",
+      "type": "enum",
+      "options": [
+        "global",
+        "regional"
+      ],
+      "dependencies": []
+    }
   ]
 }
