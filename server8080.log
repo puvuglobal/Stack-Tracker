@@ -1,0 +1,5 @@
+usage: python.exe -m http.server [-h] [--cgi] [-b ADDRESS] [-d DIRECTORY]
+                                 [-p VERSION] [--tls-cert PATH]
+                                 [--tls-key PATH] [--tls-password-file PATH]
+                                 [port]
+python.exe -m http.server: error: unrecognized arguments: 
